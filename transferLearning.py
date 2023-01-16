@@ -6,12 +6,14 @@ import numpy as np
 from torchvision import transforms
 from PIL import Image
 
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/repo/Helheim/filename.jpg"
-img = Image.open(path)
 
-convert_tensor = transforms.ToTensor()
+## test image functions
+#path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/repo/Helheim/filename.jpg"
+#img = Image.open(path)
 
-tensor = convert_tensor(img)
+#convert_tensor = transforms.ToTensor()
+
+#tensor = convert_tensor(img)
 
 
 
