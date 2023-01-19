@@ -17,7 +17,7 @@ from PIL import Image
 
 
 
-def getPatchesTransfer(tensor, patchSize, stride=1):
+def getPatchesTransfer(tensor, patchSize, stride=50):
 
     """
     takes an image and outputs list of patches in the image
@@ -53,7 +53,7 @@ def getPatchesTransfer(tensor, patchSize, stride=1):
     return patches
 
 
-def combinePatchesTransfer(patches, tensorShape, patchSize, stride=1):
+def combinePatchesTransfer(patches, tensorShape, patchSize, stride=50):
 
     """
     combines a list of patches to full image
@@ -90,7 +90,7 @@ def combinePatchesTransfer(patches, tensorShape, patchSize, stride=1):
     # Return the image tensor
     return tensor
 
-# input 5, 3, 50, 50; targets: 5, 3, 50, 50
+# input 5, 3, 50, 50; targets: 5, 1, 50, 50
 def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
     """
 
@@ -112,7 +112,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
     # get patches from input images and targets
     inputList = []
     targetList = []
-    for i in range(len(inputScenes)):
+    for i in range(inputScenes.size(0)):
         helper = getPatchesTransfer(inputScenes[i], 50)
         inputList.append(helper)
 
@@ -122,8 +122,8 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
     # get predictions from input patches
     latentSpaceLoss = 0
     for i in range(len(inputList[0])):
-        helperInpt = [x[i] for x in inputList]
-        targetInpt = [x[i] for x in targetList]
+        helperInpt = list(x[i] for x in inputList)
+        targetInpt = list(x[i] for x in targetList)
         inputPatches = torch.stack(helperInpt, dim = 0)
         targetPatches = torch.stack(targetInpt, dim=0)
 
@@ -134,21 +134,19 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
         prediction = model.forward(finalInpt, training = True)
 
         # switch input with predictions; z = scene index, i = patch index
-        for z in range(len(prediction[0])):
-            inputList[z][i] = prediction[0][z, :, :]
+        #for z in range(len(prediction[0])):
+        #    inputList[z][i] = prediction[0][z, :, :]
+
+        # write as generator
+        #list(prediction[0][z, :, :])
 
         # accumulate latent space losses
         latentSpaceLoss += prediction[1].item()
 
     # get final loss of predictions of the full scenes
     # set patches back to images
-    scenePredictions = []
-    for x in range(inputList):
-        scene = combinePatchesTransfer(x)
-        scenePredictions.append(scene)
-
+    scenePredictions = list(combinePatchesTransfer(x) for x in inputList)
     fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
-
     fullLoss += latentSpaceLoss
 
     return fullLoss
