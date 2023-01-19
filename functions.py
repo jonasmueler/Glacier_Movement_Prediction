@@ -659,7 +659,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     return model
 
 
-def getPatchesTransfer(tensor, patchSize, stride=1):
+def getPatchesTransfer(tensor, patchSize, stride=50):
+
     """
     takes an image and outputs list of patches in the image
 
@@ -668,7 +669,6 @@ def getPatchesTransfer(tensor, patchSize, stride=1):
     patchSize: int
         x,y dimension of patch
     stride: int
-        if bigger than 1 patches overlap
 
     returns: list of tensor
         list of patches
@@ -678,23 +678,27 @@ def getPatchesTransfer(tensor, patchSize, stride=1):
     # Calculate the number of patches in each direction
     nHorizontalPatches = (width - patchSize) // stride + 1
     nVerticalPatches = (height - patchSize) // stride + 1
-    # Initialize a list to store the patches
-    patches = []
+
     # Iterate over the patches and extract them
+    patches = []
+    counterX = 0
+    counterY = 0
     for i in range(nVerticalPatches):
         for j in range(nHorizontalPatches):
-            # Calculate the top-left corner of the patch
-            x = j * stride
-            y = i * stride
-            # Extract the patch
-            patch = tensor[:, y:y + patchSize, x:x + patchSize]
+            patch = tensor[:, counterX:counterX + patchSize, counterY:counterY + patchSize]
+
+            # update counters
+            counterX += patchSize
+
             # Add the patch to the list
             patches.append(patch)
-    # Return the list of patches
+        counterY += patchSize
+        counterX = 0
     return patches
 
 
-def combinePatchesTransfer(patches, tensorShape, patchSize, stride=1):
+def combinePatchesTransfer(patches, tensorShape, patchSize, stride=50):
+
     """
     combines a list of patches to full image
 
@@ -711,24 +715,115 @@ def combinePatchesTransfer(patches, tensorShape, patchSize, stride=1):
     """
     # Get the number of channels and the target height and width
     n_channels, height, width = tensorShape
+
     # Initialize a tensor to store the image
     tensor = torch.zeros(tensorShape)
+
     # Calculate the number of patches in each direction
     nHorizontalPatches = (width - patchSize) // stride + 1
     nVerticalPatches = (height - patchSize) // stride + 1
+
     # Iterate over the patches and combine them
     patchIndex = 0
+    counterX = 0
+    counterY = 0
     for i in range(nVerticalPatches):
         for j in range(nHorizontalPatches):
-            # Calculate the top-left corner of the patch
-            x = j * stride
-            y = i * stride
-            # Get the patch and add it to the image
-            patch = patches[patch_index]
-            tensor[:, y:y + patchSize, x:x + patchSize] += patch
+            tensor[:, counterX:counterX + patchSize, counterY:counterY + patchSize] = patches[patchIndex]
+
+            # update counters
+            counterX += patchSize
             patchIndex += 1
-    # Return the image tensor
+
+        counterY += patchSize
+        counterX = 0
+
     return tensor
+
+"""
+## test image functions
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/Helheim/filename.jpg"
+img = Image.open(path)
+convert_tensor = transforms.ToTensor()
+t = convert_tensor(img)[:, 0:200, 0:200]
+t_original = convert_tensor(img)[:, 0:200, 0:200]
+print(t.size())
+plt.imshow(np.transpose(t.numpy(), (1,2,0)))
+plt.show()
+
+t = getPatchesTransfer(t, 50)
+plt.imshow(np.transpose(t[0].numpy(), (1,2,0)))
+plt.show()
+print(len(t))
+t = combinePatchesTransfer(t, (3, 200,200), 50)
+plt.imshow(np.transpose(t.numpy(), (1,2,0)))
+plt.show()
+
+print(t_original.numpy()- t.numpy())
+
+"""
+# input 5, 3, 50, 50; targets: 5, 1, 50, 50
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
+    """
+
+    inputScenes: tensor
+        scenes
+    inputDates: tensor
+        dates
+    targetScenes: tensor
+        target scenes
+    targetDates: tensor
+        target dates
+    model: torch.model object
+
+    returns: int
+        loss on full five scenes and all associated patches
+
+    """
+
+    # get patches from input images and targets
+    inputList = []
+    targetList = []
+    for i in range(inputScenes.size(0)):
+        helper = getPatchesTransfer(inputScenes[i], 50)
+        inputList.append(helper)
+
+        helper = getPatchesTransfer(targetScenes[i], 50)
+        targetList.append(helper)
+
+    # get predictions from input patches
+    latentSpaceLoss = 0
+    for i in range(len(inputList[0])):
+        helperInpt = list(x[i] for x in inputList)
+        targetInpt = list(x[i] for x in targetList)
+        inputPatches = torch.stack(helperInpt, dim = 0)
+        targetPatches = torch.stack(targetInpt, dim=0)
+
+        # put together for final input
+        finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
+
+        # predict with model
+        prediction = model.forward(finalInpt, training = True)
+
+        # switch input with predictions; z = scene index, i = patch index
+        #for z in range(len(prediction[0])):
+        #    inputList[z][i] = prediction[0][z, :, :]
+
+        # write as generator
+        #list(prediction[0][z, :, :])
+
+        # accumulate latent space losses
+        latentSpaceLoss += prediction[1].item()
+
+    # get final loss of predictions of the full scenes
+    # set patches back to images
+    scenePredictions = list(combinePatchesTransfer(x) for x in inputList)
+    fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
+    fullLoss += latentSpaceLoss
+
+    return fullLoss
+
+
 
 
 
