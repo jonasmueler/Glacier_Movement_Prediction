@@ -763,7 +763,7 @@ print(t_original.numpy()- t.numpy())
 
 """
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, test = False):
     """
 
     inputScenes: tensor
@@ -775,6 +775,8 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
     targetDates: tensor
         target dates
     model: torch.model object
+    test: boolean
+        test pipeline without model predictions
 
     returns: int
         loss on full five scenes and all associated patches
@@ -792,36 +794,62 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model):
         targetList.append(helper)
 
     # get predictions from input patches
-    latentSpaceLoss = 0
-    for i in range(len(inputList[0])):
-        helperInpt = list(x[i] for x in inputList)
-        targetInpt = list(x[i] for x in targetList)
-        inputPatches = torch.stack(helperInpt, dim = 0)
-        targetPatches = torch.stack(targetInpt, dim=0)
+    if test == False:
+        latentSpaceLoss = 0
+        for i in range(len(inputList[0])):
+            helperInpt = list(x[i] for x in inputList)
+            targetInpt = list(x[i] for x in targetList)
+            inputPatches = torch.stack(helperInpt, dim = 0)
+            targetPatches = torch.stack(targetInpt, dim=0)
 
-        # put together for final input
-        finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
 
-        # predict with model
-        prediction = model.forward(finalInpt, training = True)
+            # put together for final input
+            finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
 
-        # switch input with predictions; z = scene index, i = patch index
-        #for z in range(len(prediction[0])):
-        #    inputList[z][i] = prediction[0][z, :, :]
+            # predict with model
+            prediction = model.forward(finalInpt, training = True)
 
-        # write as generator
-        #list(prediction[0][z, :, :])
+            # switch input with predictions; z = scene index, i = patch index
+            for z in range(prediction[0].size(0)):
+                inputList[z][i] = prediction[0][z, :, :]
 
-        # accumulate latent space losses
-        latentSpaceLoss += prediction[1].item()
+            # accumulate latent space losses
+            latentSpaceLoss += prediction[1].item()
 
-    # get final loss of predictions of the full scenes
-    # set patches back to images
-    scenePredictions = list(combinePatchesTransfer(x) for x in inputList)
-    fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
-    fullLoss += latentSpaceLoss
+        # get final loss of predictions of the full scenes
+        # set patches back to images
+        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
+        fullLoss += latentSpaceLoss
 
-    return fullLoss
+        return fullLoss
+
+    if test:
+        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
+        return fullLoss
+
+        latentSpaceLoss = 0
+        for i in range(len(inputList[0])):
+            helperInpt = list(x[i] for x in inputList)
+            targetInpt = list(x[i] for x in targetList)
+            inputPatches = torch.stack(helperInpt, dim=0)
+            targetPatches = torch.stack(targetInpt, dim=0)
+
+            # use targets in order to test pipeline without model prediction, takes 5 images extracts pathces and puts images back again
+            # without model predictions loss should be 0 if pipeline works
+            for z in range(inputPatches.size(0)):
+                inputList[z][i] = targetPatches[z, :, :]
+
+
+        # get final loss of predictions of the full scenes
+        # set patches back to images
+        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
+        return fullLoss
+
+
+
 
 
 
