@@ -21,7 +21,7 @@ res = functions.fullSceneLoss(testInput, testInputDates, testTargets, testTarget
 
 print(res)
 
-## test pipeline without model predictions and with same images as targets the loss should be 0
+## test pipeline without model predictions and with same images as targets, the loss should be 0
 
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/Helheim/filename.jpg"
 img = Image.open(path)

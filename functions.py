@@ -573,8 +573,8 @@ def loadCheckpoint(checkpoint, model, optimizer):
     print("loading model complete")
 
 
-def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, criterionFunction, maxIter, epochs,
-              testSet):
+def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
+              validationSet, validationStep):
     """
 
     data: list of list of input data and dates and targets
@@ -586,8 +586,11 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     weightDecay: float
     earlyStopping: float
     criterionFunction: nn.lossfunction
-    maxIter: int
     epochs: int
+    validationSet: same as data
+    validationStep: int
+        timepoint when validation set is evaluated for early stopping regularization
+
 
     return: nn.class
         trained model
@@ -598,15 +601,19 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     lastLoss = 0
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
 
+    # load model
+    if loadModel:
+        loadCheckpoint(torch.load(modelName), model=model, optimizer=optimizer)
+    model.train()
+    
     for x in range(epochs):
-        # load model
-        if loadModel:
-            loadCheckpoint(torch.load(modelName), model=model, optimizer=optimizer)
-        model.train()
-        for i in range(maxIter):
-            # sample data
-            idx = np.random.randint(0, len(data), size=1)
-            helper = data[idx[0]]
+        # get indices for epoch
+        ix = np.arange(0, len(data), 1)
+        ix = np.random.choice(ix, len(data), replace=False, p=None)
+
+        for i in ix:
+            # get data
+            helper = data[i]
             y = helper[1][0]
 
             # zero the parameter gradients
@@ -621,29 +628,30 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             optimizer.step()
 
             # print loss
-
             runningLoss += loss.item()
-            if i % 100 == 0 and i != 0:
-                if testSet != None:
-                    # testLoss = [MSEpixelLoss(model.forward(x[0]).to("cuda"), x[1]).item() for x in testSet]
-                    # testLoss = sum(testLoss)/len(testLoss)
+            if i % validationStep == 0 and i != 0:
+                if validationSet != None:
                     # sample data
-                    idx = np.random.randint(0, len(testSet), size=1)
-                    helper = testSet[idx[0]]
-                    y = helper[1][0]
+                    validationLoss = 0
+                    for i in range(len(testSet)):
+                        helper = testSet[i]
+                        y = helper[1][0]
 
-                    # forward + backward + optimize
-                    forward = model.forward(helper)
-                    # predictions = forward[0].to(device='cuda')
-                    predictions = forward[0]
+                        # forward + backward + optimize
+                        forward = model.forward(helper)
+                        # predictions = forward[0].to(device='cuda')
+                        predictions = forward[0]
 
-                    testLoss = MSEpixelLoss(predictions, y) + forward[1]
-                    print("current test loss: ", testLoss)
+                        testLoss = MSEpixelLoss(predictions, y) + forward[1]
+                        validationLoss += testLoss.item()
+                    print("current validation loss: ", validationLoss / len(validationSet))
             print("epoch ", x, ", batch ", i, " current loss = ", runningLoss / (i + 1))
 
+
+            ################ implement correct early stopping from literature!!!! ##########################
             # early stopping
             if earlyStopping > 0:
-                if (lastLoss - loss.item()) < earlyStopping:
+                if (loss.item() - lastLoss) < earlyStopping:
                     stoppingCounter += 1
 
                 if stoppingCounter == 10:
