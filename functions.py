@@ -2,6 +2,7 @@
 import coiled
 import distributed
 import dask
+import pandas as pd
 import pystac_client
 import planetary_computer as pc
 import ipyleaflet
@@ -600,6 +601,9 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     stoppingCounter = 0
     lastLoss = 0
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
+    trainLosses = []
+    validationLosses = []
+    trainCounter = 0
 
     # load model
     if loadModel:
@@ -626,9 +630,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             loss = MSEpixelLoss(predictions, y) + forward[1]
             loss.backward()
             optimizer.step()
+            trainCounter += 1
 
             # print loss
             runningLoss += loss.item()
+            meanRunningLoss = runningLoss / trainCounter
+            trainLosses.append(meanRunningLoss)
+
             if i % validationStep == 0 and i != 0:
                 if validationSet != None:
                     # sample data
@@ -644,28 +652,52 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                         testLoss = MSEpixelLoss(predictions, y) + forward[1]
                         validationLoss += testLoss.item()
-                    print("current validation loss: ", validationLoss / len(validationSet))
-            print("epoch ", x, ", batch ", i, " current loss = ", runningLoss / (i + 1))
+                        meanValidationLoss = validationLoss / len(validationSet)
+                        validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as wel for comparison with interpolation
+                        # of in between datapoints
 
+                    print("current validation loss: ", meanValidationLoss)
 
-            ################ implement correct early stopping from literature!!!! ##########################
-            # early stopping
-            if earlyStopping > 0:
-                if (loss.item() - lastLoss) < earlyStopping:
-                    stoppingCounter += 1
+                # early stopping
+                if earlyStopping > 0:
+                    if (meanValidationLoss - lastLoss) > earlyStopping:
+                        stoppingCounter += 1
 
-                if stoppingCounter == 10:
-                    print("model converged, early stopping")
-                    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-                    saveCheckpoint(checkpoint, modelName)
-                    sys.exit()
-            lastLoss = loss.item()
+                    if stoppingCounter == 10:
+                        print("model converged, early stopping")
+                        checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+                        saveCheckpoint(checkpoint, modelName)
+                        # save losses
+                        dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(trainLosses)]}
+                        trainResults = pd.DataFrame(dict)
 
-        checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-        saveCheckpoint(checkpoint, modelName)
+                        # fill in validation losses with index
+                        for i in range(len(validationLosses)):
+                            trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
 
-    return model
+                        # save dartaFrame to csv
+                        trainResults.to_csv("resultsTraining.csv")
+                        ############ find better solution than exiting the file
+                        quit()
+                        #######################################################
 
+                    lastLoss = meanValidationLoss
+            print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
+
+    ## save model anyways in case it did not converge
+    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+    saveCheckpoint(checkpoint, modelName)
+
+    # save losses
+    dict = {"trainLoss": trainLosses, "validationLoss" : [np.NaN for x in range(trainLosses)]}
+    trainResults = pd.DataFrame(dict)
+
+    # fill in validation losses with index
+    for i in range(len(validationLosses)):
+        trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
+
+    # save dartaFrame to csv
+    trainResults.to_csv("resultsTraining.csv")
 
 def getPatchesTransfer(tensor, patchSize, stride=50):
 
