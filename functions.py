@@ -826,10 +826,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
     inputList = []
     targetList = []
     for i in range(inputScenes.size(0)):
-        helper = getPatchesTransfer(inputScenes[i], patchSize, stride)
+        helper = getPatches(inputScenes[i], patchSize, stride)
         inputList.append(helper)
 
-        helper = getPatchesTransfer(targetScenes[i], patchSize, stride)
+        helper = getPatches(targetScenes[i], patchSize, stride)
         targetList.append(helper)
 
     # get predictions from input patches
@@ -857,7 +857,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
+        scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
