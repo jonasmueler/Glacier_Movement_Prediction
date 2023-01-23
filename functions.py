@@ -27,7 +27,7 @@ from sklearn.feature_extraction import image
 import torch.optim as optim
 import torch
 import sys
-#from torchvision import transforms
+from torchvision import transforms
 from PIL import Image
 
 
@@ -406,74 +406,6 @@ def loadData(path, years):
 
     return d
 
-def createPatches(img, patchSize, maxPatches, roi, applyKernel = False):
-    """
-    creates image patches sampled from a region of interest
-
-    img: np.array
-        shape = (11, x,y)
-    patchSize: tuple of int
-        size of patches
-    maxPatches: int
-        number of patches extracted
-    roi: list of int
-        bounding box region of interest for importance sampling
-    applyKernel: boolean
-        if data still contains missings apply kernel to patches
-
-    returns:  np.array
-        shape = (n_patches, 11, pachsize[0], patchsize[1])
-    """
-
-    img = img[:, roi[0]:roi[1], roi[2]:roi[3]]  # roi x,y coordinates over all bands
-    # clean missings
-    if applyKernel:
-        # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
-        for z in range(img.shape[0]):
-            while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
-                img[z, :, :] = applyToImage(img[z, :, :])
-                #print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
-            print("band: ", z, " of ", img.shape[0], "done")
-    print("application of kernel done")
-
-    # rearrange dims for scikit-learn
-    img = np.transpose(img, (1,2,0))
-    patches = image.extract_patches_2d(img, patchSize, max_patches=maxPatches, random_state=42)
-
-    # get into pytorch fomat for conv2d
-    # output of extract_patches_2d = (n_patches, patch_height, patch_width, n_channels)
-    patches = np.transpose(patches, (0, 3, 1, 2))
-
-    return patches
-
-
-def automatePatching(data, patchSize, maxPatches, roi, applyKernel):
-    """
-    creates image patches sampled from a region of interest
-
-    data: list of tuple of datetime and np.array
-        data extracted from API
-    patchSize: tuple of int
-        size of patches
-    maxPatches: int
-        number of patches extracted
-    roi: list of int
-        bounding box region of interest for importance sampling
-    applyKernel: boolean
-        if data still contains missings apply kernel to patches
-
-    returns:  list of tuple of datetime and np.array
-        switch np array in tuple with np array with on more dimension -> patches
-    """
-
-    res = []
-    for i in range(len(data)):
-        print("processing image: ", i)
-        patches = createPatches(data[i][1][:, :, :], patchSize, maxPatches, roi, applyKernel=applyKernel)
-        res.append((data[i][0], patches))
-
-    return res
-
 ## create time series of 5 images
 def convertDatetoVector(date):
     """
@@ -490,61 +422,6 @@ def convertDatetoVector(date):
     res = torch.tensor([day, month, year], dtype = torch.float)
 
     return res
-
-
-def getTrainTest(patches, window, inputBands, outputBands, numSequences):
-    """
-
-    patches: list of tuple of datetime and np.array
-        data from API
-    window: int
-        length of sequences for model
-    inputBands: list of int
-    outputBands: list of int
-    numSequences: int
-        number of sequences sampled from scenes
-
-    returns: list of list of input data, input date and target data, target date
-
-    """
-
-    dataList = []
-    for i in range(numSequences):
-        # create patches from random consecutive timepoints in the future
-        ## take next n scenes
-        #x = patches[i:i + window]
-        #y = patches[i + window: i + (2 * window)]
-        ## take random next scenes
-        # sample 2*window consecutive indices
-        seq = np.arange(0, len(patches))
-        seq = np.random.choice(seq, 2*window, replace = False).tolist()
-        seq.sort()
-        seqX = seq[0:window]
-        seqY = seq[window:]
-        x = [patches[t] for t in seqX]
-        y = [patches[t] for t in seqY]
-        for z in range(x[0][1].shape[0]):
-            xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
-            xDates = torch.stack(xDates, dim=0)
-            yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
-            yDates = torch.stack(yDates, dim=0)
-            xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
-            xHelper = torch.stack(xHelper, dim = 0)
-            yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
-            yHelper = torch.stack(yHelper, dim=0)
-
-            # sanity checks
-            assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
-
-            # save
-            dataList.append([[xHelper, xDates], [yHelper, yDates]])
-        print("batch ", i, " done")
-    # save data object on drive
-    with open("trainData", "wb") as fp:  # Pickling
-        pickle.dump(dataList, fp)
-    print("data saved!")
-
-    return dataList
 
 def MSEpixelLoss(predictions, y):
     """
@@ -699,7 +576,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     # save dartaFrame to csv
     trainResults.to_csv("resultsTraining.csv")
 
-def getPatchesTransfer(tensor, patchSize, stride=50):
+def getPatches(tensor, patchSize, stride=50):
 
     """
     takes an image and outputs list of patches in the image
@@ -726,18 +603,17 @@ def getPatchesTransfer(tensor, patchSize, stride=50):
     for i in range(nVerticalPatches):
         for j in range(nHorizontalPatches):
             patch = tensor[:, counterX:counterX + patchSize, counterY:counterY + patchSize]
-
             # update counters
-            counterX += patchSize
+            counterX += stride
 
             # Add the patch to the list
             patches.append(patch)
-        counterY += patchSize
+        counterY += stride
         counterX = 0
     return patches
 
 
-def combinePatchesTransfer(patches, tensorShape, patchSize, stride=50):
+def combinePatches(patches, tensorShape, patchSize, stride=50):
 
     """
     combines a list of patches to full image
@@ -772,10 +648,10 @@ def combinePatchesTransfer(patches, tensorShape, patchSize, stride=50):
             tensor[:, counterX:counterX + patchSize, counterY:counterY + patchSize] = patches[patchIndex]
 
             # update counters
-            counterX += patchSize
+            counterX += stride
             patchIndex += 1
 
-        counterY += patchSize
+        counterY += stride
         counterX = 0
 
     return tensor
@@ -791,20 +667,138 @@ print(t.size())
 plt.imshow(np.transpose(t.numpy(), (1,2,0)))
 plt.show()
 
-t = getPatchesTransfer(t, 50)
+t = getPatchesTransfer(t, 50, 40)
 plt.imshow(np.transpose(t[0].numpy(), (1,2,0)))
 plt.show()
 print(len(t))
-t = combinePatchesTransfer(t, (3, 200,200), 50)
+t = combinePatchesTransfer(t, (3, 200,200), 50, 40)
 plt.imshow(np.transpose(t.numpy(), (1,2,0)))
 plt.show()
 
 print(t_original.numpy()- t.numpy())
-
 """
-# input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, stride, outputDimensions, test = False):
+
+def createPatches(img, patchSize, stride, roi, applyKernel = False):
     """
+    creates image patches sampled from a region of interest
+
+    img: np.array
+    patchSize: int
+        size of patches
+    stride: int
+    roi: list of int
+        bounding box region of interest for importance sampling
+    applyKernel: boolean
+        if data still contains missings apply kernel to patches
+
+    returns:  torch.tensor
+        shape = (n_patches, bands, patchSize, patchSize)
+    """
+
+    img = img[:, roi[0]:roi[1], roi[2]:roi[3]]  # roi x,y coordinates over all bands
+    # clean missings
+    if applyKernel:
+        # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
+        for z in range(img.shape[0]):
+            while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
+                img[z, :, :] = applyToImage(img[z, :, :])
+                #print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
+            print("band: ", z, " of ", img.shape[0], "done")
+    print("application of kernel done")
+
+    # torch conversion
+    img = torch.from_numpy(img)
+    patches = getPatches(img, patchSize, stride=stride)
+    out = torch.stack(patches, dim = 0)
+    out = out.numpy()
+
+    return out
+
+
+def automatePatching(data, patchSize, maxPatches, roi, applyKernel):
+    """
+    creates image patches sampled from a region of interest
+
+    data: list of tuple of datetime and np.array
+        data extracted from API
+    patchSize: tuple of int
+        size of patches
+    maxPatches: int
+        number of patches extracted
+    roi: list of int
+        bounding box region of interest for importance sampling
+    applyKernel: boolean
+        if data still contains missings apply kernel to patches
+
+    returns:  list of tuple of datetime and np.array
+        switch np array in tuple with np array with on more dimension -> patches
+    """
+
+    res = []
+    for i in range(len(data)):
+        print("processing image: ", i)
+        patches = createPatches(data[i][1][:, :, :], patchSize, maxPatches, roi, applyKernel=applyKernel)
+        res.append((data[i][0], patches))
+
+    return res
+
+def getTrainTest(patches, window, inputBands, outputBands, numSequences):
+    """
+
+    patches: list of tuple of datetime and np.array
+        data from API
+    window: int
+        length of sequences for model
+    inputBands: list of int
+    outputBands: list of int
+    numSequences: int
+        number of sequences sampled from scenes
+
+    returns: list of list of input data, input date and target data, target date
+
+    """
+    dataList = []
+    for i in range(numSequences):
+        # create patches from random consecutive timepoints in the future
+        ## take next n scenes
+        #x = patches[i:i + window]
+        #y = patches[i + window: i + (2 * window)]
+        ## take random next scenes
+        # sample 2*window consecutive indices
+        seq = np.arange(0, len(patches))
+        seq = np.random.choice(seq, 2*window, replace = False).tolist()
+        seq.sort()
+        seqX = seq[0:window]
+        seqY = seq[window:]
+        x = [patches[t] for t in seqX]
+        y = [patches[t] for t in seqY]
+        for z in range(x[0][1].shape[0]):
+            xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
+            xDates = torch.stack(xDates, dim=0)
+            yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
+            yDates = torch.stack(yDates, dim=0)
+            xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
+            xHelper = torch.stack(xHelper, dim = 0)
+            yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
+            yHelper = torch.stack(yHelper, dim=0)
+
+            # sanity checks
+            assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+
+            # save
+            dataList.append([[xHelper, xDates], [yHelper, yDates]])
+        print("batch ", i, " done")
+    # save data object on drive
+    with open("trainData", "wb") as fp:  # Pickling
+        pickle.dump(dataList, fp)
+    print("data saved!")
+
+    return dataList
+
+# input 5, 3, 50, 50; targets: 5, 1, 50, 50
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, test = False):
+    """
+    train model on loss of full scenes and backpropagate full scene error in order to get smooth boarders in the final scene predictions
 
     inputScenes: tensor
         scenes
@@ -815,6 +809,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, str
     targetDates: tensor
         target dates
     model: torch.model object
+    patchSize: int
     stride: int
         used stride for patching
     outputDimensions: tuple
@@ -831,10 +826,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, str
     inputList = []
     targetList = []
     for i in range(inputScenes.size(0)):
-        helper = getPatchesTransfer(inputScenes[i], stride)
+        helper = getPatchesTransfer(inputScenes[i], patchSize, stride)
         inputList.append(helper)
 
-        helper = getPatchesTransfer(targetScenes[i], stride)
+        helper = getPatchesTransfer(targetScenes[i], patchSize, stride)
         targetList.append(helper)
 
     # get predictions from input patches
@@ -862,14 +857,14 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, str
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
         return fullLoss
 
     if test:
-        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
 
@@ -888,7 +883,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, str
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
 
