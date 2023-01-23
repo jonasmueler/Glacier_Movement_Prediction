@@ -803,7 +803,7 @@ print(t_original.numpy()- t.numpy())
 
 """
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, test = False):
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, stride, outputDimensions, test = False):
     """
 
     inputScenes: tensor
@@ -815,6 +815,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, tes
     targetDates: tensor
         target dates
     model: torch.model object
+    stride: int
+        used stride for patching
+    outputDimensions: tuple
+        dimensions of output scenes
     test: boolean
         test pipeline without model predictions
 
@@ -827,10 +831,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, tes
     inputList = []
     targetList = []
     for i in range(inputScenes.size(0)):
-        helper = getPatchesTransfer(inputScenes[i], 50)
+        helper = getPatchesTransfer(inputScenes[i], stride)
         inputList.append(helper)
 
-        helper = getPatchesTransfer(targetScenes[i], 50)
+        helper = getPatchesTransfer(targetScenes[i], stride)
         targetList.append(helper)
 
     # get predictions from input patches
@@ -858,14 +862,14 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, tes
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
         return fullLoss
 
     if test:
-        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
 
@@ -884,7 +888,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, tes
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatchesTransfer(x, (3, 200, 200), 50) for x in inputList)
+        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
 
