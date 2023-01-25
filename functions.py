@@ -67,7 +67,7 @@ def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
     print("found ", len(items), " scenes")
 
     # stack
-    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:3267")
+    stack = stackstac.stack(items, bounds_latlon=bbox)
 
     # use common_name for bands
     stack = stack.assign_coords(band=stack.common_name.fillna(stack.band).rename("band"))
@@ -518,8 +518,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                 if validationSet != None:
                     # sample data
                     validationLoss = 0
-                    for i in range(len(testSet)):
-                        helper = testSet[i]
+                    for i in range(len(validationSet)):
+                        helper = validationSet[i]
                         y = helper[1][0]
 
                         # forward + backward + optimize
@@ -530,7 +530,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         testLoss = MSEpixelLoss(predictions, y) + forward[1]
                         validationLoss += testLoss.item()
                         meanValidationLoss = validationLoss / len(validationSet)
-                        validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as wel for comparison with interpolation
+                        validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
                         # of in between datapoints
 
                     print("current validation loss: ", meanValidationLoss)
@@ -574,7 +574,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
         trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
 
     # save dartaFrame to csv
-    trainResults.to_csv("resultsTraining.csv")
+    trainResults.to_csv("resultsTrainingPatches.csv")
 
 def getPatches(tensor, patchSize, stride=50):
 
@@ -886,6 +886,78 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
+
+
+def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions):
+    """
+
+    train model on full scenes
+
+    model: torch nn.model
+    modelName: string
+    optimizer: torch optim object
+    data: list of list of tensor, tensor and tensor, tensor
+        five scenes input and dates, five scenes targets and dates
+    epochs: int
+    patchSize: int
+    stride: int
+    outputDimensions: tuple
+
+    """
+
+    trainCounter = 0
+    runningLoss = 0
+    trainLosses = []
+    for x in range(epochs):
+        # get indices for epoch
+        ix = np.arange(0, len(data), 1)
+        ix = np.random.choice(ix, len(data), replace=False, p=None)
+
+        for i in ix:
+            # get data
+            helper = data[i]
+            y = helper[1][0]
+
+            # zero the parameter gradients
+            optimizer.zero_grad()
+
+            # forward + backward + optimize
+
+            loss = fullSceneLoss(helper[0][0], helper[0][1],
+                                 helper[1][0], helper[1][1],
+                                 model,
+                                 patchSize,
+                                 stride,
+                                 outputDimensions,
+                                 test = False)
+            loss.backward()
+            optimizer.step()
+            trainCounter += 1
+
+            # print loss
+            runningLoss += loss.item()
+            meanRunningLoss = runningLoss / trainCounter
+            trainLosses.append(meanRunningLoss)
+            print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
+
+    ## save model anyways in case it did not converge
+    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+    saveCheckpoint(checkpoint, modelName)
+
+    # save losses
+    dict = {"trainLoss": trainLosses}
+    trainResults = pd.DataFrame(dict)
+
+    # save dartaFrame to csv
+    trainResults.to_csv("resultsTrainingScenes.csv")
+
+## visualize network performance on full scenes
+def inferenceScenes(model, data):
+
+
+
+
+
 
 
 

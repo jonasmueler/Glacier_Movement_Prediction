@@ -27,7 +27,7 @@ import rasterio
 
 # wrapper for acquiring data
 
-def API(box, time, cloudCoverage, allowedMissings, year, plot = False):
+def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = False):
     """
     acquire and preprocess the data
 
@@ -41,6 +41,8 @@ def API(box, time, cloudCoverage, allowedMissings, year, plot = False):
         p(missingData)
     year: string
         year of data extraction, downloads chunks of data as one year packages
+    glacierName: string
+        Name of the glacier for folder structure
     plot: boolean
         plot alignment (done correctly?)
 
@@ -72,8 +74,9 @@ def API(box, time, cloudCoverage, allowedMissings, year, plot = False):
     d = functions.NDSI(d, 0.3)
     # save on hard drive with pickling
     # create folder
-    pathOrigin = os.getcwd()
-    pathOrigin = os.path.join(pathOrigin, "images")
+
+    pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets"
+    pathOrigin = pathOrigin + "/" + glacierName
     os.makedirs(pathOrigin, exist_ok = True)
     os.chdir(pathOrigin)
 
@@ -116,8 +119,8 @@ for b in range(len(years)):
     os.chdir(path)
     if b < 10:
         str = years[b] + "-01-01/" + years[b+1] + "-01-01"
-        API((-38.46004817957116, 66.32096453314284, -38.1270251082821, 66.4310289161498),
-              str, 20, 0.5, years[b], plot = True)
+        API((7.889556884765626, 46.382464893261165, 8.22257995605469, 46.57160668424229),
+              str, 20, 0.5, years[b], "Jungfrau_Aletsch_Bietschhorn", plot = True)
         print(years[b] + " done")
     if b == 10:
         print("finished!")
