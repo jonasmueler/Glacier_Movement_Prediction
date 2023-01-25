@@ -951,7 +951,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     # save dartaFrame to csv
     trainResults.to_csv("resultsTrainingScenes.csv")
 
-## visualize network performance on full scenes
+## visualize network performance on full scenes, use for testData, qualitative check
 def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = False):
     """
 
@@ -969,6 +969,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
     targetScenes = data[1][0]
     inputDates = data[0][1]
     targetDates = data[1][1]
+
 
     # get patches from input images and targets
     inputList = []
@@ -1009,7 +1010,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
     if plot:
         plotList = [data[0][0][d] for d in range(5)]
         plotList = plotList + scenePredictions
-        plotList = [x.numpy() for x in plotList]
+        plotList = [x.detach().numpy() for x in plotList]
+        plotList = [np.transpose(x, (1,2,0)) for x in plotList]
 
         # Create a figure with 2 rows and 5 columns
         fig, axs = plt.subplots(2, 5)
