@@ -952,7 +952,70 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     trainResults.to_csv("resultsTrainingScenes.csv")
 
 ## visualize network performance on full scenes
-def inferenceScenes(model, data):
+def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = False):
+
+
+
+
+    inputScenes = data[0][0]
+    targetScenes = data[1][0]
+    inputDates = data[0][1]
+    targetDates = data[1][1]
+    # get patches from input images and targets
+    inputList = []
+    targetList = []
+    for i in range(inputScenes.size(0)):
+        helper = getPatches(inputScenes[i], patchSize, stride)
+        inputList.append(helper)
+
+        helper = getPatches(targetScenes[i], patchSize, stride)
+        targetList.append(helper)
+
+    # get predictions from input patches
+    latentSpaceLoss = 0
+    for i in range(len(inputList[0])):
+        helperInpt = list(x[i] for x in inputList)
+        targetInpt = list(x[i] for x in targetList)
+        inputPatches = torch.stack(helperInpt, dim=0)
+        targetPatches = torch.stack(targetInpt, dim=0)
+
+        # put together for final input
+        finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
+
+        # predict with model
+        prediction = model.forward(finalInpt, training=True)
+
+        # switch input with predictions; z = scene index, i = patch index
+        for z in range(prediction[0].size(0)):
+            inputList[z][i] = prediction[0][z, :, :]
+
+        # accumulate latent space losses
+        latentSpaceLoss += prediction[1].item()
+
+    # get final loss of predictions of the full scenes
+    # set patches back to images
+    scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)
+
+    ## plot
+    if plot:
+        plotList = [data[0][0][d] for d in range(5)]
+        plotList = plotList + scenePredictions
+        # Create a figure with 2 rows and 5 columns
+        fig, axs = plt.subplots(2, 5)
+
+        # Assume that `images` is a list of 10 images
+        for i in range(10):
+            # Get the current axis
+            ax = axs[i // 5, i % 5]
+            # Plot the image on the current axis
+            ax.imshow(plotList[i])
+            # Remove the axis labels
+            ax.axis('off')
+
+        # Show the figure
+        plt.show()
+
+    return scenePredictions
 
 
 
