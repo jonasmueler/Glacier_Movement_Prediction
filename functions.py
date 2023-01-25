@@ -953,14 +953,23 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
 
 ## visualize network performance on full scenes
 def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = False):
+    """
 
+    model: nn.class object
+    data: same as above
+    patchSize: int
+    stride: int
+    outputDimensions: tuple
+    plot: boolean
 
-
-
+    return: list of tensor
+        predicted scenes
+    """
     inputScenes = data[0][0]
     targetScenes = data[1][0]
     inputDates = data[0][1]
     targetDates = data[1][1]
+
     # get patches from input images and targets
     inputList = []
     targetList = []
@@ -1000,6 +1009,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
     if plot:
         plotList = [data[0][0][d] for d in range(5)]
         plotList = plotList + scenePredictions
+        plotList = [x.numpy() for x in plotList]
+
         # Create a figure with 2 rows and 5 columns
         fig, axs = plt.subplots(2, 5)
 
