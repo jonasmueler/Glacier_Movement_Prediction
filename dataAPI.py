@@ -119,8 +119,8 @@ for b in range(len(years)):
     os.chdir(path)
     if b < 10:
         str = years[b] + "-01-01/" + years[b+1] + "-01-01"
-        API((7.889556884765626, 46.382464893261165, 8.22257995605469, 46.57160668424229),
-              str, 20, 0.5, years[b], "Jungfrau_Aletsch_Bietschhorn", plot = True)
+        API((-49.707011136141695, 69.0891590033335, -49.374331387606546, 69.1869693618585),
+              str, 20, 0.5, years[b], "Jakobshavn", plot = True)
         print(years[b] + " done")
     if b == 10:
         print("finished!")

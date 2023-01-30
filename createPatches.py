@@ -2,10 +2,13 @@ import os
 import functions
 import matplotlib.pyplot as plt
 import pickle
+
+########### first check images with plot, then save patched pickle files #######################
 year = "2021"
 
-
-d = functions.loadData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/repo/Helheim", [year])
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
+os.chdir(path)
+d = functions.loadData(path, [year])
 
 ## add ndsi masks
 d = functions.NDSI(d, threshold = 0.3)
@@ -20,11 +23,11 @@ for i in range(len(d)):# rgb
 
 """
 # 2013
-#goodImg = [0, 2, 3, 4, 5, 6, 8, 9]
+#goodImg = [2, 3, 4, 5, 6, 7, 8, 10]
 # 2014:
-#goodImg = [0, 1,2 , 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+#goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 # 2015:
-#goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+#goodImg = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
 # 2016
 #goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23]
 # 2017
@@ -39,11 +42,18 @@ for i in range(len(d)):# rgb
 goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 d = [d[i] for i in goodImg]
 
-d = functions.automatePatching(d, (50, 50), 20, [0, 350, 200, 440], applyKernel=True)
+d = functions.automatePatching(d, 50, 20, [100, 400, 200, 500], applyKernel=True)
+
+os.makedirs(path + "/patched", exist_ok = True)
+os.chdir(path + "/patched")
 
 
 with open(year, "wb") as fp:  # Pickling
     pickle.dump(d, fp)
 print("data saved!")
+
+#"""
+
+
 
 

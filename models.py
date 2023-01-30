@@ -927,20 +927,27 @@ class AE_Transformer(nn.Module):
 
         # encoder
         res = self.encoder(s, datesEncoder, targets=False)
+        skipConnections = self.getSkips(res[1])
+        reconstruction = self.decoder(res[0], skipConnections, res[2])
+
+        # get reconstruction loss of input
+        # take last channel -> snow/Ice map
+        s = s[:,2, :, :].squeeze()
+
+        reconstructionLoss = nn.MSELoss()(reconstruction, s)
+
 
         # latent space
         l = self.latentSpace(res[0], target, datesDecoder, training)
 
         if training:
             # decoder
-            skipConnections = self.getSkips(res[1])
             s = self.decoder(l[0], skipConnections, res[2])  # output encoder: [result, skipConnections, poolingIndices]
 
-            return [s, l[1]]
+            return [s, l[1], reconstructionLoss] # model prediction, latent space loss, reconstruction loss
 
         elif training == False:
             # decoder
-            skipConnections = self.getSkips(res[1])
             s = self.decoder(l, skipConnections, res[2])  # output encoder: [result, skipConnections, poolingIndices]
 
             return s

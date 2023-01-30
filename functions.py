@@ -67,7 +67,7 @@ def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
     print("found ", len(items), " scenes")
 
     # stack
-    stack = stackstac.stack(items, bounds_latlon=bbox)
+    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:32623")
 
     # use common_name for bands
     stack = stack.assign_coords(band=stack.common_name.fillna(stack.band).rename("band"))
@@ -527,7 +527,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         # predictions = forward[0].to(device='cuda')
                         predictions = forward[0]
 
-                        testLoss = MSEpixelLoss(predictions, y) + forward[1]
+                        testLoss = MSEpixelLoss(predictions, y) + forward[1] + forward[2]
                         validationLoss += testLoss.item()
                         meanValidationLoss = validationLoss / len(validationSet)
                         validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
@@ -715,13 +715,13 @@ def createPatches(img, patchSize, stride, roi, applyKernel = False):
     return out
 
 
-def automatePatching(data, patchSize, maxPatches, roi, applyKernel):
+def automatePatching(data, patchSize, stride, roi, applyKernel):
     """
     creates image patches sampled from a region of interest
 
     data: list of tuple of datetime and np.array
         data extracted from API
-    patchSize: tuple of int
+    patchSize: int
         size of patches
     maxPatches: int
         number of patches extracted
@@ -737,7 +737,7 @@ def automatePatching(data, patchSize, maxPatches, roi, applyKernel):
     res = []
     for i in range(len(data)):
         print("processing image: ", i)
-        patches = createPatches(data[i][1][:, :, :], patchSize, maxPatches, roi, applyKernel=applyKernel)
+        patches = createPatches(data[i][1][:, :, :], patchSize, stride, roi, applyKernel=applyKernel)
         res.append((data[i][0], patches))
 
     return res
@@ -922,7 +922,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
             optimizer.zero_grad()
 
             # forward + backward + optimize
-
+            # use only target prediction for loss, latent space should already be learned, just edges of patches are smoothed
             loss = fullSceneLoss(helper[0][0], helper[0][1],
                                  helper[1][0], helper[1][1],
                                  model,
@@ -954,6 +954,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
 ## visualize network performance on full scenes, use for testData, qualitative check
 def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = False):
     """
+    use for visual check of model performance
 
     model: nn.class object
     data: same as above
