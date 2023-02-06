@@ -954,13 +954,13 @@ class AE_Transformer(nn.Module):
 
 
 # test forward pass
-test = [[torch.rand(5, 3, 50, 50, requires_grad=True),[torch.rand(1,3, requires_grad=True), torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True)]],
-       [torch.rand(5, 1, 50, 50, requires_grad=True),[torch.rand(1,3, requires_grad=True), torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True)]]]
+#test = [[torch.rand(5, 3, 50, 50, requires_grad=True),[torch.rand(1,3, requires_grad=True), torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True)]],
+#       [torch.rand(5, 1, 50, 50, requires_grad=True),[torch.rand(1,3, requires_grad=True), torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True)]]]
 
 
-model = AE_Transformer(2420,2420, 2420, 3, 1, 1000, 6,4, True, None)
-r = model.forward(test, True)
-print(r)
+#model = AE_Transformer(2420,2420, 2420, 3, 1, 1000, 6,4, True, None)
+#r = model.forward(test, True)
+#print(r)
 
 #total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 

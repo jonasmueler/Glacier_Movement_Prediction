@@ -706,7 +706,7 @@ def createPatches(img, patchSize, stride, roi, applyKernel = False):
             print("band: ", z, " of ", img.shape[0], "done")
     print("application of kernel done")
 
-    # torch conversion
+    # torch conversion; put into ndarray
     img = torch.from_numpy(img)
     patches = getPatches(img, patchSize, stride=stride)
     out = torch.stack(patches, dim = 0)
@@ -742,52 +742,58 @@ def automatePatching(data, patchSize, stride, roi, applyKernel):
 
     return res
 
-def getTrainTest(patches, window, inputBands, outputBands, numSequences):
+def getTrainTest(patches, window, inputBands, outputBands):
     """
+    takes 10 relative time deltas between scenes and outputs patch sequences with their corresponding date vectors
 
-    patches: list of tuple of datetime and np.array
-        data from API
+    patches: list of list of tensor and tensor and list of tensor and tensor
+        data createPatches.py
     window: int
         length of sequences for model
     inputBands: list of int
     outputBands: list of int
-    numSequences: int
-        number of sequences sampled from scenes
 
     returns: list of list of input data, input date and target data, target date
 
     """
     dataList = []
-    for i in range(numSequences):
-        # create patches from random consecutive timepoints in the future
-        ## take next n scenes
-        #x = patches[i:i + window]
-        #y = patches[i + window: i + (2 * window)]
-        ## take random next scenes
-        # sample 2*window consecutive indices
-        seq = np.arange(0, len(patches))
-        seq = np.random.choice(seq, 2*window, replace = False).tolist()
-        seq.sort()
-        seqX = seq[0:window]
-        seqY = seq[window:]
-        x = [patches[t] for t in seqX]
-        y = [patches[t] for t in seqY]
-        for z in range(x[0][1].shape[0]):
-            xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
-            xDates = torch.stack(xDates, dim=0)
-            yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
-            yDates = torch.stack(yDates, dim=0)
-            xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
-            xHelper = torch.stack(xHelper, dim = 0)
-            yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
-            yHelper = torch.stack(yHelper, dim=0)
+    deltas = np.arange(1,6,1) # [1:5]
+    counter = 0
+    for delta in deltas:
+        patchList = patches[::delta]
+        for i in range((len(patchList) - 2*window) // 1 + 1): # formula from pytorch cnn classes
+            # create patches from random consecutive timepoints in the future
+            ## take next n scenes
+            x = patchList[i:i + window]
+            y = patchList[i + window: i + (2 * window)]
+            ## take random next scenes
+            # sample 2*window consecutive indices
+            #seq = np.arange(0, len(patches))
+            #seq = np.random.choice(seq, 2*window, replace = False).tolist()
+            #seq.sort()
+            #seqX = seq[0:window]
+            #seqY = seq[window:]
+            #x = [patches[t] for t in seqX]
+            #y = [patches[t] for t in seqY]
+            for z in range(x[0][1].shape[0]):
+                xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
+                xDates = torch.stack(xDates, dim=0)
+                yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
+                yDates = torch.stack(yDates, dim=0)
+                xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
+                xHelper = torch.stack(xHelper, dim = 0)
+                yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
+                yHelper = torch.stack(yHelper, dim=0)
 
-            # sanity checks
-            assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+                # sanity checks
+                assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
 
-            # save
-            dataList.append([[xHelper, xDates], [yHelper, yDates]])
-        print("batch ", i, " done")
+                # save
+                dataList.append([[xHelper, xDates], [yHelper, yDates]])
+
+        print("delta ", counter, " done")
+        counter += 1
+
     # save data object on drive
     with open("trainData", "wb") as fp:  # Pickling
         pickle.dump(dataList, fp)
@@ -796,7 +802,7 @@ def getTrainTest(patches, window, inputBands, outputBands, numSequences):
     return dataList
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, test = False):
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, training, test = False):
     """
     train model on loss of full scenes and backpropagate full scene error in order to get smooth boarders in the final scene predictions
 
@@ -814,6 +820,8 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         used stride for patching
     outputDimensions: tuple
         dimensions of output scenes
+    training: boolean
+        inference?
     test: boolean
         test pipeline without model predictions
 
@@ -846,7 +854,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
             finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
 
             # predict with model
-            prediction = model.forward(finalInpt, training = True)
+            prediction = model.forward(finalInpt, training = training)
 
             # switch input with predictions; z = scene index, i = patch index
             for z in range(prediction[0].size(0)):
@@ -929,6 +937,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
                                  patchSize,
                                  stride,
                                  outputDimensions,
+                                 training = True,
                                  test = False)
             loss.backward()
             optimizer.step()
@@ -983,7 +992,6 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
         targetList.append(helper)
 
     # get predictions from input patches
-    latentSpaceLoss = 0
     for i in range(len(inputList[0])):
         helperInpt = list(x[i] for x in inputList)
         targetInpt = list(x[i] for x in targetList)
@@ -994,14 +1002,11 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
         finalInpt = [[inputPatches, inputDates], [targetPatches, targetDates]]
 
         # predict with model
-        prediction = model.forward(finalInpt, training=True)
+        prediction = model.forward(finalInpt, training=False)
 
         # switch input with predictions; z = scene index, i = patch index
-        for z in range(prediction[0].size(0)):
-            inputList[z][i] = prediction[0][z, :, :]
-
-        # accumulate latent space losses
-        latentSpaceLoss += prediction[1].item()
+        for z in range(prediction.size(0)):
+            inputList[z][i] = prediction[z, :, :]
 
     # get final loss of predictions of the full scenes
     # set patches back to images
