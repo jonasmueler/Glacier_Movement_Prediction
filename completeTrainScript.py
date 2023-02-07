@@ -32,31 +32,17 @@ crit = 0.9
 dTrain = data[0:round(len(d)*crit)]
 dValidate = data[round(len(d)*crit):-1]
 
-# get data onto cuda
-def helper(y):
-    """
-    transfers datum to gpu
-
-    y: list of list of tensor and tensor and list of tensor and tensor
-        input datum
-    return: list of list of tensor and tensor and list of tensor and tensor
-        transferred to cuda gpu
-    """
-    y[0][0] = y[0][0].to("cuda").to(torch.float32)
-    y[0][1] = y[0][1].to("cuda").to(torch.float32)
-    y[1][0] = y[1][0].to("cuda").to(torch.float32)
-    y[1][1] = y[1][1].to("cuda").to(torch.float32)
-
-    return y
-
-
-dTrain = list(map(lambda x: helper(x), dTrain))
-dTest = list(map(lambda x: helper(x), dValidate))
-
+# move to cuda
+dTrain = list(map(lambda x: functions.moveToCuda(x), dTrain))
+dValidate = list(map(lambda x: functions.moveToCuda(x), dValidate))
 
 # initialize model
 model = models.AE_Transformer(2420,2420,2420, 3, 5, 1000, 12, 10, True, None)
 model = model.to("cuda").to(torch.float32)
+
+# train on patches
+### args ### data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs, validationSet, validationStep
+functions.trainLoop(dTrain, model, False,"transfomrerPatches", 0.0001, 0.01, 0.00001, 1000, dValidate)
 
 
 

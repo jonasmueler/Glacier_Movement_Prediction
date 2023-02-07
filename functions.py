@@ -537,7 +537,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                 # early stopping
                 if earlyStopping > 0:
-                    if (meanValidationLoss - lastLoss) > earlyStopping:
+                    if (meanValidationLoss - lastLoss) < earlyStopping:
                         stoppingCounter += 1
 
                     if stoppingCounter == 10:
@@ -1037,7 +1037,21 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
     return scenePredictions
 
 
+def moveToCuda(y):
+    """
+    transfers datum to gpu
 
+    y: list of list of tensor and tensor and list of tensor and tensor
+        input datum
+    return: list of list of tensor and tensor and list of tensor and tensor
+        transferred to cuda gpu
+    """
+    y[0][0] = y[0][0].to("cuda").to(torch.float32)
+    y[0][1] = y[0][1].to("cuda").to(torch.float32)
+    y[1][0] = y[1][0].to("cuda").to(torch.float32)
+    y[1][1] = y[1][1].to("cuda").to(torch.float32)
+
+    return y
 
 
 
