@@ -4,6 +4,7 @@ import models
 import random
 import torch
 
+
 ## load datasets of three glaciers
 
 # helheim glacier
@@ -43,6 +44,12 @@ model = model.to("cuda").to(torch.float32)
 # train on patches
 ### args ### data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs, validationSet, validationStep
 functions.trainLoop(dTrain, model, False,"transfomrerPatches", 0.0001, 0.01, 0.00001, 1000, dValidate)
+
+## to do: load full scene dataset
+## train on full scene dataset
+## get losses from function
+## predict some images and save them on harddrive
+## integrate weights and biases into the script to observe losses
 
 
 

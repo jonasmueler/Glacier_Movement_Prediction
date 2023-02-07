@@ -554,9 +554,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                         # save dartaFrame to csv
                         trainResults.to_csv("resultsTraining.csv")
-                        ############ find better solution than exiting the file
-                        quit()
-                        #######################################################
+                        return
 
                     lastLoss = meanValidationLoss
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
@@ -575,6 +573,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
     # save dartaFrame to csv
     trainResults.to_csv("resultsTrainingPatches.csv")
+
+    return
 
 def getPatches(tensor, patchSize, stride=50):
 
@@ -744,7 +744,7 @@ def automatePatching(data, patchSize, stride, roi, applyKernel):
 
 def getTrainTest(patches, window, inputBands, outputBands):
     """
-    takes 10 relative time deltas between scenes and outputs patch sequences with their corresponding date vectors
+    takes 5 relative time deltas between scenes and outputs patch sequences with their corresponding date vectors
 
     patches: list of list of tensor and tensor and list of tensor and tensor
         data createPatches.py
