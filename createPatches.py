@@ -13,7 +13,7 @@ d = functions.loadData(path, [year])
 
 
 ## add ndsi masks
-d = functions.NDSI(d, threshold = 0.3)
+#d = functions.NDSI(d, threshold = 0.3)
 
 """
 # find roi and good images

@@ -960,8 +960,10 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     # save dartaFrame to csv
     trainResults.to_csv("resultsTrainingScenes.csv")
 
+    return
+
 ## visualize network performance on full scenes, use for testData, qualitative check
-def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = False):
+def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, plot = False, safe = False):
     """
     use for visual check of model performance
 
@@ -970,7 +972,13 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
     patchSize: int
     stride: int
     outputDimensions: tuple
+    glacierName: str
+        name of the glacier for order structure
+    predictionname: str
+        name of folder for predictions to be safed in
     plot: boolean
+    safe: boolean
+        safe output as images on harddrive
 
     return: list of tensor
         predicted scenes
@@ -1033,6 +1041,29 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, plot = Fal
 
         # Show the figure
         plt.show()
+    if safe:
+        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+        os.chdir(path)
+        os.mkdirs("modelPredictions", exists_ok = True)
+        os.chdir(path + "/modelPredictions")
+        os.mkdirs(glacierName, exists_ok=True)
+        os.chdir(os.getcwd() + "/" + glacierName)
+        os.mkdirs(predictionName, exists_ok=True)
+        os.chdir(os.getcwd() + "/" + predictionName)
+
+        path = os.getcwd()
+        for i in range(len(scenePredictions)):
+            # model predictions
+            os.mkdirs("predictions", exists_ok=True)
+            os.chdir(os.getcwd() + "/" + "predictions")
+            im = Image.fromarray(scenePredictions[i])
+            im.save(str(i) + ".jpeg")
+
+            # target predictions
+            os.mkdirs("targets", exists_ok=True)
+            os.chdir(os.getcwd() + "/" + "targets")
+            im = Image.fromarray(targetScenes[i])
+            im.save(str(i) + ".jpeg")
 
     return scenePredictions
 
@@ -1052,6 +1083,70 @@ def moveToCuda(y):
     y[1][1] = y[1][1].to("cuda").to(torch.float32)
 
     return y
+
+
+def loadFullSceneData(path, names, window, inputBands, outputBands, ROI):
+    """
+    creates dataset of full scenes in order to train model on full scene loss
+
+    path: string
+        path to dataset
+    names: list of string
+        names of files to load
+    inputBands: int
+        number of the input to be used
+    outputBands: int
+        number of bands to be used in the output
+
+    return: list of tensor and tensor, and tensor and tensor
+        datum = list of scenes, dates and targets and dates
+    """
+    d = loadData(path, names)
+    dataList = []
+    deltas = np.arange(1, 6, 1)  # [1:5]
+    counter = 0
+    for delta in deltas:
+        sceneList = d[::delta]
+        for i in range((len(sceneList) - 2 * window) // 1 + 1):  # formula from pytorch cnn classes
+            # create patches from random consecutive timepoints in the future
+            ## take next n scenes
+            x = sceneList[i:i + window]
+            y = sceneList[i + window: i + (2 * window)]
+
+            # dates
+            xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
+            xDates = torch.stack(xDates, dim=0)
+            yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
+            yDates = torch.stack(yDates, dim=0)
+
+            # ROI in scenes
+            xHelper = list(map(lambda x: torch.from_numpy(x[1][inputBands, ROI[0]:ROI[1], ROI[2]:ROI[3]]), x))
+            xHelper = torch.stack(xHelper, dim=0)
+            yHelper = list(map(lambda x: torch.from_numpy(x[1][outputBands, ROI[0]:ROI[1], ROI[2]:ROI[3]]), y))
+            yHelper = torch.stack(yHelper, dim=0).unsqueeze(1)
+
+            # sanity checks
+            assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+
+            # save
+            dataList.append([[xHelper, xDates], [yHelper, yDates]])
+
+        print("delta ", counter, " done")
+        counter += 1
+
+    # save data object on drive
+    with open("trainDataFullScenes", "wb") as fp:  # Pickling
+        pickle.dump(dataList, fp)
+    print("data saved!")
+
+    return dataList
+
+## test
+#path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
+#dat = loadFullSceneData(path, ["2013"], 5, [7,8,9], 9, [100, 400, 200, 500])
+#print(dat[0][0][1].size())
+
+
 
 
 
