@@ -126,8 +126,8 @@ def minmaxScaler(X):
        values from [0,1]
     """
     #res = (X - np.nanpercentile(X,2)) / (np.nanpercentile(X, 98) - np.nanpercentile(X, 2))
-    res = ((X - np.nanmin(X) )/ (np.nanmax(X) - np.nanmin(X))) *255.99
-    res = res.astype("uint8")
+    res = ((X - np.nanmin(X) )/ (np.nanmax(X) - np.nanmin(X))) #*255.99
+    #res = res.astype("uint8")
     return res
 
 
@@ -501,7 +501,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             optimizer.zero_grad()
 
             # forward + backward + optimize
-            forward = model.forward(helper)
+            forward = model.forward(helper, training = True)
             # predictions = forward[0].to(device='cuda')
             predictions = forward[0]
             loss = MSEpixelLoss(predictions, y) + forward[1]
@@ -542,10 +542,17 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                     if stoppingCounter == 10:
                         print("model converged, early stopping")
+
+                        # navigate/create order structure
+                        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+                        os.chdir(path)
+                        os.makedirs(modelName, exist_ok=True)
+                        os.chdir(path + "/" + modelName)
+
                         checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
                         saveCheckpoint(checkpoint, modelName)
                         # save losses
-                        dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(trainLosses)]}
+                        dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
                         trainResults = pd.DataFrame(dict)
 
                         # fill in validation losses with index
@@ -559,12 +566,17 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     lastLoss = meanValidationLoss
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
+    path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+    os.chdir(path)
+    os.makedirs(modelName, exist_ok = True)
+    os.chdir(path + "/" + modelName)
+
     ## save model anyways in case it did not converge
     checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
     saveCheckpoint(checkpoint, modelName)
 
     # save losses
-    dict = {"trainLoss": trainLosses, "validationLoss" : [np.NaN for x in range(trainLosses)]}
+    dict = {"trainLoss": trainLosses, "validationLoss" : [np.NaN for x in range(len(trainLosses))]}
     trainResults = pd.DataFrame(dict)
 
     # fill in validation losses with index
@@ -949,7 +961,12 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
             trainLosses.append(meanRunningLoss)
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
-    ## save model anyways in case it did not converge
+    path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+    os.chdir(path)
+    os.makedirs(modelName, exist_ok=True)
+    os.chdir(path + "/" + modelName)
+
+    ## save model
     checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
     saveCheckpoint(checkpoint, modelName)
 
@@ -963,7 +980,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     return
 
 ## visualize network performance on full scenes, use for testData, qualitative check
-def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, plot = False, safe = False):
+def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False):
     """
     use for visual check of model performance
 
@@ -976,6 +993,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         name of the glacier for order structure
     predictionname: str
         name of folder for predictions to be safed in
+    modelName: string
+        name of the model to safe in order structure
     plot: boolean
     safe: boolean
         safe output as images on harddrive
@@ -1042,45 +1061,73 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         # Show the figure
         plt.show()
     if safe:
-        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+        print("start saving prediction scenes")
+
+        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
         os.chdir(path)
-        os.mkdirs("modelPredictions", exists_ok = True)
-        os.chdir(path + "/modelPredictions")
-        os.mkdirs(glacierName, exists_ok=True)
+        os.makedirs(modelName, exist_ok=True)
+        os.chdir(path + "/" + modelName)
+
+        os.makedirs("modelPredictions", exist_ok=True)
+        os.chdir(os.getcwd() + "/modelPredictions")
+        os.makedirs(glacierName, exist_ok=True)
         os.chdir(os.getcwd() + "/" + glacierName)
-        os.mkdirs(predictionName, exists_ok=True)
+        os.makedirs(predictionName, exist_ok=True)
         os.chdir(os.getcwd() + "/" + predictionName)
 
         path = os.getcwd()
         for i in range(len(scenePredictions)):
             # model predictions
-            os.mkdirs("predictions", exists_ok=True)
-            os.chdir(os.getcwd() + "/" + "predictions")
-            im = Image.fromarray(scenePredictions[i])
-            im.save(str(i) + ".jpeg")
+            os.chdir(path)
+            os.makedirs("predictions", exist_ok=True)
+            os.chdir(path + "/" + "predictions")
+            img = Image.fromarray(minmaxScaler(scenePredictions[i].cpu().detach().numpy()[0,:,:]), "L")
+            ## debug plotting
+            #plt.imshow(img)
+            #plt.show()
+
+            # save
+            name = str(i) + ".jpeg"
+            img.save(name, quality=95)
+
+            with open(str(i), "wb") as fp:  # Pickling
+                pickle.dump(scenePredictions[i].cpu().detach().numpy(), fp)
+
 
             # target predictions
-            os.mkdirs("targets", exists_ok=True)
-            os.chdir(os.getcwd() + "/" + "targets")
-            im = Image.fromarray(targetScenes[i])
-            im.save(str(i) + ".jpeg")
+            os.chdir(path)
+            os.makedirs("targets", exist_ok=True)
+            os.chdir(path + "/" + "targets")
+            img = Image.fromarray(minmaxScaler(targetScenes[i].cpu().detach().numpy()[0,:,:]), "L")
 
+            ## debug plotting
+            #plt.imshow(targetScenes[i].cpu().detach().numpy()[0,:,:])
+            #plt.show()
+
+            # save
+            name = str(i) + ".jpeg"
+            img.save(name, quality=95)
+            with open(str(i), "wb") as fp:  # Pickling
+                pickle.dump(targetScenes[i].cpu().detach().numpy(), fp)
+
+    print("prediction scenes saved")
     return scenePredictions
 
 
-def moveToCuda(y):
+def moveToCuda(y, device):
     """
-    transfers datum to gpu
+    transfers datum to gpu/cpu
 
     y: list of list of tensor and tensor and list of tensor and tensor
         input datum
     return: list of list of tensor and tensor and list of tensor and tensor
         transferred to cuda gpu
     """
-    y[0][0] = y[0][0].to("cuda").to(torch.float32)
-    y[0][1] = y[0][1].to("cuda").to(torch.float32)
-    y[1][0] = y[1][0].to("cuda").to(torch.float32)
-    y[1][1] = y[1][1].to("cuda").to(torch.float32)
+
+    y[0][0] = y[0][0].to(device).to(torch.float32)
+    y[0][1] = y[0][1].to(device).to(torch.float32)
+    y[1][0] = y[1][0].to(device).to(torch.float32)
+    y[1][1] = y[1][1].to(device).to(torch.float32)
 
     return y
 

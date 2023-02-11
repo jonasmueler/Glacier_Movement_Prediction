@@ -481,12 +481,13 @@ class AE_Attention(nn.Module):
 
 class AE_Transformer(nn.Module):
     def __init__(self, encoderIn, hiddenLenc, hiddenLdec, mlpSize, numLayersDateEncoder, sizeDateEncoder,
-                 attLayers, attentionHeads, Training=True, predictionInterval=None):
+                 attLayers, attentionHeads, device, Training=True, predictionInterval=None):
         super(AE_Transformer, self).__init__()
 
         # global
         self.training = Training
         self.predictionInterval = predictionInterval
+        self.device = torch.device(device)
 
         # encoder
         self.CLayer1 = nn.Conv2d(3, 10, (3, 3), 1)
@@ -584,7 +585,7 @@ class AE_Transformer(nn.Module):
         """
 
         # MLP
-        s = dateVec
+        s = dateVec.to(self.device)
         for layer in self.dateEncoderMLPlist:
             s = layer(s)
         return s
@@ -639,7 +640,7 @@ class AE_Transformer(nn.Module):
             list indices for 2dmaxunpool in decoder]
         """
         # init memory; idea: safe maxPool indices and skip connections in list of lists for decoder
-        result = torch.zeros((len(x), self.hiddenLenc))
+        result = torch.zeros((len(x), self.hiddenLenc)).to(self.device)
         poolingIndices = []
         skipConnections = []
 
@@ -728,7 +729,7 @@ class AE_Transformer(nn.Module):
             constants added for positional encodings
         """
         # create constant 'pe' matrix with values dependant on pos and i
-        pe = torch.zeros(seqLen, self.hiddenLenc)
+        pe = torch.zeros(seqLen, self.hiddenLenc).to(self.device)
         for pos in range(seqLen):
             for i in range(0, self.hiddenLenc, 2):
                 pe[pos, i] = \
@@ -759,7 +760,7 @@ class AE_Transformer(nn.Module):
         mask = mask.masked_fill(mask == 0, float('-inf'))
         mask = mask.masked_fill(mask == 1, float(0.0))
 
-        return mask
+        return mask.to(self.device)
 
     def latentSpace(self, flattenedInput, targets, targetsT, training):
         """
@@ -780,8 +781,8 @@ class AE_Transformer(nn.Module):
         """
         if training:  # ~teacher forcing
             # add start token to sequences
-            helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32)
-            flattenedInput = torch.vstack([helper, flattenedInput])
+            helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
+            flattenedInput = torch.vstack([helper, flattenedInput]).to(self.device)
             targets = self.encoder(targets, targetsT, targets=True)[0]  # add temporal information
             targetsOut = targets.clone()  # for latentspace loss
             targets = torch.vstack([helper, targets])
@@ -852,12 +853,12 @@ class AE_Transformer(nn.Module):
             output NDSI image snow maks of shape (5, 50,50) # 5 timepoints
         """
 
-        result = torch.zeros((latentOutput.size(0), 50, 50))
+        result = torch.zeros((latentOutput.size(0), 50, 50)).to(self.device)
         for i in range(latentOutput.size(0)):
-            image = latentOutput[i, :].clone()
+            image = latentOutput[i, :].clone().to(self.device)
 
             # MLP
-            s = image.clone()
+            s = image.clone().to(self.device)
             for layer in self.MLPlistDec:
                 s = layer(s)
 
@@ -943,12 +944,14 @@ class AE_Transformer(nn.Module):
         if training:
             # decoder
             s = self.decoder(l[0], skipConnections, res[2])  # output encoder: [result, skipConnections, poolingIndices]
+            s = s.unsqueeze(dim = 1) # for loss
 
             return [s, l[1], reconstructionLoss] # model prediction, latent space loss, reconstruction loss
 
         elif training == False:
             # decoder
             s = self.decoder(l, skipConnections, res[2])  # output encoder: [result, skipConnections, poolingIndices]
+            s = s.unsqueeze(dim=1) # for loss
 
             return s
 
