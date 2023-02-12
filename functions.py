@@ -1,34 +1,40 @@
 # packages
-import coiled
-import distributed
-import dask
+#import coiled
+#import distributed
+#import dask
 import pandas as pd
 import pystac_client
 import planetary_computer as pc
-import ipyleaflet
-import IPython.display as dsp
-import geogif
-from dateutil.parser import ParserError
+#import ipyleaflet
+#import IPython.display as dsp
+#import geogif
+#from dateutil.parser import ParserError
 import stackstac
-import bottleneck
-import dask
+#import bottleneck
+#import dask
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.image as mpimg
+#import matplotlib.image as mpimg
 from numpy import array
 import cv2
-import imutils
+#import imutils
 from torch import nn
-from numpy import linalg as LA
-from numpy import ma
+#from numpy import linalg as LA
+#from numpy import ma
 import os
 import pickle
-from sklearn.feature_extraction import image
+#from sklearn.feature_extraction import image
 import torch.optim as optim
 import torch
-import sys
-from torchvision import transforms
+#import sys
+#from torchvision import transforms
 from PIL import Image
+import wandb
+
+
+## global variables for project
+### change here to run on cluster ####
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
@@ -452,7 +458,7 @@ def loadCheckpoint(checkpoint, model, optimizer):
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
-              validationSet, validationStep):
+              validationSet, validationStep, WandB, pathOrigin = pathOrigin):
     """
 
     data: list of list of input data and dates and targets
@@ -468,6 +474,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     validationSet: same as data
     validationStep: int
         timepoint when validation set is evaluated for early stopping regularization
+    WandB: boolean
+        use weights and biases tool to monitor losses dynmaically
 
 
     return: nn.class
@@ -481,6 +489,21 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     trainLosses = []
     validationLosses = []
     trainCounter = 0
+
+    # WandB
+    if WandB:
+        wandb.init(
+            # set the wandb project where this run will be logged
+            project= modelName,
+
+            # track hyperparameters and run metadata
+            config={
+                "learning_rate": lr,
+                "architecture": modelName,
+                "dataset": "Helheim, Aletsch, jakobshavn",
+                "epochs": epochs,
+            }
+        )
 
     # load model
     if loadModel:
@@ -535,12 +558,16 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                     print("current validation loss: ", meanValidationLoss)
 
+                ## log to wandb
+                if WandB:
+                    wandb.log({"train loss": meanRunningLoss, "validation loss": meanValidationLoss})
+
                 # early stopping
                 if earlyStopping > 0:
                     if (meanValidationLoss - lastLoss) < earlyStopping:
                         stoppingCounter += 1
 
-                    if stoppingCounter == 10:
+                    if stoppingCounter == 5:
                         print("model converged, early stopping")
 
                         # navigate/create order structure
@@ -566,7 +593,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     lastLoss = meanValidationLoss
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
-    path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+    path = pathOrigin + "/results" ## check if takes global variable
     os.chdir(path)
     os.makedirs(modelName, exist_ok = True)
     os.chdir(path + "/" + modelName)
@@ -814,7 +841,7 @@ def getTrainTest(patches, window, inputBands, outputBands):
     return dataList
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, training, test = False):
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, training, test = False, pathOrigin = pathOrigin):
     """
     train model on loss of full scenes and backpropagate full scene error in order to get smooth boarders in the final scene predictions
 
@@ -908,7 +935,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         return fullLoss
 
 
-def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions):
+def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, pathOrigin = pathOrigin):
     """
 
     train model on full scenes
@@ -961,7 +988,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
             trainLosses.append(meanRunningLoss)
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
-    path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+    path = pathOrigin + "/results"
     os.chdir(path)
     os.makedirs(modelName, exist_ok=True)
     os.chdir(path + "/" + modelName)
@@ -980,7 +1007,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     return
 
 ## visualize network performance on full scenes, use for testData, qualitative check
-def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False):
+def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False, pathOrigin = pathOrigin):
     """
     use for visual check of model performance
 
@@ -1063,7 +1090,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     if safe:
         print("start saving prediction scenes")
 
-        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+        path = pathOrigin + "/results"
         os.chdir(path)
         os.makedirs(modelName, exist_ok=True)
         os.chdir(path + "/" + modelName)

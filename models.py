@@ -510,7 +510,7 @@ class AE_Transformer(nn.Module):
         Linear = nn.Linear(self.sizeDate, self.sizeDate)
         Out = nn.Linear(self.sizeDate, self.hiddenLenc)
         r = nn.ReLU()
-        s = nn.Softmax()
+        s = nn.Softmax() ## check dimensions! error should be rudimentary
         helper = [In]
 
         for i in range(self.numLayersDateEncoder):
@@ -790,6 +790,10 @@ class AE_Transformer(nn.Module):
             # positional information to input
             positionalEmbedding = self.positionalEncodings(flattenedInput.size(0) * 2)
 
+            # temporal information to input
+            for i in range(positionalEmbedding.size(0)):
+                positionalEmbedding[i] = positionalEmbedding[i] + self.dateEncoder(targetsT[i])
+
             # divide for input and output
             idx = int(flattenedInput.size(0))
             inputMatrix = positionalEmbedding[:, 0:idx, :]
@@ -961,7 +965,7 @@ class AE_Transformer(nn.Module):
 #       [torch.rand(5, 1, 50, 50, requires_grad=True),[torch.rand(1,3, requires_grad=True), torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True),torch.rand(1,3, requires_grad=True)]]]
 
 
-#model = AE_Transformer(2420,2420, 2420, 3, 1, 1000, 6,4, True, None)
+#model = AE_Transformer(2420,2420, 2420, 3, 1, 1000, 1,1,"cuda", True, None)
 #r = model.forward(test, True)
 #print(r)
 

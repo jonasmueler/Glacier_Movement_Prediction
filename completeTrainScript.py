@@ -7,24 +7,27 @@ import os
 import torch.optim as optim
 
 ## load datasets of three glaciers
+
+
+device = "cpu"
+
 """
 # helheim glacier
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched"
+path = pathOrigin + "/datasets"
 os.chdir(path)
-helheim = functions.openData("trainData")
+helheim = functions.openData("trainDataHelheim")
 
 # Aletsch glacier
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched"
 os.chdir(path)
-aletsch = functions.openData("trainData")
+aletsch = functions.openData("trainDataAletsch")
 
 # Jakobshavn glacier
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched"
 os.chdir(path)
-jakobshavn = functions.openData("trainData")
+jakobshavn = functions.openData("trainDataJakobshavn")
 
 # put into one big dataset
 data = helheim + aletsch + jakobshavn
+
 """
 ### debug ###
 # test with 200*200 image
@@ -53,28 +56,35 @@ dTrain = data[0:round(len(data)*crit)]
 dValidate = data[round(len(data)*crit):-1]
 
 # move to cuda
-dTrain = list(map(lambda x: functions.moveToCuda(x, torch.device('cpu')), dTrain))
-dValidate = list(map(lambda x: functions.moveToCuda(x, torch.device('cpu')), dValidate))
+dTrain = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), dTrain))
+dValidate = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), dValidate))
 
 # initialize model
-model = models.AE_Transformer(2420,2420,2420, 1, 1, 1, 1, 1,torch.device('cpu'), True, 5)
-model = model.to(torch.device('cpu')).to(torch.float32)
-"""
+## args ## encoderIn, hiddenLenc, hiddenLdec, mlpSize, numLayersDateEncoder, sizeDateEncoder,
+# attLayers, attentionHeads, device, Training=True, predictionInterval=None
+#model = models.AE_Transformer(2420,2420,2420, 3, 2, 1000, 10, 10,torch.device('cuda'), True, 5)
+
+model = models.AE_Transformer(2420,2420,2420, 1, 1, 1, 1, 1,torch.device(device), True, 5)
+model = model.to(torch.device(device)).to(torch.float32)
+
 # train on patches
 ### args ### data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs, validationSet, validationStep
-functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 1, dValidate, 10)
+functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True)
 
 # load full scene dataset, use Helheim data to train edges between patch predictions
+
+
+#path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
+#os.chdir(path)
+#sceneDataHelheim = functions.loadFullSceneData(path,
+#                                               ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
+#                                               5,
+#                                               [7, 8, 9],
+#                                               9,
+#                                               [100, 400, 200, 500])
 """
-"""
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
-os.chdir(path)
-sceneDataHelheim = functions.loadFullSceneData(path,
-                                               ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"],
-                                               5,
-                                               [7, 8, 9],
-                                               9,
-                                               [100, 400, 200, 500])
+scenedataHelheim = functions.openData("trainDataFullScenes")
+
 """
 ### debug ###
 testInput = torch.rand(5, 3, 300, 300, requires_grad=True)
@@ -90,14 +100,14 @@ testTargetDates = torch.stack([torch.rand(1,3, requires_grad=True), torch.rand(1
 sceneDataHelheim = [[[testInput, testInputDates], [testTargets, testTargetDates]]]
 
 #############
-"""
+
 # train on full scene dataset
 functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
                                  sceneDataHelheim,
                                  1,
                                  50, 50,
                                  (1, 300 ,300))
-"""
+
 ## predict some images and save them on harddrive
 ## args: model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False
 res1 = functions.inferenceScenes(model,
@@ -130,10 +140,9 @@ res3 = functions.inferenceScenes(model,
                                 "2",
                                 plot = False,
                                 safe = True)
-                                
 """
 
-## integrate weights and biases into the script to observe losses
+
 
 
 
