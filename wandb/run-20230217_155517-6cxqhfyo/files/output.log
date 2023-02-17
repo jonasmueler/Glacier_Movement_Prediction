@@ -1,0 +1,27 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py:116: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 76, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 487, in forward
+    reconstruction = self.decoder(res[0], skipConnections, poolingInd)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 420, in decoder
+    image = torch.reshape(s, (20, 20, 20))
+RuntimeError: shape '[20, 20, 20]' is invalid for input of size 9680
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 76, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 487, in forward
+    reconstruction = self.decoder(res[0], skipConnections, poolingInd)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 420, in decoder
+    image = torch.reshape(s, (20, 20, 20))
+RuntimeError: shape '[20, 20, 20]' is invalid for input of size 9680
+torch.Size([20, 22, 22])
+torch.Size([20, 22, 22])
+torch.Size([20, 22, 22])
+torch.Size([20, 22, 22])
+torch.Size([20, 22, 22])

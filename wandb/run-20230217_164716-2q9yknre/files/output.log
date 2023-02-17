@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 77, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 939, in forward
+    res = self.encoder(s, datesEncoder, targets=False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 711, in encoder
+    s = layer(s)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (1x484 and 9680x1000)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 77, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 939, in forward
+    res = self.encoder(s, datesEncoder, targets=False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 711, in encoder
+    s = layer(s)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/linear.py", line 114, in forward
+    return F.linear(input, self.weight, self.bias)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (1x484 and 9680x1000)

@@ -1,0 +1,41 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py:116: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 76, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 486, in forward
+    reconstruction = self.decoder(res[0], skipConnections, poolingInd)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 422, in decoder
+    s = self.maxUnPool(image, indices[6])
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/pooling.py", line 406, in forward
+    return F.max_unpool2d(input, indices, self.kernel_size, self.stride,
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 980, in max_unpool2d
+    return torch._C._nn.max_unpool2d(input, indices, output_size)
+RuntimeError: Found an invalid max index: 2825 (output volumes are of size 24x24
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 76, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 541, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 486, in forward
+    reconstruction = self.decoder(res[0], skipConnections, poolingInd)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/AuTransformerMaxPool.py", line 422, in decoder
+    s = self.maxUnPool(image, indices[6])
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/pooling.py", line 406, in forward
+    return F.max_unpool2d(input, indices, self.kernel_size, self.stride,
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 980, in max_unpool2d
+    return torch._C._nn.max_unpool2d(input, indices, output_size)
+RuntimeError: Found an invalid max index: 2825 (output volumes are of size 24x24
+torch.Size([10, 46, 46])
+torch.Size([20, 42, 42])
+torch.Size([40, 38, 38])
+torch.Size([60, 34, 34])
+torch.Size([80, 30, 30])
+torch.Size([100, 26, 26])
+torch.Size([20, 22, 22])
