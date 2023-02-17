@@ -552,6 +552,7 @@ class AE_Transformer(nn.Module):
                                           num_encoder_layers=self.attentionLayers,
                                           num_decoder_layers=self.attentionLayers)
 
+
         # MLP Decoder
         self.hiddenLdec = hiddenLdec
         In = nn.Linear(self.hiddenLdec, self.hiddenLdec)
@@ -640,11 +641,11 @@ class AE_Transformer(nn.Module):
             list indices for 2dmaxunpool in decoder]
         """
         # init memory; idea: safe maxPool indices and skip connections in list of lists for decoder
-        result = torch.zeros((len(x), self.hiddenLenc)).to(self.device)
+        result = Variable(torch.zeros((len(x), self.hiddenLenc))).to(self.device)
         poolingIndices = []
         skipConnections = []
 
-        for i in range(len(x)):  # add max pooling
+        for i in range(len(x)):
             helper = []
             helper1 = []
             if targets:
@@ -710,11 +711,15 @@ class AE_Transformer(nn.Module):
                 s = layer(s)
             result[i, :] = s + self.dateEncoder(encDate[i])  # + encoder temporal embedding
 
+            # save memory
+            del s
+
             # save lists for decoder
             skipConnections.append(helper)
             poolingIndices.append(helper1)
 
         return [result, skipConnections, poolingIndices]
+        #return [result, skipConnections]
 
     def positionalEncodings(self, seqLen):
         """
@@ -771,7 +776,9 @@ class AE_Transformer(nn.Module):
         targets: tensor
             if training == True
         targetsT: list of tensor
-            temporal information of images
+            temporal information targets and input
+        temporalInfInference:
+            temporal information for inference, when no more teacher forcing is used
         training: boolean
             training or inference
 
@@ -780,29 +787,25 @@ class AE_Transformer(nn.Module):
 
         """
         if training:  # ~teacher forcing
-            # add start token to sequences
+            # add temporal information to targets
+            targets = self.encoder(targets, targetsT, targets=True)[0]
+            targetsOut = targets.clone().to(self.device)
+            # add start tokens to sequences
             helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
+            targets = torch.vstack([helper, targets]).to(self.device)
             flattenedInput = torch.vstack([helper, flattenedInput]).to(self.device)
-            targets = self.encoder(targets, targetsT, targets=True)[0]  # add temporal information
-            targetsOut = targets.clone()  # for latentspace loss
-            targets = torch.vstack([helper, targets])
 
-            # positional information to input
+            # positional information to data
             positionalEmbedding = self.positionalEncodings(flattenedInput.size(0) * 2)
-
-            # temporal information to input
-            for i in range(positionalEmbedding.size(0)):
-                positionalEmbedding[i] = positionalEmbedding[i] + self.dateEncoder(targetsT[i])
 
             # divide for input and output
             idx = int(flattenedInput.size(0))
             inputMatrix = positionalEmbedding[:, 0:idx, :]
-            targetMatrix = positionalEmbedding[:, idx:flattenedInput.size(0) * 2, :]
-
-            flattenedInput = flattenedInput + inputMatrix
-            flattenedInput = flattenedInput.squeeze(0)
+            targetMatrix = positionalEmbedding[:, idx:idx * 2, :]
 
             # add positional information
+            flattenedInput = flattenedInput + inputMatrix
+            flattenedInput = flattenedInput.squeeze(0)
             targets = targets + targetMatrix
             targets = targets.squeeze(0)
 
@@ -835,7 +838,7 @@ class AE_Transformer(nn.Module):
 
                 # forward pass
                 out = self.transformer(flattenedInput, yInput, tgt_mask=targetMask)
-                out = out + self.dateEncoder(targetsT[q])  # add temporal information
+                out = out + self.dateEncoder(targetsT[q])  # add temporal information to predictions
                 nextItem = out[-1]
                 yInput = torch.vstack([yInput, nextItem]).squeeze()
 
@@ -859,7 +862,9 @@ class AE_Transformer(nn.Module):
 
         result = torch.zeros((latentOutput.size(0), 50, 50)).to(self.device)
         for i in range(latentOutput.size(0)):
-            image = latentOutput[i, :].clone().to(self.device)
+            # memory management
+            image = Variable(latentOutput[i, :]).to(self.device)
+            #image = latentOutput[i, :].clone().to(self.device)
 
             # MLP
             s = image.clone().to(self.device)
@@ -949,7 +954,6 @@ class AE_Transformer(nn.Module):
             # decoder
             s = self.decoder(l[0], skipConnections, res[2])  # output encoder: [result, skipConnections, poolingIndices]
             s = s.unsqueeze(dim = 1) # for loss
-
             return [s, l[1], reconstructionLoss] # model prediction, latent space loss, reconstruction loss
 
         elif training == False:

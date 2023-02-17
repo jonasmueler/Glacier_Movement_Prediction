@@ -5,10 +5,13 @@ import random
 import torch
 import os
 import torch.optim as optim
+import AuTransformerMaxPool
 
 ## load datasets of three glaciers
 
-
+## global variables for project
+### change here to run on cluster ####
+#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
 device = "cpu"
 
 """
@@ -64,12 +67,14 @@ dValidate = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), dV
 # attLayers, attentionHeads, device, Training=True, predictionInterval=None
 #model = models.AE_Transformer(2420,2420,2420, 3, 2, 1000, 10, 10,torch.device('cuda'), True, 5)
 
-model = models.AE_Transformer(2420,2420,2420, 1, 1, 1, 1, 1,torch.device(device), True, 5)
+model = AuTransformerMaxPool.AE_Transformer(9680,1000,1000, 1, 1, 1, 1, 1,torch.device(device), True, 5)
+
 model = model.to(torch.device(device)).to(torch.float32)
 
 # train on patches
-### args ### data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs, validationSet, validationStep
-functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True)
+### args ### (data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
+              # validationSet, validationStep, WandB, device, pathOrigin = pathOrigin):
+functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
 
 # load full scene dataset, use Helheim data to train edges between patch predictions
 
@@ -106,7 +111,8 @@ functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters
                                  sceneDataHelheim,
                                  1,
                                  50, 50,
-                                 (1, 300 ,300))
+                                 (1, 300 ,300),
+                                device)
 
 ## predict some images and save them on harddrive
 ## args: model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False
@@ -118,6 +124,7 @@ res1 = functions.inferenceScenes(model,
                                 "Helheim",
                                 "0",
                                 "transformerScenes",
+                                device,
                                 plot = False,
                                 safe = True)
 """

@@ -34,7 +34,9 @@ import wandb
 
 ## global variables for project
 ### change here to run on cluster ####
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+
+#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
@@ -458,7 +460,7 @@ def loadCheckpoint(checkpoint, model, optimizer):
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
-              validationSet, validationStep, WandB, pathOrigin = pathOrigin):
+              validationSet, validationStep, WandB, device, pathOrigin = pathOrigin):
     """
 
     data: list of list of input data and dates and targets
@@ -476,6 +478,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
         timepoint when validation set is evaluated for early stopping regularization
     WandB: boolean
         use weights and biases tool to monitor losses dynmaically
+    device: string
+        device on which the data should be stored
 
 
     return: nn.class
@@ -483,12 +487,17 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     """
     torch.autograd.set_detect_anomaly(True)
     runningLoss = 0
+    runningLossLatentSpace = []
+    meanRunningLossLatentSpace = 0
+    runningLossReconstruction = []
+    meanRunningLossReconstruction = 0
     stoppingCounter = 0
     lastLoss = 0
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
     trainLosses = []
     validationLosses = []
     trainCounter = 0
+    meanValidationLoss = 0
 
     # WandB
     if WandB:
@@ -518,6 +527,11 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
         for i in ix:
             # get data
             helper = data[i]
+
+            # move to cuda
+            helper = moveToCuda(helper, device)
+
+            #define target
             y = helper[1][0]
 
             # zero the parameter gradients
@@ -525,17 +539,32 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
             # forward + backward + optimize
             forward = model.forward(helper, training = True)
-            # predictions = forward[0].to(device='cuda')
             predictions = forward[0]
-            loss = MSEpixelLoss(predictions, y) + forward[1]
+            loss = MSEpixelLoss(predictions, y) + forward[1] + forward[2] # output loss, latent space loss, recopnstruction loss
             loss.backward()
             optimizer.step()
             trainCounter += 1
 
             # print loss
+            meanRunningLossLatentSpace += forward[1].item()
+            meanRunningLossLatentSpace = meanRunningLossLatentSpace/trainCounter
+            runningLossLatentSpace.append(meanRunningLossLatentSpace)
+            meanRunningLossReconstruction += forward[2].item()
+            meanRunningLossReconstruction = meanRunningLossReconstruction/trainCounter
+            runningLossReconstruction.append(meanRunningLossReconstruction)
             runningLoss += loss.item()
             meanRunningLoss = runningLoss / trainCounter
             trainLosses.append(meanRunningLoss)
+
+            # save memory
+            del loss, forward, helper
+
+            ## log to wandb
+            if WandB:
+                wandb.log({"train loss": meanRunningLoss,
+                           "latentSpaceLoss": meanRunningLossLatentSpace,
+                           "reconstructionLoss": meanRunningLossReconstruction,
+                           "validationLoss": meanValidationLoss})
 
             if i % validationStep == 0 and i != 0:
                 if validationSet != None:
@@ -543,10 +572,14 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     validationLoss = 0
                     for i in range(len(validationSet)):
                         helper = validationSet[i]
+
+                        # move to cuda
+                        helper = moveToCuda(helper, device)
+
                         y = helper[1][0]
 
                         # forward + backward + optimize
-                        forward = model.forward(helper)
+                        forward = model.forward(helper, training = True)
                         # predictions = forward[0].to(device='cuda')
                         predictions = forward[0]
 
@@ -556,11 +589,11 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
                         # of in between datapoints
 
-                    print("current validation loss: ", meanValidationLoss)
+                        # save memory
+                        del forward
 
-                ## log to wandb
-                if WandB:
-                    wandb.log({"train loss": meanRunningLoss, "validation loss": meanValidationLoss})
+
+                    print("current validation loss: ", meanValidationLoss)
 
                 # early stopping
                 if earlyStopping > 0:
@@ -571,7 +604,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         print("model converged, early stopping")
 
                         # navigate/create order structure
-                        path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results"
+                        path = pathOrigin + "/results"
                         os.chdir(path)
                         os.makedirs(modelName, exist_ok=True)
                         os.chdir(path + "/" + modelName)
@@ -603,7 +636,10 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     saveCheckpoint(checkpoint, modelName)
 
     # save losses
-    dict = {"trainLoss": trainLosses, "validationLoss" : [np.NaN for x in range(len(trainLosses))]}
+    dict = {"trainLoss": trainLosses,
+            "validationLoss" : [np.NaN for x in range(len(trainLosses))],
+            "latentSpaceLoss": runningLossLatentSpace,
+            "reconstructionLoss": runningLossReconstruction}
     trainResults = pd.DataFrame(dict)
 
     # fill in validation losses with index
@@ -908,6 +944,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
+        # save memory
+        del prediction
+        del scenePredictions
+
         return fullLoss
 
     if test:
@@ -935,7 +975,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         return fullLoss
 
 
-def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, pathOrigin = pathOrigin):
+def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, device, pathOrigin = pathOrigin):
     """
 
     train model on full scenes
@@ -949,6 +989,10 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     patchSize: int
     stride: int
     outputDimensions: tuple
+    device: string
+        machine to be used
+    pathOrigin: str
+        path for data safing
 
     """
 
@@ -963,6 +1007,10 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
         for i in ix:
             # get data
             helper = data[i]
+
+            # move to cuda
+            helper = moveToCuda(helper, device)
+
             y = helper[1][0]
 
             # zero the parameter gradients
@@ -986,6 +1034,10 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
             runningLoss += loss.item()
             meanRunningLoss = runningLoss / trainCounter
             trainLosses.append(meanRunningLoss)
+
+            # save memory
+            del loss
+
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
     path = pathOrigin + "/results"
@@ -1007,7 +1059,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     return
 
 ## visualize network performance on full scenes, use for testData, qualitative check
-def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False, pathOrigin = pathOrigin):
+def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, device, plot = False, safe = False, pathOrigin = pathOrigin):
     """
     use for visual check of model performance
 
@@ -1022,6 +1074,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         name of folder for predictions to be safed in
     modelName: string
         name of the model to safe in order structure
+    device: sring
+        machine to compute on
     plot: boolean
     safe: boolean
         safe output as images on harddrive
@@ -1029,6 +1083,9 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     return: list of tensor
         predicted scenes
     """
+    # move to cuda
+    data = moveToCuda(data, device)
+
     inputScenes = data[0][0]
     targetScenes = data[1][0]
     inputDates = data[0][1]
