@@ -6,6 +6,7 @@ import torch
 import os
 import torch.optim as optim
 import AuTransformerMaxPool
+import TransformerNoEmbedding
 
 ## load datasets of three glaciers
 
@@ -67,7 +68,7 @@ dValidate = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), dV
 # attLayers, attentionHeads, device, Training=True, predictionInterval=None
 #model = models.AE_Transformer(2420,2420,2420, 3, 2, 1000, 10, 10,torch.device('cuda'), True, 5)
 
-model = AuTransformerMaxPool.AE_Transformer(9680,1000,1000, 1, 1, 1, 1, 1,torch.device(device), True, 5)
+model = TransformerNoEmbedding.AE_Transformer(484,484,484, 1, 1, 1, 1, 1,torch.device(device), True, 5)
 
 model = model.to(torch.device(device)).to(torch.float32)
 

@@ -1,0 +1,1 @@
+{"train loss": 1.378570944070816, "latentSpaceLoss": 0.41445269187291467, "reconstructionLoss": 0.07683451101183891, "validationLoss": 0, "_timestamp": 1676649792.477134, "_runtime": 18.401396989822388, "_step": 3}

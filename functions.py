@@ -1,7 +1,7 @@
 # packages
 #import coiled
 #import distributed
-#import dask
+#import dask/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results/transformerScenesSmall/modelPredictions/Helheim/0/predictions
 import pandas as pd
 import pystac_client
 import planetary_computer as pc
@@ -26,6 +26,10 @@ import pickle
 #from sklearn.feature_extraction import image
 import torch.optim as optim
 import torch
+# memory overflow bug fix
+torch.backends.cudnn.enabled = True
+torch.backends.cudnn.benchmark = True
+#
 #import sys
 #from torchvision import transforms
 from PIL import Image
@@ -34,9 +38,9 @@ import wandb
 
 ## global variables for project
 ### change here to run on cluster ####
-pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
 
-#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
@@ -596,34 +600,34 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     print("current validation loss: ", meanValidationLoss)
 
                 # early stopping
-                if earlyStopping > 0:
-                    if (meanValidationLoss - lastLoss) < earlyStopping:
-                        stoppingCounter += 1
+            if earlyStopping > 0:
+                if lastLoss < meanRunningLoss:
+                    stoppingCounter += 1
 
-                    if stoppingCounter == 5:
-                        print("model converged, early stopping")
+                if stoppingCounter == 100:
+                    print("model converged, early stopping")
 
-                        # navigate/create order structure
-                        path = pathOrigin + "/results"
-                        os.chdir(path)
-                        os.makedirs(modelName, exist_ok=True)
-                        os.chdir(path + "/" + modelName)
+                    # navigate/create order structure
+                    path = pathOrigin + "/results"
+                    os.chdir(path)
+                    os.makedirs(modelName, exist_ok=True)
+                    os.chdir(path + "/" + modelName)
 
-                        checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-                        saveCheckpoint(checkpoint, modelName)
-                        # save losses
-                        dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
-                        trainResults = pd.DataFrame(dict)
+                    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+                    saveCheckpoint(checkpoint, modelName)
+                    # save losses
+                    dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
+                    trainResults = pd.DataFrame(dict)
 
-                        # fill in validation losses with index
-                        for i in range(len(validationLosses)):
-                            trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
+                    # fill in validation losses with index
+                    for i in range(len(validationLosses)):
+                        trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
 
-                        # save dartaFrame to csv
-                        trainResults.to_csv("resultsTraining.csv")
-                        return
+                    # save dartaFrame to csv
+                    trainResults.to_csv("resultsTraining.csv")
+                    return
 
-                    lastLoss = meanValidationLoss
+            lastLoss = meanRunningLoss
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
     path = pathOrigin + "/results" ## check if takes global variable
@@ -1083,6 +1087,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     return: list of tensor
         predicted scenes
     """
+    # inference mode
+    model.eval()
     # move to cuda
     data = moveToCuda(data, device)
 
@@ -1195,7 +1201,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
                 pickle.dump(targetScenes[i].cpu().detach().numpy(), fp)
 
     print("prediction scenes saved")
-    return scenePredictions
+    #return scenePredictions
+    return
 
 
 def moveToCuda(y, device):
