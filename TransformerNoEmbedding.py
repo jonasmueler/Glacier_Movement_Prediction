@@ -22,7 +22,7 @@ class AE_Transformer(nn.Module):
         self.CLayer4 = nn.Conv2d(40, 60, (3, 3), 1)
         self.CLayer5 = nn.Conv2d(60, 80, (3, 3), 1)
         self.CLayer6 = nn.Conv2d(80, 100, (3, 3), 1)
-        self.CLayer7 = nn.Conv2d(100, 1, (3, 3), 1)
+        self.CLayer7 = nn.Conv2d(100, 10, (3, 3), 1)
         self.maxPool = nn.MaxPool2d(3, 1, return_indices=True)
         self.relu = nn.ReLU()
         self.flatten = nn.Flatten(start_dim=0, end_dim=-1)
@@ -52,7 +52,7 @@ class AE_Transformer(nn.Module):
         self.sc4 = nn.Conv2d(300, 60, kernel_size=(3, 3), padding=1)
         self.sc5 = nn.Conv2d(400, 80, kernel_size=(3, 3), padding=1)
         self.sc6 = nn.Conv2d(500, 100, kernel_size=(3, 3), padding=1)
-        self.sc7 = nn.Conv2d(5, 1, kernel_size=(3, 3), padding=1)
+        self.sc7 = nn.Conv2d(50, 10, kernel_size=(3, 3), padding=1)
 
         # hidden space
         self.attentionLayers = attLayers
@@ -62,7 +62,7 @@ class AE_Transformer(nn.Module):
                                           num_decoder_layers=self.attentionLayers)
 
         # decoder
-        self.TCLayer1 = nn.ConvTranspose2d(1, 100, (3, 3), 1)
+        self.TCLayer1 = nn.ConvTranspose2d(10, 100, (3, 3), 1)
         self.TCLayer2 = nn.ConvTranspose2d(100, 80, (3, 3), 1)
         self.TCLayer3 = nn.ConvTranspose2d(80, 60, (3, 3), 1)
         self.TCLayer4 = nn.ConvTranspose2d(60, 40, (3, 3), 1)
@@ -374,7 +374,7 @@ class AE_Transformer(nn.Module):
             s = Variable(latentOutput[i, :]).to(self.device)
 
             # start deconvolution; image should be (100, 8, 8)
-            image = torch.reshape(s, (1, 22, 22))
+            image = torch.reshape(s, (10, 22, 22))
 
             s = image + skips[6]
             s = self.maxUnPool(image, indices[6])

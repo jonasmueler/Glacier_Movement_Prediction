@@ -491,15 +491,15 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     """
     torch.autograd.set_detect_anomaly(True)
     runningLoss = 0
-    runningLossLatentSpace = []
+    runningLossLatentSpace = np.zeros(len(data) * epochs)
     meanRunningLossLatentSpace = 0
-    runningLossReconstruction = []
+    runningLossReconstruction = np.zeros(len(data) * epochs)
     meanRunningLossReconstruction = 0
     stoppingCounter = 0
     lastLoss = 0
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
-    trainLosses = []
-    validationLosses = []
+    trainLosses = np.zeros(len(data) * epochs)
+    validationLosses = np.zeros((len(data) * epochs, 2))
     trainCounter = 0
     meanValidationLoss = 0
 
@@ -552,13 +552,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             # print loss
             meanRunningLossLatentSpace += forward[1].item()
             meanRunningLossLatentSpace = meanRunningLossLatentSpace/trainCounter
-            runningLossLatentSpace.append(meanRunningLossLatentSpace)
+            runningLossLatentSpace[trainCounter - 1] = meanRunningLossLatentSpace
             meanRunningLossReconstruction += forward[2].item()
             meanRunningLossReconstruction = meanRunningLossReconstruction/trainCounter
-            runningLossReconstruction.append(meanRunningLossReconstruction)
+            runningLossReconstruction[trainCounter - 1] = meanRunningLossReconstruction
             runningLoss += loss.item()
             meanRunningLoss = runningLoss / trainCounter
-            trainLosses.append(meanRunningLoss)
+            trainLosses[trainCounter - 1] = meanRunningLoss
 
             # save memory
             del loss, forward, helper
@@ -590,7 +590,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         testLoss = MSEpixelLoss(predictions, y) + forward[1] + forward[2]
                         validationLoss += testLoss.item()
                         meanValidationLoss = validationLoss / len(validationSet)
-                        validationLosses.append([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
+                        validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
                         # of in between datapoints
 
                         # save memory
@@ -621,7 +621,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                     # fill in validation losses with index
                     for i in range(len(validationLosses)):
-                        trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
+                        trainResults.iloc[validationLosses[i, 1], 1] = validationLosses[i, 0]
 
                     # save dartaFrame to csv
                     trainResults.to_csv("resultsTraining.csv")
@@ -636,8 +636,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     os.chdir(path + "/" + modelName)
 
     ## save model anyways in case it did not converge
-    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-    saveCheckpoint(checkpoint, modelName)
+    #checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
+    #saveCheckpoint(checkpoint, modelName)
 
     # save losses
     dict = {"trainLoss": trainLosses,
@@ -648,10 +648,12 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
     # fill in validation losses with index
     for i in range(len(validationLosses)):
-        trainResults.iloc[validationLosses[i][1], 1] = validationLosses[i][0]
+        trainResults.iloc[int(validationLosses[i, 1].item()), 1] = validationLosses[i, 0].item()
 
     # save dartaFrame to csv
     trainResults.to_csv("resultsTrainingPatches.csv")
+    print("results saved!")
+
 
     return
 
@@ -1136,19 +1138,13 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         plotList = [x.detach().numpy() for x in plotList]
         plotList = [np.transpose(x, (1,2,0)) for x in plotList]
 
-        # Create a figure with 2 rows and 5 columns
         fig, axs = plt.subplots(2, 5)
 
-        # Assume that `images` is a list of 10 images
         for i in range(10):
-            # Get the current axis
             ax = axs[i // 5, i % 5]
-            # Plot the image on the current axis
             ax.imshow(plotList[i])
-            # Remove the axis labels
             ax.axis('off')
 
-        # Show the figure
         plt.show()
     if safe:
         print("start saving prediction scenes")
@@ -1171,14 +1167,11 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
             os.chdir(path)
             os.makedirs("predictions", exist_ok=True)
             os.chdir(path + "/" + "predictions")
-            img = Image.fromarray(minmaxScaler(scenePredictions[i].cpu().detach().numpy()[0,:,:]), "L")
-            ## debug plotting
-            #plt.imshow(img)
-            #plt.show()
+            plt.imshow(minmaxScaler(scenePredictions[i].cpu().detach().numpy()[0,:,:]), cmap='gray')
 
-            # save
-            name = str(i) + ".jpeg"
-            img.save(name, quality=95)
+            # save on harddrive
+            p = os.getcwd()+ "/" + str(i) + ".pdf"
+            plt.savefig(p, dpi=1000)
 
             with open(str(i), "wb") as fp:  # Pickling
                 pickle.dump(scenePredictions[i].cpu().detach().numpy(), fp)
@@ -1188,15 +1181,12 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
             os.chdir(path)
             os.makedirs("targets", exist_ok=True)
             os.chdir(path + "/" + "targets")
-            img = Image.fromarray(minmaxScaler(targetScenes[i].cpu().detach().numpy()[0,:,:]), "L")
+            plt.imshow(minmaxScaler(targetScenes[i].cpu().detach().numpy()[0, :, :]), cmap='gray')
 
-            ## debug plotting
-            #plt.imshow(targetScenes[i].cpu().detach().numpy()[0,:,:])
-            #plt.show()
+            # save on harddrive
+            p = os.getcwd() + "/" + str(i) + ".pdf"
+            plt.savefig(p, dpi=1000)
 
-            # save
-            name = str(i) + ".jpeg"
-            img.save(name, quality=95)
             with open(str(i), "wb") as fp:  # Pickling
                 pickle.dump(targetScenes[i].cpu().detach().numpy(), fp)
 
