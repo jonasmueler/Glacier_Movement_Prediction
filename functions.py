@@ -1,7 +1,7 @@
 # packages
 #import coiled
 #import distributed
-#import dask/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/results/transformerScenesSmall/modelPredictions/Helheim/0/predictions
+#import dask
 import pandas as pd
 import pystac_client
 import planetary_computer as pc
@@ -34,13 +34,14 @@ torch.backends.cudnn.benchmark = True
 #from torchvision import transforms
 from PIL import Image
 import wandb
+from torch.autograd import Variable
 
 
 ## global variables for project
 ### change here to run on cluster ####
 #pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-
 pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+
 
 
 def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
@@ -79,7 +80,7 @@ def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
     print("found ", len(items), " scenes")
 
     # stack
-    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:32623")
+    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:32625")
 
     # use common_name for bands
     stack = stack.assign_coords(band=stack.common_name.fillna(stack.band).rename("band"))
@@ -273,8 +274,10 @@ def NDSI(Input, threshold):
     returns: list of tuple of datetime and 3d ndarray
         switch swir Band with calculated NDSI values
     """
+    """
     for i in range(len(Input)):
-        tensor = Input[i][1][:, :, :]
+        #tensor = Input[i][1][:, :, :]
+        tensor = Input
         NDSI = np.divide(np.subtract(tensor[2, :, :], tensor[5, :, :]), np.add(tensor[2, :, :], tensor[5, :, :]))
         nosnow = np.ma.masked_where(NDSI >= threshold, NDSI).filled(0)
         snow = np.ma.masked_where(NDSI < threshold, NDSI).filled(0)
@@ -282,7 +285,16 @@ def NDSI(Input, threshold):
                              tensor[5, :, :],tensor[6, :, :], NDSI, nosnow, snow))
         switchD = np.transpose(switchD, (2,0,1)) # switch dimensions back
         Input[i] = (Input[i][0], switchD)
-    return Input
+    """
+    tensor = Input
+    NDSI = np.divide(np.subtract(tensor[2, :, :], tensor[5, :, :]), np.add(tensor[2, :, :], tensor[5, :, :]))
+    nosnow = np.ma.masked_where(NDSI >= threshold, NDSI).filled(0)
+    snow = np.ma.masked_where(NDSI < threshold, NDSI).filled(0)
+    switchD = np.dstack((tensor[0, :, :], tensor[1, :, :], tensor[2, :, :], tensor[3, :, :], tensor[4, :, :],
+                         tensor[5, :, :], tensor[6, :, :], NDSI, nosnow, snow))
+    switchD = np.transpose(switchD, (2, 0, 1))  # switch dimensions back
+
+    return switchD
 
 # blur imputed pixels to cover edge of imputation
 def gaussianBlurring(Input, kSize, band):
@@ -454,13 +466,12 @@ def MSEpixelLoss(predictions, y):
     return loss
 
 def saveCheckpoint(state, filename):
-    torch.save(state, filename)
+    torch.save(state.state_dict(), filename)
     print("model checkpoint saved")
-    
-def loadCheckpoint(checkpoint, model, optimizer):
-    model.load_state_dict(checkpoint["state_dict"])
-    optimizer.load_state_dict(checkpoint["optimizer"])
+def loadCheckpoint(state, path):
+    state.load_state_dict(torch.load(path))
     print("loading model complete")
+    return state
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
@@ -471,7 +482,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     model: pytorch nn.class
     loadModel: boolean
     modelName: string
-        .pth.tar model name on harddrive
+        .pth.tar model name on harddrive with path
     lr: float
     weightDecay: float
     earlyStopping: float
@@ -503,6 +514,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     trainCounter = 0
     meanValidationLoss = 0
 
+
     # WandB
     if WandB:
         wandb.init(
@@ -520,7 +532,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
     # load model
     if loadModel:
-        loadCheckpoint(torch.load(modelName), model=model, optimizer=optimizer)
+        model = loadCheckpoint(model, modelName)
     model.train()
     
     for x in range(epochs):
@@ -540,6 +552,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
             # zero the parameter gradients
             optimizer.zero_grad()
+            model.zero_grad()
 
             # forward + backward + optimize
             forward = model.forward(helper, training = True)
@@ -560,15 +573,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             meanRunningLoss = runningLoss / trainCounter
             trainLosses[trainCounter - 1] = meanRunningLoss
 
-            # save memory
-            del loss, forward, helper
-
             ## log to wandb
             if WandB:
                 wandb.log({"train loss": meanRunningLoss,
                            "latentSpaceLoss": meanRunningLossLatentSpace,
                            "reconstructionLoss": meanRunningLossReconstruction,
                            "validationLoss": meanValidationLoss})
+
 
             if i % validationStep == 0 and i != 0:
                 if validationSet != None:
@@ -594,7 +605,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                         # of in between datapoints
 
                         # save memory
-                        del forward
+                        del forward, helper
 
 
                     print("current validation loss: ", meanValidationLoss)
@@ -612,9 +623,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     os.chdir(path)
                     os.makedirs(modelName, exist_ok=True)
                     os.chdir(path + "/" + modelName)
+                    saveCheckpoint(model, modelName)
 
-                    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-                    saveCheckpoint(checkpoint, modelName)
                     # save losses
                     dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
                     trainResults = pd.DataFrame(dict)
@@ -628,7 +638,12 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     return
 
             lastLoss = meanRunningLoss
+
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
+            #print("epoch: ", x, ", example: ", trainCounter, " current loss = ", loss.item())
+
+            # save memory
+            del loss, forward, helper, y
 
     path = pathOrigin + "/results" ## check if takes global variable
     os.chdir(path)
@@ -636,8 +651,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     os.chdir(path + "/" + modelName)
 
     ## save model anyways in case it did not converge
-    #checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-    #saveCheckpoint(checkpoint, modelName)
+    saveCheckpoint(model, modelName)
 
     # save losses
     dict = {"trainLoss": trainLosses,
@@ -652,9 +666,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
     # save dartaFrame to csv
     trainResults.to_csv("resultsTrainingPatches.csv")
+
     print("results saved!")
-
-
     return
 
 def getPatches(tensor, patchSize, stride=50):
@@ -780,14 +793,18 @@ def createPatches(img, patchSize, stride, roi, applyKernel = False):
     # clean missings
     if applyKernel:
         # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
-        for z in range(img.shape[0]):
+        for z in [2,5]: # only use NDSI relevant bands
             while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
                 img[z, :, :] = applyToImage(img[z, :, :])
-                #print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
+                print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
             print("band: ", z, " of ", img.shape[0], "done")
     print("application of kernel done")
 
-    # torch conversion; put into ndarray
+    # apply NDSI here
+    # add NDSI and snow masks
+    img = NDSI(img, 0.3)  # hardcoded snow value threshold
+
+    # torch conversion, put into ndarray
     img = torch.from_numpy(img)
     patches = getPatches(img, patchSize, stride=stride)
     out = torch.stack(patches, dim = 0)
@@ -883,7 +900,9 @@ def getTrainTest(patches, window, inputBands, outputBands):
     return dataList
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
-def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, patchSize, stride, outputDimensions, training, test = False, pathOrigin = pathOrigin):
+def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
+                  model, patchSize, stride, outputDimensions, training,
+                  test = False, pathOrigin = pathOrigin):
     """
     train model on loss of full scenes and backpropagate full scene error in order to get smooth boarders in the final scene predictions
 
@@ -905,6 +924,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         inference?
     test: boolean
         test pipeline without model predictions
+
 
     returns: int
         loss on full five scenes and all associated patches
@@ -950,9 +970,10 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
+
         # save memory
-        del prediction
-        del scenePredictions
+        #del prediction
+        #del scenePredictions
 
         return fullLoss
 
@@ -981,7 +1002,8 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates, model, pat
         return fullLoss
 
 
-def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, device, pathOrigin = pathOrigin):
+def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, device,
+                   WandB, pathOrigin = pathOrigin):
     """
 
     train model on full scenes
@@ -1001,6 +1023,20 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
         path for data safing
 
     """
+    # WandB
+    if WandB:
+        wandb.init(
+            # set the wandb project where this run will be logged
+            project=modelName,
+
+            # track hyperparameters and run metadata
+            config={
+                "architecture": modelName,
+                "dataset": "Helheim, Aletsch, jakobshavn",
+                "epochs": epochs,
+            }
+        )
+
 
     trainCounter = 0
     runningLoss = 0
@@ -1035,14 +1071,18 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
             loss.backward()
             optimizer.step()
             trainCounter += 1
-
+            print(loss)
             # print loss
             runningLoss += loss.item()
             meanRunningLoss = runningLoss / trainCounter
             trainLosses.append(meanRunningLoss)
 
+            ## log to wandb
+            if WandB:
+                wandb.log({"train loss": meanRunningLoss})
+
             # save memory
-            del loss
+            #del loss
 
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
@@ -1052,8 +1092,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     os.chdir(path + "/" + modelName)
 
     ## save model
-    checkpoint = {"state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-    saveCheckpoint(checkpoint, modelName)
+    saveCheckpoint(model, modelName)
 
     # save losses
     dict = {"trainLoss": trainLosses}
@@ -1205,15 +1244,15 @@ def moveToCuda(y, device):
         transferred to cuda gpu
     """
 
-    y[0][0] = y[0][0].to(device).to(torch.float32)
-    y[0][1] = y[0][1].to(device).to(torch.float32)
-    y[1][0] = y[1][0].to(device).to(torch.float32)
-    y[1][1] = y[1][1].to(device).to(torch.float32)
+    y[0][0] = y[0][0].to(device).to(torch.float32).requires_grad_()
+    y[0][1] = y[0][1].to(device).to(torch.float32).requires_grad_()
+    y[1][0] = y[1][0].to(device).to(torch.float32).requires_grad_()
+    y[1][1] = y[1][1].to(device).to(torch.float32).requires_grad_()
 
     return y
 
 
-def loadFullSceneData(path, names, window, inputBands, outputBands, ROI):
+def loadFullSceneData(path, names, window, inputBands, outputBands, ROI, applyKernel):
     """
     creates dataset of full scenes in order to train model on full scene loss
 
@@ -1230,6 +1269,23 @@ def loadFullSceneData(path, names, window, inputBands, outputBands, ROI):
         datum = list of scenes, dates and targets and dates
     """
     d = loadData(path, names)
+
+    # crop to ROIs
+    for i in range(len(d)):
+        d[i] = (d[i][0], d[i][1][:, ROI[0]:ROI[1], ROI[2]:ROI[3]])
+
+    # kernel for nans
+    if applyKernel:
+        for i in range(len(d)):
+            img = d[i][1]
+            for z in [2,5]:
+                while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
+                    img[z, :, :] = applyToImage(img[z, :, :])
+                    print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
+                print("band: ", z, " of ", img.shape[0], "done")
+            d[i] = (d[i][0], NDSI(img, 0.3)) # add NDSI here
+    print("application of kernel done")
+
     dataList = []
     deltas = np.arange(1, 6, 1)  # [1:5]
     counter = 0
@@ -1270,9 +1326,17 @@ def loadFullSceneData(path, names, window, inputBands, outputBands, ROI):
     return dataList
 
 ## test
-#path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
-#dat = loadFullSceneData(path, ["2013"], 5, [7,8,9], 9, [100, 400, 200, 500])
-#print(dat[0][0][1].size())
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn"
+dat = loadFullSceneData(path, ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"], 5, [7,8,9], 9, [50, 650, 100, 600], True)
+print(dat[0][0][1].size())
+
+os.chdir("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets")
+# save data object on drive
+with open("aletschFullScenes", "wb") as fp:  # Pickling
+    pickle.dump(dat, fp)
+print("data saved!")
+
+
 
 
 

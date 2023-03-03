@@ -45,12 +45,14 @@ class AE_Transformer(nn.Module):
         Linear = nn.Linear(self.sizeDate, self.sizeDate)
         Out = nn.Linear(self.sizeDate, self.hiddenLenc)
         r = nn.ReLU()
+        soft = nn.Softmax()
         helper = [In]
 
         for i in range(self.numLayersDateEncoder):
             helper.append(Linear)
             helper.append(r)
         helper.append(Out)
+        helper.append(soft)
         self.dateEncoderMLPlist = nn.ModuleList(helper)
 
         # latent space
@@ -87,7 +89,7 @@ class AE_Transformer(nn.Module):
         targets: boolean
         return: tensor
         """
-        # init memory; idea: safe maxPool indices and skip connections in list of lists for decoder
+        # init memory
         result = Variable(torch.zeros((len(x), self.hiddenLenc))).to(self.device)
 
         for i in range(len(x)):
@@ -165,8 +167,6 @@ class AE_Transformer(nn.Module):
             if training == True
         targetsT: list of tensor
             temporal information targets and input
-        temporalInfInference:
-            temporal information for inference, when no more teacher forcing is used
         training: boolean
             training or inference
 
@@ -203,6 +203,9 @@ class AE_Transformer(nn.Module):
 
             # MSE loss for latent space
             loss = nn.MSELoss()(out, targetsOut)
+
+            # free memory
+            del targets, targetsOut, helper, flattenedInput, positionalEmbedding, inputMatrix, targetMatrix
 
             return [out, loss]
 
@@ -248,7 +251,7 @@ class AE_Transformer(nn.Module):
             output NDSI image snow maks of shape (5, 50,50) # 5 timepoints
         """
 
-        result = torch.zeros((latentOutput.size(0), 50, 50)).to(self.device)
+        result = Variable(torch.zeros((latentOutput.size(0), 50, 50))).to(self.device)
         for i in range(latentOutput.size(0)):
             # memory management
             s = Variable(latentOutput[i, :]).to(self.device)
@@ -292,6 +295,10 @@ class AE_Transformer(nn.Module):
             # decoder
             s = self.decoder(l[0])
             s = s.unsqueeze(dim = 1) # for loss
+
+            # free memory
+            del datesEncoder, target, datesDecoder, res
+
             return [s, l[1], torch.tensor(0)]
 
         elif training == False:

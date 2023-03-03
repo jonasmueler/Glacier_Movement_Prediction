@@ -189,7 +189,7 @@ class AE_Transformer(nn.Module):
         result = Variable(torch.zeros((len(x), self.hiddenLenc))).to(self.device)
         poolingIndices = []
         skipConnections = []
-
+        meanImage = Variable(torch.zeros(1, 50, 50)).to(self.device) # create mean image for decoder
         for i in range(len(x)):
             helper = []
             helper1 = []
@@ -202,6 +202,7 @@ class AE_Transformer(nn.Module):
                 s = self.relu(s)
                 helper.append(s)
                 helper1.append(indices)
+                meanImage += image
 
             if targets == False:
                 image = x[i, :, :, :]
@@ -212,6 +213,7 @@ class AE_Transformer(nn.Module):
                 s = self.relu(s)
                 helper.append(s)
                 helper1.append(indices)
+                meanImage += image[2, :, :]
 
             s = self.CLayer2(s)
             s, indices = self.maxPool(s)
@@ -262,8 +264,9 @@ class AE_Transformer(nn.Module):
             # save lists for decoder
             skipConnections.append(helper)
             poolingIndices.append(helper1)
+        meanImage = torch.divide(meanImage, 5)
 
-        return [result, skipConnections, poolingIndices]
+        return [result, skipConnections, poolingIndices, meanImage]
 
 
     def positionalEncodings(self, seqLen):
@@ -389,7 +392,7 @@ class AE_Transformer(nn.Module):
 
             return yInput[1:, :]
 
-    def decoder(self, latentOutput, skips, indices):
+    def decoder(self, latentOutput, skips, indices, meanImage, delta):
         """
         transposed convolutions to get the original image shape
 
@@ -401,6 +404,10 @@ class AE_Transformer(nn.Module):
             skip connections
         indices: list of tensor
             indices for maxunpool in recosntruction of the image
+        meanImage: tensor
+            meanImage of all five inputs
+        delta: float
+            controls conditioning on previous output, starts with meanImage
         return: tensor
             output NDSI image snow maks of shape (5, 50,50) # 5 timepoints
         """
@@ -453,7 +460,11 @@ class AE_Transformer(nn.Module):
             s = self.relu(s)
 
             # save in tensor
-            result[i, :, :] = s
+            result[i, :, :] = ((1 - delta) * meanImage) + (delta * s) # mixture of output and conditioned on old output
+
+            # update meanImge
+            meanImage = ((1 - delta) * meanImage) + (delta * s)
+
         return result
 
     def forward(self, d, training):
@@ -482,7 +493,7 @@ class AE_Transformer(nn.Module):
         res = self.encoder(s, datesEncoder, targets=False)
         skipConnections = self.getSkips(res[1])
         poolingInd = self.getMaxPoolindices(res[2])
-        reconstruction = self.decoder(res[0], skipConnections, poolingInd)
+        reconstruction = self.decoder(res[0], skipConnections, poolingInd, res[3], 0.5)
 
         # get reconstruction loss of input
         # take last channel -> snow/Ice map
@@ -496,13 +507,13 @@ class AE_Transformer(nn.Module):
 
         if training:
             # decoder
-            s = self.decoder(l[0], skipConnections, poolingInd)  # output encoder: [result, skipConnections, poolingIndices]
+            s = self.decoder(l[0], skipConnections, poolingInd, res[3], 0.5)  # output encoder: [result, skipConnections, poolingIndices, meanImage]
             s = s.unsqueeze(dim = 1) # for loss
             return [s, l[1], reconstructionLoss] # model prediction, latent space loss, reconstruction loss
 
         elif training == False:
             # decoder
-            s = self.decoder(l, skipConnections, poolingInd)  # output encoder: [result, skipConnections, poolingIndices]
+            s = self.decoder(l, skipConnections, poolingInd, res[3], 0.5)  # output encoder: [result, skipConnections, poolingIndices]
             s = s.unsqueeze(dim=1) # for loss
 
             return s

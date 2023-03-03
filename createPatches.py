@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import pickle
 
 ########### first check images with plot, then save patched pickle files #######################
+# start from 2017 again
 year = "2021"
 
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn"
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim"
 os.chdir(path)
 d = functions.loadData(path, [year])
 
@@ -25,28 +26,30 @@ for i in range(len(d)):# rgb
 
 """
 # 2013
-#goodImg = [0, 3, 5, 6, 7]
+#goodImg = [2, 3, 4, 5, 6, 7, 8, 10]
 # 2014:
-#goodImg = [1, 2, 3, 4, 7, 8]
+#goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24]
 # 2015:
-#goodImg = [1,2 ,3, 4, 5, 8, 9, 10, 12, 13, 14, 15]
+#goodImg = [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
 # 2016
-#goodImg = [0, 1, 2, 3, 9, 10, 11, 12, 13]
+#goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23]
 # 2017
-#goodImg = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+#goodImg = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 # 2018
-#goodImg = [2, 3, 4, 5, 10, 12, 13]
+#goodImg = [0, 2, 3, 4, 7, 8, 9, 10, 11, 12]
 # 2019
-#goodImg = [2, 3, 5, 6, 11]
+#goodImg = [0, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21]
 # 2020
-#goodImg = [1, 2, 3, 4, 5, 7, 10]
+#goodImg = [1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 # 2021
-goodImg = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15]
+goodImg = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+
+
 
 
 d = [d[i] for i in goodImg]
 
-d = functions.automatePatching(d, 50, 40, [50, 650, 0, 600] , applyKernel=True)
+d = functions.automatePatching(d, 50, 40, [100, 400, 200, 500] , applyKernel=True)
 
 os.makedirs(path + "/patched", exist_ok = True)
 os.chdir(path + "/patched")

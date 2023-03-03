@@ -9,7 +9,7 @@ pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissens
 device = "cpu"
 
 model = TransformerNoEmbedding.AE_Transformer(484,484,484, 1, 1, 480, 11, 22,torch.device(device), True, 5)
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay = 0.01)
 # Print model's state_dict
 print(model.CLayer1.weight)
 
@@ -17,7 +17,6 @@ path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/
 checkpoint = torch.load(path)
 
 model.load_state_dict(checkpoint['state_dict'])
-optimizer.load_state_dict(checkpoint['optimizer'])
 
 print(model.CLayer1.weight)
 

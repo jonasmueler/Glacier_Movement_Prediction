@@ -14,6 +14,7 @@ import Transformer
 ## global variables for project
 ### change here to run on cluster ####
 #pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 device = "cpu"
 
 """
@@ -69,7 +70,7 @@ dValidate = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), dV
 # attLayers, attentionHeads, device, Training=True, predictionInterval=None
 #model = models.AE_Transformer(2420,2420,2420, 3, 2, 1000, 10, 10,torch.device('cuda'), True, 5)
 
-model = Transformer.AE_Transformer(2500,2500,2500, 1, 1, 1, 1, 1,torch.device(device), True, 5)
+model = AuTransformerMaxPool.AE_Transformer(9680,4000,4000, 1, 1, 1, 1, 1,torch.device(device), True, 5)
 
 model = model.to(torch.device(device)).to(torch.float32)
 
@@ -91,7 +92,7 @@ functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.0
 #                                               [100, 400, 200, 500])
 """
 scenedataHelheim = functions.openData("trainDataFullScenes")
-
+sceneDataHelheim = list(map(lambda x: functions.moveToCuda(x, torch.device(device)), sceneDataHelheim))
 """
 ### debug ###
 testInput = torch.rand(5, 3, 300, 300, requires_grad=True)
@@ -109,12 +110,15 @@ sceneDataHelheim = [[[testInput, testInputDates], [testTargets, testTargetDates]
 #############
 
 # train on full scene dataset
+# model, modelName, optimizer, data, epochs, patchSize, stride, outputDimensions, device,
+#                    WandB, pathOrigin = pathOrigin
 functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
                                  sceneDataHelheim,
                                  1,
                                  50, 50,
                                  (1, 300 ,300),
-                                device)
+                                device,
+                                True)
 
 ## predict some images and save them on harddrive
 ## args: model, data, patchSize, stride, outputDimensions, glacierName, predictionName, modelName, plot = False, safe = False

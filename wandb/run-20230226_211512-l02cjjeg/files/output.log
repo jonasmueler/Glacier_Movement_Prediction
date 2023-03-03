@@ -1,0 +1,20 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/Transformer.py:78: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+epoch:  0 , example:  1  current loss =  2.337061882019043
+epoch:  0 , example:  2  current loss =  2.3358556032180786
+epoch:  0 , example:  3  current loss =  2.33424973487854
+epoch:  1 , example:  4  current loss =  2.3317660689353943
+epoch:  1 , example:  5  current loss =  2.329689455032349
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 80, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 637, in trainLoop
+    path = pathOrigin + "/results" ## check if takes global variable
+TypeError: unsupported operand type(s) for +: 'bool' and 'str'
+epoch:  1 , example:  6  current loss =  2.3281712929407754
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 80, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 637, in trainLoop
+    path = pathOrigin + "/results" ## check if takes global variable
+TypeError: unsupported operand type(s) for +: 'bool' and 'str'

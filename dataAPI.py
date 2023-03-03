@@ -52,17 +52,17 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
     d = functions.getData(bbox=box, bands=['coastal', 'red', 'green', 'blue', 'nir08', 'swir16', 'swir22'], timeRange=time, cloudCoverage= cloudCoverage, allowedMissings=allowedMissings)
     #d = functions.filterAndConvert(res, cloudCoverage, allowedMissings)
 
-    print("start processing: ", len(d), " images")
     """
+    print("start processing: ", len(d), " images")    
     # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
     for i in range(len(d)):
-        for z in range(7):
+        for z in [2, 5]:
             while np.count_nonzero(np.isnan(d[i][1][z, :, :])) > 0:
                 d[i][1][z, :, :] = functions.applyToImage(d[i][1][z, :, :])
                 print("still missing ", np.count_nonzero(np.isnan(d[i][1][z, :, :])), " pixels")
         print("image: ", i ," of ", len(d), "done" )
     print("application of kernel done")
-
+    
     #### sanity check images contain no missings at all ########
     # corners are completely missing in satelite images because of different paths of satelite,
     # cannot be resolved by kernel (division by zero), -> imputation of "mean image" pixels for corners
@@ -70,8 +70,6 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
         d = functions.imputeMeanValues(d, i)
     print("Imputation of mean values done")
     """
-    # add NDSI and snow masks
-    d = functions.NDSI(d, 0.3)
     # save on hard drive with pickling
     # create folder
 
@@ -80,16 +78,35 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
     os.makedirs(pathOrigin, exist_ok = True)
     os.chdir(pathOrigin)
 
+    # change folder
+    os.makedirs(pathOrigin + "/" + "examples", exist_ok = True)
+    os.chdir(pathOrigin + "/" + "examples")
+
     #plot as check in RGB
     if plot: # sanity check
-        rgb = functions.createImage(d[1][1][1:4, :, :], 0.40)
-        plt.imshow(rgb)
-        plt.show()
+        for i in range(2):
+            rgb = functions.createImage(d[i][1][1:4, :, :], 0.40)
+            plt.imshow(rgb)
+            plt.axis("off")
+
+            # clear date string
+            name = str(d[i][0])
+            name = name.replace(":", "-")
+            name = name.replace(".", "-")
+
+            # save
+            plt.savefig(name + ".pdf", dpi = 1000)
+            """"
+            if i == 4:
+                plt.show()
         for i in range(len(d)): #rgb
             rgb = functions.createImage(d[i][1][1:4,:,:], 0.40)
             plt.subplot(round(len(d)/2)+1, 2, i + 1)
             plt.imshow(rgb)
         plt.show()
+        """
+    # change back to origin folder
+    os.chdir(pathOrigin)
 
     # save data object
     with open(year, "wb") as fp:  # Pickling
@@ -118,9 +135,9 @@ years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021",
 for b in range(len(years)):
     os.chdir(path)
     if b < 10:
-        str = years[b] + "-01-01/" + years[b+1] + "-01-01"
+        string = years[b] + "-01-01/" + years[b+1] + "-01-01"
         API((-49.707011136141695, 69.0891590033335, -49.374331387606546, 69.1869693618585),
-              str, 20, 0.5, years[b], "Jakobshavn", plot = True)
+              string, 20, 0.5, years[b], "Jakobshavn", plot = True)
         print(years[b] + " done")
     if b == 10:
         print("finished!")
