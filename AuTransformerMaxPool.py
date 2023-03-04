@@ -205,7 +205,9 @@ class AE_Transformer(nn.Module):
                 meanImage += image
 
             if targets == False:
+                #print(x.size())
                 image = x[i, :, :, :]
+                #print(image.size())
                 image = image.view(3, 50, 50)
                 # start convolutions
                 s = self.CLayer1(image)
@@ -296,7 +298,7 @@ class AE_Transformer(nn.Module):
         x = pe * math.sqrt(self.hiddenLenc)
         pe = pe + x
 
-        return pe
+        return pe.to(self.device)
 
     def get_tgt_mask(self, size):
         """
@@ -369,8 +371,8 @@ class AE_Transformer(nn.Module):
         if training == False:  # inference ## add temporal embeddings
             ### len(targetsT) = self.predictionInterval -> variable prediction length
             # add start token to sequences
-            yInput = torch.zeros(1, self.hiddenLenc, dtype=torch.float32)
-            helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32)
+            yInput = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
+            helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
             flattenedInput = torch.vstack([helper, flattenedInput])
 
             for q in range(self.predictionInterval):
@@ -493,7 +495,7 @@ class AE_Transformer(nn.Module):
         res = self.encoder(s, datesEncoder, targets=False)
         skipConnections = self.getSkips(res[1])
         poolingInd = self.getMaxPoolindices(res[2])
-        reconstruction = self.decoder(res[0], skipConnections, poolingInd, res[3], 0.5)
+        reconstruction = self.decoder(res[0], skipConnections, poolingInd, res[3], 0.1)
 
         # get reconstruction loss of input
         # take last channel -> snow/Ice map
@@ -507,13 +509,13 @@ class AE_Transformer(nn.Module):
 
         if training:
             # decoder
-            s = self.decoder(l[0], skipConnections, poolingInd, res[3], 0.5)  # output encoder: [result, skipConnections, poolingIndices, meanImage]
+            s = self.decoder(l[0], skipConnections, poolingInd, res[3], 0.1)  # output encoder: [result, skipConnections, poolingIndices, meanImage]
             s = s.unsqueeze(dim = 1) # for loss
             return [s, l[1], reconstructionLoss] # model prediction, latent space loss, reconstruction loss
 
         elif training == False:
             # decoder
-            s = self.decoder(l, skipConnections, poolingInd, res[3], 0.5)  # output encoder: [result, skipConnections, poolingIndices]
+            s = self.decoder(l, skipConnections, poolingInd, res[3], 0.1)  # output encoder: [result, skipConnections, poolingIndices]
             s = s.unsqueeze(dim=1) # for loss
 
             return s

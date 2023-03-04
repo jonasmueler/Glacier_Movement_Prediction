@@ -77,8 +77,8 @@ model = model.to(torch.device(device)).to(torch.float32)
 # train on patches
 ### args ### (data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
               # validationSet, validationStep, WandB, device, pathOrigin = pathOrigin):
-functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 10, True, device)
-
+functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0.00001, 2, dValidate, 1, True, device)
+#functions.trainLoop(dTrain, model, True,"hardConditionedOutputSoftmax", 0.00001, 0.01, 0.00001, 1, dValidate, 10, True, device)
 # load full scene dataset, use Helheim data to train edges between patch predictions
 
 

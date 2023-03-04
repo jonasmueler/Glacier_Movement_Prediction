@@ -39,8 +39,8 @@ from torch.autograd import Variable
 
 ## global variables for project
 ### change here to run on cluster ####
-#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 
@@ -465,13 +465,34 @@ def MSEpixelLoss(predictions, y):
 
     return loss
 
-def saveCheckpoint(state, filename):
-    torch.save(state.state_dict(), filename)
-    print("model checkpoint saved")
-def loadCheckpoint(state, path):
-    state.load_state_dict(torch.load(path))
-    print("loading model complete")
-    return state
+def saveCheckpoint(model, optimizer, filename):
+    """
+    saves current model and optimizer step
+
+    model: nn.model
+    optimizer: torch.optim.optimzer class
+    filename: string
+    """
+    checkpoint = {
+        'model': model.state_dict(),
+        'optimizer': optimizer.state_dict()}
+    torch.save(checkpoint, filename)
+    print("checkpoint saved")
+    return
+def loadCheckpoint(model, optimizer, path):
+    """
+    loads mode and optimzer for further training
+    model: nn.model
+    optimizer: torch.optim.optimzer class
+    path: string 
+    return: list of optimizer and model
+     
+    """
+    checkpoint = torch.load(path)
+    model = checkpoint['model']
+    optimizer = checkpoint['optimizer']
+    print("model complete")
+    return [model, optimizer]
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
@@ -511,7 +532,9 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
     trainLosses = np.zeros(len(data) * epochs)
     validationLosses = np.zeros((len(data) * epochs, 2))
+    validationLoss = 0
     trainCounter = 0
+    trainCounterValidation = 0
     meanValidationLoss = 0
 
 
@@ -532,7 +555,11 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
     # load model
     if loadModel:
-        model = loadCheckpoint(model, modelName)
+        # get into folder
+        os.chdir(pathOrigin + "/results/" + modelName)
+        lastState = loadCheckpoint(model, optimizer, pathOrigin + "/results/" + modelName + "/" + modelName)
+        model = lastState[0]
+        optimizer = lastState[1]
     model.train()
     
     for x in range(epochs):
@@ -583,39 +610,37 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
             if i % validationStep == 0 and i != 0:
                 if validationSet != None:
-                    # sample data
-                    validationLoss = 0
-                    for i in range(len(validationSet)):
-                        helper = validationSet[i]
+                    # sample validation set datum
+                    ind = np.random.randint(0, len(validationSet))
+                    helper = validationSet[ind]
 
-                        # move to cuda
-                        helper = moveToCuda(helper, device)
+                    # move to cuda
+                    helper = moveToCuda(helper, device)
 
-                        y = helper[1][0]
+                    y = helper[1][0]
 
-                        # forward + backward + optimize
-                        forward = model.forward(helper, training = True)
-                        # predictions = forward[0].to(device='cuda')
-                        predictions = forward[0]
+                    # forward
+                    forward = model.forward(helper, training=True)
+                    # predictions = forward[0].to(device='cuda')
+                    predictions = forward[0]
+                    trainCounterValidation += 1
+                    testLoss = MSEpixelLoss(predictions, y) + forward[1] + forward[2]
+                    validationLoss += testLoss.item()
+                    meanValidationLoss = validationLoss / trainCounterValidation
+                    validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter])  # save trainCounter as well for comparison with interpolation
+                    # of in between datapoints
 
-                        testLoss = MSEpixelLoss(predictions, y) + forward[1] + forward[2]
-                        validationLoss += testLoss.item()
-                        meanValidationLoss = validationLoss / len(validationSet)
-                        validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter]) # save trainCounter as well for comparison with interpolation
-                        # of in between datapoints
-
-                        # save memory
-                        del forward, helper
-
+                    # save memory
+                    #del forward, helper
 
                     print("current validation loss: ", meanValidationLoss)
 
                 # early stopping
             if earlyStopping > 0:
-                if lastLoss < meanRunningLoss:
+                if lastLoss < meanValidationLoss:
                     stoppingCounter += 1
 
-                if stoppingCounter == 100:
+                if stoppingCounter == 1000:
                     print("model converged, early stopping")
 
                     # navigate/create order structure
@@ -623,7 +648,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     os.chdir(path)
                     os.makedirs(modelName, exist_ok=True)
                     os.chdir(path + "/" + modelName)
-                    saveCheckpoint(model, modelName)
+                    saveCheckpoint(model, optimizer, modelName)
 
                     # save losses
                     dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
@@ -631,13 +656,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
                     # fill in validation losses with index
                     for i in range(len(validationLosses)):
-                        trainResults.iloc[validationLosses[i, 1], 1] = validationLosses[i, 0]
+                        trainResults.iloc[int(validationLosses[i, 1].item()), 1] = validationLosses[i, 0].item()
 
                     # save dartaFrame to csv
                     trainResults.to_csv("resultsTraining.csv")
                     return
 
-            lastLoss = meanRunningLoss
+            lastLoss = meanValidationLoss
 
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
             #print("epoch: ", x, ", example: ", trainCounter, " current loss = ", loss.item())
@@ -645,13 +670,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             # save memory
             del loss, forward, helper, y
 
-    path = pathOrigin + "/results" ## check if takes global variable
+    path = pathOrigin + "/results"
     os.chdir(path)
     os.makedirs(modelName, exist_ok = True)
     os.chdir(path + "/" + modelName)
 
     ## save model anyways in case it did not converge
-    saveCheckpoint(model, modelName)
+    saveCheckpoint(model, optimizer, modelName)
 
     # save losses
     dict = {"trainLoss": trainLosses,
@@ -707,7 +732,7 @@ def getPatches(tensor, patchSize, stride=50):
     return patches
 
 
-def combinePatches(patches, tensorShape, patchSize, stride=50):
+def combinePatches(patches, tensorShape, patchSize, stride=50, device= "cpu"):
 
     """
     combines a list of patches to full image
@@ -727,7 +752,7 @@ def combinePatches(patches, tensorShape, patchSize, stride=50):
     n_channels, height, width = tensorShape
 
     # Initialize a tensor to store the image
-    tensor = torch.zeros(tensorShape)
+    tensor = torch.zeros(tensorShape).to(device)
 
     # Calculate the number of patches in each direction
     nHorizontalPatches = (width - patchSize) // stride + 1
@@ -901,8 +926,8 @@ def getTrainTest(patches, window, inputBands, outputBands):
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
 def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
-                  model, patchSize, stride, outputDimensions, training,
-                  test = False, pathOrigin = pathOrigin):
+                  model, patchSize, stride, outputDimensions, device = "cpu", training = True,
+                  test = False):
     """
     train model on loss of full scenes and backpropagate full scene error in order to get smooth boarders in the final scene predictions
 
@@ -920,6 +945,8 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
         used stride for patching
     outputDimensions: tuple
         dimensions of output scenes
+    device: string
+        on which device is tensor calculated
     training: boolean
         inference?
     test: boolean
@@ -966,7 +993,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
 
         # get final loss of predictions of the full scenes
         # set patches back to images
-        scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)
+        scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride, device = device) for x in inputList)
         fullLoss = sum(list(map(lambda x,y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         fullLoss += latentSpaceLoss
 
@@ -978,7 +1005,7 @@ def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
         return fullLoss
 
     if test:
-        scenePredictions = list(combinePatchesTransfer(x, outputDimensions, patchSize, stride) for x in inputList)
+        scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)
         fullLoss = sum(list(map(lambda x, y: nn.MSELoss()(x, y), scenePredictions, targetScenes)))
         return fullLoss
 
@@ -1066,12 +1093,14 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
                                  patchSize,
                                  stride,
                                  outputDimensions,
+                                 device=device,
                                  training = True,
                                  test = False)
+            loss = torch.divide(loss, 144) # normalize loss
             loss.backward()
             optimizer.step()
             trainCounter += 1
-            print(loss)
+
             # print loss
             runningLoss += loss.item()
             meanRunningLoss = runningLoss / trainCounter
@@ -1098,7 +1127,7 @@ def fullSceneTrain(model, modelName, optimizer, data, epochs, patchSize, stride,
     dict = {"trainLoss": trainLosses}
     trainResults = pd.DataFrame(dict)
 
-    # save dartaFrame to csv
+    # save dataFrame to csv
     trainResults.to_csv("resultsTrainingScenes.csv")
 
     return
@@ -1270,6 +1299,7 @@ def loadFullSceneData(path, names, window, inputBands, outputBands, ROI, applyKe
     """
     d = loadData(path, names)
 
+
     # crop to ROIs
     for i in range(len(d)):
         d[i] = (d[i][0], d[i][1][:, ROI[0]:ROI[1], ROI[2]:ROI[3]])
@@ -1304,9 +1334,9 @@ def loadFullSceneData(path, names, window, inputBands, outputBands, ROI, applyKe
             yDates = torch.stack(yDates, dim=0)
 
             # ROI in scenes
-            xHelper = list(map(lambda x: torch.from_numpy(x[1][inputBands, ROI[0]:ROI[1], ROI[2]:ROI[3]]), x))
+            xHelper = list(map(lambda x: torch.from_numpy(x[1][inputBands, :, :]), x))
             xHelper = torch.stack(xHelper, dim=0)
-            yHelper = list(map(lambda x: torch.from_numpy(x[1][outputBands, ROI[0]:ROI[1], ROI[2]:ROI[3]]), y))
+            yHelper = list(map(lambda x: torch.from_numpy(x[1][outputBands, :, :]), y))
             yHelper = torch.stack(yHelper, dim=0).unsqueeze(1)
 
             # sanity checks
@@ -1326,15 +1356,79 @@ def loadFullSceneData(path, names, window, inputBands, outputBands, ROI, applyKe
     return dataList
 
 ## test
+"""
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn"
-dat = loadFullSceneData(path, ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"], 5, [7,8,9], 9, [50, 650, 100, 600], True)
-print(dat[0][0][1].size())
+dat = loadFullSceneData(path, ["2013", "2014"], 5, [7,8,9], 9, [50, 650, 100, 700], True)
 
+# ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
 os.chdir("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets")
 # save data object on drive
-with open("aletschFullScenes", "wb") as fp:  # Pickling
+with open("test", "wb") as fp:  # Pickling
     pickle.dump(dat, fp)
 print("data saved!")
+"""
+
+
+def plotPatches(model, data, path, plot):
+    """
+    plots patches and targets and saves on harddrive
+
+    model: nn.model object
+    data: list of list of tensor and tensor, and list of tensor and tensor
+    path: str
+    plot: boolean
+    """
+
+
+    model.eval()
+
+    # predictions
+    forward = model.forward(data, training=False)
+    predictions = forward
+
+    # put into list
+    predList = []
+    targetList = []
+    for i in range(5):
+
+        pred = predictions[i].detach().cpu().numpy().squeeze()
+        predList.append(pred)
+
+        targ = data[1][0][i].detach().cpu().numpy().squeeze()
+        targetList.append(targ)
+
+    plotData = predList + targetList
+
+
+    # integrate dates here
+
+    # check inference
+    assert len(plotData) == 10
+
+    # start plotting
+    path = pathOrigin + "/predictions"
+    os.chdir(path)
+    name = str(np.random.randint(50000))
+    os.makedirs(name, exist_ok=True)
+    os.chdir(path + "/" + name)
+
+    path = os.getcwd()
+    for i in range(len(plotData)):
+        # model predictions
+        plt.imshow(minmaxScaler(plotData[i]), cmap='gray')
+
+        # save on harddrive
+        p = os.getcwd() + "/" + str(i) + ".pdf"
+        plt.savefig(p, dpi=1000)
+
+        with open(str(i), "wb") as fp:  # Pickling
+            pickle.dump(plotData[i], fp)
+
+    # Show the plot
+    if plot:
+        plt.show()
+
+    return
 
 
 
