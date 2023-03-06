@@ -39,8 +39,8 @@ from torch.autograd import Variable
 
 ## global variables for project
 ### change here to run on cluster ####
-pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 
@@ -489,10 +489,10 @@ def loadCheckpoint(model, optimizer, path):
      
     """
     checkpoint = torch.load(path)
-    model = checkpoint['model']
-    optimizer = checkpoint['optimizer']
-    print("model complete")
-    return [model, optimizer]
+    model.load_state_dict(checkpoint['model'])
+    optimizer.load_state_dict(checkpoint['optimizer'])
+    print("checkpoint loaded")
+    return
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
@@ -556,8 +556,8 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
     # load model
     if loadModel:
         # get into folder
-        os.chdir(pathOrigin + "/results/" + modelName)
-        lastState = loadCheckpoint(model, optimizer, pathOrigin + "/results/" + modelName + "/" + modelName)
+        os.chdir(pathOrigin + "/models")
+        lastState = loadCheckpoint(model, optimizer, pathOrigin + "/models/" + modelName)
         model = lastState[0]
         optimizer = lastState[1]
     model.train()
@@ -586,17 +586,18 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             predictions = forward[0]
             loss = MSEpixelLoss(predictions, y) + forward[1] + forward[2] # output loss, latent space loss, recopnstruction loss
             loss.backward()
+            torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=4.0) # gradient clipping; no exploding gradient
             optimizer.step()
             trainCounter += 1
 
             # print loss
-            meanRunningLossLatentSpace += forward[1].item()
+            meanRunningLossLatentSpace += forward[1].cpu().detach().item()
             meanRunningLossLatentSpace = meanRunningLossLatentSpace/trainCounter
             runningLossLatentSpace[trainCounter - 1] = meanRunningLossLatentSpace
-            meanRunningLossReconstruction += forward[2].item()
+            meanRunningLossReconstruction += forward[2].cpu().detach().item()
             meanRunningLossReconstruction = meanRunningLossReconstruction/trainCounter
             runningLossReconstruction[trainCounter - 1] = meanRunningLossReconstruction
-            runningLoss += loss.item()
+            runningLoss += loss.detach().cpu().item()
             meanRunningLoss = runningLoss / trainCounter
             trainLosses[trainCounter - 1] = meanRunningLoss
 
@@ -630,9 +631,6 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter])  # save trainCounter as well for comparison with interpolation
                     # of in between datapoints
 
-                    # save memory
-                    #del forward, helper
-
                     print("current validation loss: ", meanValidationLoss)
 
                 # early stopping
@@ -662,10 +660,13 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     trainResults.to_csv("resultsTraining.csv")
                     return
 
+            # save model and optimizer checkpoint in case of memory overlow
+            if trainCounter % 5000 == 0:
+                saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
+
             lastLoss = meanValidationLoss
 
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
-            #print("epoch: ", x, ", example: ", trainCounter, " current loss = ", loss.item())
 
             # save memory
             del loss, forward, helper, y
@@ -1203,7 +1204,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     if plot:
         plotList = [data[0][0][d] for d in range(5)]
         plotList = plotList + scenePredictions
-        plotList = [x.detach().numpy() for x in plotList]
+        plotList = [x.detach().cpu().numpy() for x in plotList]
         plotList = [np.transpose(x, (1,2,0)) for x in plotList]
 
         fig, axs = plt.subplots(2, 5)

@@ -1,0 +1,300 @@
+2023-03-04 21:02:00,872 INFO    StreamThr :17469 [internal.py:wandb_internal():87] W&B internal server running at pid: 17469, started at: 2023-03-04 21:02:00.870481
+2023-03-04 21:02:00,877 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status
+2023-03-04 21:02:00,878 INFO    WriterThread:17469 [datastore.py:open_for_write():85] open: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/run-oh3pq180.wandb
+2023-03-04 21:02:00,913 DEBUG   SenderThread:17469 [sender.py:send():336] send: header
+2023-03-04 21:02:01,025 DEBUG   SenderThread:17469 [sender.py:send():336] send: run
+2023-03-04 21:02:01,639 INFO    SenderThread:17469 [dir_watcher.py:__init__():216] watching files in: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files
+2023-03-04 21:02:01,639 INFO    SenderThread:17469 [sender.py:_start_run_threads():1067] run started: oh3pq180 with start time 1677960120.874229
+2023-03-04 21:02:01,639 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: summary_record
+2023-03-04 21:02:01,640 INFO    SenderThread:17469 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-04 21:02:01,644 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: check_version
+2023-03-04 21:02:01,644 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: check_version
+2023-03-04 21:02:01,780 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: run_start
+2023-03-04 21:02:01,800 DEBUG   HandlerThread:17469 [system_info.py:__init__():31] System info init
+2023-03-04 21:02:01,801 DEBUG   HandlerThread:17469 [system_info.py:__init__():46] System info init done
+2023-03-04 21:02:01,801 INFO    HandlerThread:17469 [system_monitor.py:start():151] Starting system monitor
+2023-03-04 21:02:01,801 INFO    SystemMonitor:17469 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-03-04 21:02:01,801 INFO    HandlerThread:17469 [system_monitor.py:probe():172] Collecting system info
+2023-03-04 21:02:01,801 INFO    SystemMonitor:17469 [interfaces.py:start():168] Started cpu
+2023-03-04 21:02:01,802 INFO    SystemMonitor:17469 [interfaces.py:start():168] Started disk
+2023-03-04 21:02:01,803 INFO    SystemMonitor:17469 [interfaces.py:start():168] Started gpu
+2023-03-04 21:02:01,804 INFO    SystemMonitor:17469 [interfaces.py:start():168] Started memory
+2023-03-04 21:02:01,805 INFO    SystemMonitor:17469 [interfaces.py:start():168] Started network
+2023-03-04 21:02:01,812 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:01,812 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:01,815 DEBUG   HandlerThread:17469 [system_info.py:probe():195] Probing system
+2023-03-04 21:02:01,820 DEBUG   HandlerThread:17469 [system_info.py:_probe_git():180] Probing git
+2023-03-04 21:02:01,836 DEBUG   HandlerThread:17469 [system_info.py:_probe_git():188] Probing git done
+2023-03-04 21:02:01,837 DEBUG   HandlerThread:17469 [system_info.py:probe():241] Probing system done
+2023-03-04 21:02:01,837 DEBUG   HandlerThread:17469 [system_monitor.py:probe():181] {'os': 'Linux-5.19.0-35-generic-x86_64-with-glibc2.35', 'python': '3.10.6', 'heartbeatAt': '2023-03-04T20:02:01.815634', 'startedAt': '2023-03-04T20:02:00.731355', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py', 'codePath': 'completeTrainScriptDebug.py', 'git': {'remote': 'https://github.com/jonasmueler/Glacier_Movement_Prediction.git', 'commit': 'f9972d6dd2ca1a5b2602153147babdc872d786ba'}, 'email': 'jonasmu@edu.aau.at', 'root': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code', 'host': 'jonas-X555UB', 'username': 'jonas', 'executable': '/usr/bin/python3.10', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2699.9995, 'min': 400.0, 'max': 2800.0}, 'cpu_freq_per_core': [{'current': 2699.991, 'min': 400.0, 'max': 2800.0}, {'current': 2700.011, 'min': 400.0, 'max': 2800.0}, {'current': 2700.0, 'min': 400.0, 'max': 2800.0}, {'current': 2699.996, 'min': 400.0, 'max': 2800.0}], 'disk': {'total': 233.17998886108398, 'used': 82.7370376586914}, 'gpu': 'NVIDIA GeForce 940M', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce 940M', 'memory_total': 2147483648}], 'memory': {'total': 7.664207458496094}}
+2023-03-04 21:02:01,837 INFO    HandlerThread:17469 [system_monitor.py:probe():182] Finished collecting system info
+2023-03-04 21:02:01,837 INFO    HandlerThread:17469 [system_monitor.py:probe():185] Publishing system info
+2023-03-04 21:02:01,837 DEBUG   HandlerThread:17469 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-03-04 21:02:01,838 DEBUG   HandlerThread:17469 [system_info.py:_save_pip():67] Saving pip packages done
+2023-03-04 21:02:01,840 INFO    HandlerThread:17469 [system_monitor.py:probe():187] Finished publishing system info
+2023-03-04 21:02:01,844 DEBUG   SenderThread:17469 [sender.py:send():336] send: files
+2023-03-04 21:02:01,844 INFO    SenderThread:17469 [sender.py:_save_file():1321] saving file wandb-metadata.json with policy now
+2023-03-04 21:02:01,856 DEBUG   SenderThread:17469 [sender.py:send():336] send: telemetry
+2023-03-04 21:02:01,898 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: stop_status
+2023-03-04 21:02:01,899 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: stop_status
+2023-03-04 21:02:02,644 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/output.log
+2023-03-04 21:02:02,645 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/requirements.txt
+2023-03-04 21:02:02,645 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-metadata.json
+2023-03-04 21:02:02,646 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json
+2023-03-04 21:02:02,694 INFO    wandb-upload_0:17469 [upload_job.py:push():138] Uploaded file /tmp/tmpvx53e0yrwandb/0wowvi9s-wandb-metadata.json
+2023-03-04 21:02:03,814 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:03,814 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:04,644 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/output.log
+2023-03-04 21:02:05,815 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:05,815 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:06,242 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:07,817 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:07,817 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:09,819 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:09,819 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:11,243 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:11,821 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:11,821 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:13,822 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:13,823 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:15,824 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:15,824 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:16,244 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:16,868 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:16,880 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:17,825 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:17,826 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:19,827 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:19,828 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:21,245 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:21,829 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:21,829 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:21,935 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:23,830 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:23,831 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:25,832 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:25,833 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:26,283 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:26,963 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:27,834 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:27,834 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:29,855 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:29,855 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:31,290 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:31,986 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:33,096 ERROR   gpu       :17469 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-04 21:02:33,100 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:33,101 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:34,298 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/config.yaml
+2023-03-04 21:02:35,115 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:35,115 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:36,973 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:37,117 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:37,161 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:38,766 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:39,162 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:39,163 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:41,165 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:41,166 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:41,976 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:43,173 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:43,173 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:43,768 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:45,175 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:45,176 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:46,994 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:47,178 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:47,179 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:48,769 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:49,181 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:49,182 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:51,184 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:51,185 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:51,982 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:53,187 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:53,188 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:53,790 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:55,189 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:55,190 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:56,982 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:02:57,191 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:57,192 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:58,772 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:02:59,204 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:02:59,205 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:01,206 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:01,207 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:01,808 DEBUG   SystemMonitor:17469 [system_monitor.py:_start():130] Starting system metrics aggregation loop
+2023-03-04 21:03:01,835 DEBUG   SenderThread:17469 [sender.py:send():336] send: stats
+2023-03-04 21:03:02,013 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:03,294 ERROR   gpu       :17469 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-04 21:03:03,295 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:03,295 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:03,841 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:05,297 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:05,298 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:07,010 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:07,300 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:07,301 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:08,843 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:09,303 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:09,303 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:11,304 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:11,305 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:12,011 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:13,306 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:13,307 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:13,845 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:15,309 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:15,310 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:17,014 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:17,313 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:17,314 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:18,845 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:19,315 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:19,316 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:21,318 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:21,319 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:22,015 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:22,474 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-04 21:03:22,499 DEBUG   SenderThread:17469 [sender.py:send():336] send: history
+2023-03-04 21:03:22,522 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: summary_record
+2023-03-04 21:03:22,542 INFO    SenderThread:17469 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-04 21:03:22,572 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json
+2023-03-04 21:03:23,321 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:23,322 ERROR   gpu       :17469 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-04 21:03:23,440 DEBUG   SenderThread:17469 [sender.py:send():336] send: exit
+2023-03-04 21:03:23,444 INFO    SenderThread:17469 [sender.py:send_exit():559] handling exit code: 1
+2023-03-04 21:03:23,469 INFO    SenderThread:17469 [sender.py:send_exit():561] handling runtime: 81
+2023-03-04 21:03:23,473 INFO    SenderThread:17469 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-04 21:03:23,475 INFO    SenderThread:17469 [sender.py:send_exit():567] send defer
+2023-03-04 21:03:23,477 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,478 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 0
+2023-03-04 21:03:23,480 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,482 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 0
+2023-03-04 21:03:23,483 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 1
+2023-03-04 21:03:23,485 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,485 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 1
+2023-03-04 21:03:23,487 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,488 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 1
+2023-03-04 21:03:23,489 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 2
+2023-03-04 21:03:23,490 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,490 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 2
+2023-03-04 21:03:23,493 INFO    HandlerThread:17469 [system_monitor.py:finish():161] Stopping system monitor
+2023-03-04 21:03:23,500 DEBUG   SystemMonitor:17469 [system_monitor.py:_start():137] Finished system metrics aggregation loop
+2023-03-04 21:03:23,503 DEBUG   SystemMonitor:17469 [system_monitor.py:_start():141] Publishing last batch of metrics
+2023-03-04 21:03:23,502 INFO    HandlerThread:17469 [interfaces.py:finish():175] Joined cpu
+2023-03-04 21:03:23,510 INFO    HandlerThread:17469 [interfaces.py:finish():175] Joined disk
+2023-03-04 21:03:23,570 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json
+2023-03-04 21:03:23,572 ERROR   gpu       :17469 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-04 21:03:23,572 INFO    HandlerThread:17469 [interfaces.py:finish():175] Joined gpu
+2023-03-04 21:03:23,572 INFO    HandlerThread:17469 [interfaces.py:finish():175] Joined memory
+2023-03-04 21:03:23,573 INFO    HandlerThread:17469 [interfaces.py:finish():175] Joined network
+2023-03-04 21:03:23,573 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,573 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 2
+2023-03-04 21:03:23,573 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 3
+2023-03-04 21:03:23,573 DEBUG   SenderThread:17469 [sender.py:send():336] send: stats
+2023-03-04 21:03:23,574 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,574 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 3
+2023-03-04 21:03:23,575 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,575 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 3
+2023-03-04 21:03:23,575 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 4
+2023-03-04 21:03:23,575 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,575 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 4
+2023-03-04 21:03:23,576 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,576 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 4
+2023-03-04 21:03:23,576 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 5
+2023-03-04 21:03:23,576 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,577 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 5
+2023-03-04 21:03:23,581 DEBUG   SenderThread:17469 [sender.py:send():336] send: summary
+2023-03-04 21:03:23,582 INFO    SenderThread:17469 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-04 21:03:23,583 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,583 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 5
+2023-03-04 21:03:23,583 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 6
+2023-03-04 21:03:23,583 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,583 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 6
+2023-03-04 21:03:23,584 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,584 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 6
+2023-03-04 21:03:23,584 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 7
+2023-03-04 21:03:23,584 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:23,584 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:23,585 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 7
+2023-03-04 21:03:23,585 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:23,585 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 7
+2023-03-04 21:03:24,389 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 8
+2023-03-04 21:03:24,390 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:24,390 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 8
+2023-03-04 21:03:24,391 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:24,391 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 8
+2023-03-04 21:03:24,458 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: poll_exit
+2023-03-04 21:03:24,489 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 9
+2023-03-04 21:03:24,490 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: poll_exit
+2023-03-04 21:03:24,490 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:24,493 DEBUG   SenderThread:17469 [sender.py:send():336] send: artifact
+2023-03-04 21:03:24,493 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 9
+2023-03-04 21:03:24,576 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/output.log
+2023-03-04 21:03:24,577 INFO    Thread-13 :17469 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json
+2023-03-04 21:03:25,460 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: poll_exit
+2023-03-04 21:03:26,822 INFO    wandb-upload_1:17469 [upload_job.py:push():96] Uploaded file /home/jonas/.local/share/wandb/artifacts/staging/tmpspnhqi1p
+2023-03-04 21:03:26,828 INFO    wandb-upload_0:17469 [upload_job.py:push():96] Uploaded file /home/jonas/.local/share/wandb/artifacts/staging/tmp5nx3n_fb
+2023-03-04 21:03:28,549 INFO    SenderThread:17469 [sender.py:send_artifact():1417] sent artifact job-https___github.com_jonasmueler_Glacier_Movement_Prediction.git_completeTrainScriptDebug.py - {'id': 'QXJ0aWZhY3Q6Mzg4NTM3NDIx', 'digest': '5915f186375b7f508f1d1c157cd3c022', 'state': 'PENDING', 'aliases': [], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjU1NzY4NjQ2', 'latestArtifact': None}, 'version': 'latest'}
+2023-03-04 21:03:28,550 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:28,551 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 9
+2023-03-04 21:03:28,552 INFO    SenderThread:17469 [dir_watcher.py:finish():362] shutting down directory watcher
+2023-03-04 21:03:28,584 INFO    SenderThread:17469 [dir_watcher.py:finish():392] scan: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files
+2023-03-04 21:03:28,586 INFO    SenderThread:17469 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/config.yaml config.yaml
+2023-03-04 21:03:28,589 INFO    SenderThread:17469 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/output.log output.log
+2023-03-04 21:03:28,604 INFO    SenderThread:17469 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/requirements.txt requirements.txt
+2023-03-04 21:03:28,615 INFO    SenderThread:17469 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-metadata.json wandb-metadata.json
+2023-03-04 21:03:28,616 INFO    SenderThread:17469 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json wandb-summary.json
+2023-03-04 21:03:28,624 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 10
+2023-03-04 21:03:28,624 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: poll_exit
+2023-03-04 21:03:28,625 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:28,631 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 10
+2023-03-04 21:03:28,632 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:28,632 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 10
+2023-03-04 21:03:28,633 INFO    SenderThread:17469 [file_pusher.py:finish():162] shutting down file pusher
+2023-03-04 21:03:29,530 INFO    wandb-upload_1:17469 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/config.yaml
+2023-03-04 21:03:29,634 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: status_report
+2023-03-04 21:03:29,887 INFO    wandb-upload_3:17469 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/wandb-summary.json
+2023-03-04 21:03:29,894 INFO    wandb-upload_0:17469 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/output.log
+2023-03-04 21:03:29,894 INFO    wandb-upload_2:17469 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/files/requirements.txt
+2023-03-04 21:03:30,096 INFO    Thread-12 (_thread_body):17469 [sender.py:transition_state():587] send defer: 11
+2023-03-04 21:03:30,097 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:30,098 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 11
+2023-03-04 21:03:30,099 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:30,100 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 11
+2023-03-04 21:03:30,101 INFO    SenderThread:17469 [file_pusher.py:join():167] waiting for file pusher
+2023-03-04 21:03:30,101 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 12
+2023-03-04 21:03:30,102 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:30,103 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 12
+2023-03-04 21:03:30,104 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:30,105 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 12
+2023-03-04 21:03:30,467 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-04 21:03:30,618 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 13
+2023-03-04 21:03:30,619 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:30,620 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 13
+2023-03-04 21:03:30,621 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:30,621 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 13
+2023-03-04 21:03:30,623 INFO    SenderThread:17469 [sender.py:transition_state():587] send defer: 14
+2023-03-04 21:03:30,625 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: defer
+2023-03-04 21:03:30,626 DEBUG   SenderThread:17469 [sender.py:send():336] send: final
+2023-03-04 21:03:30,626 INFO    HandlerThread:17469 [handler.py:handle_request_defer():170] handle defer: 14
+2023-03-04 21:03:30,626 DEBUG   SenderThread:17469 [sender.py:send():336] send: footer
+2023-03-04 21:03:30,628 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: defer
+2023-03-04 21:03:30,629 INFO    SenderThread:17469 [sender.py:send_request_defer():583] handle sender defer: 14
+2023-03-04 21:03:30,631 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: poll_exit
+2023-03-04 21:03:30,633 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: server_info
+2023-03-04 21:03:30,635 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: poll_exit
+2023-03-04 21:03:30,638 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: get_summary
+2023-03-04 21:03:30,638 DEBUG   SenderThread:17469 [sender.py:send_request():363] send_request: server_info
+2023-03-04 21:03:30,640 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: sampled_history
+2023-03-04 21:03:30,916 INFO    MainThread:17469 [wandb_run.py:_footer_history_summary_info():3442] rendering history
+2023-03-04 21:03:30,918 INFO    MainThread:17469 [wandb_run.py:_footer_history_summary_info():3474] rendering summary
+2023-03-04 21:03:30,921 INFO    MainThread:17469 [wandb_run.py:_footer_sync_info():3398] logging synced files
+2023-03-04 21:03:30,926 DEBUG   HandlerThread:17469 [handler.py:handle_request():144] handle_request: shutdown
+2023-03-04 21:03:30,926 INFO    HandlerThread:17469 [handler.py:finish():841] shutting down handler
+2023-03-04 21:03:31,638 INFO    WriterThread:17469 [datastore.py:close():299] close: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230304_210200-oh3pq180/run-oh3pq180.wandb
+2023-03-04 21:03:31,915 INFO    SenderThread:17469 [sender.py:finish():1493] shutting down sender
+2023-03-04 21:03:31,916 INFO    SenderThread:17469 [file_pusher.py:finish():162] shutting down file pusher
+2023-03-04 21:03:31,917 INFO    SenderThread:17469 [file_pusher.py:join():167] waiting for file pusher

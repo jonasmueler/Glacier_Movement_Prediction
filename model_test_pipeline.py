@@ -28,7 +28,7 @@ if load == True:
 
 #os.chdir(pathOrigin + "/datasets")
 #aletschData = functions.openData("aletsch_patches")
-
+"""
 ### debug ###
 # test with 200*200 image
 testInput = torch.rand(5, 3, 50, 50, requires_grad=True)

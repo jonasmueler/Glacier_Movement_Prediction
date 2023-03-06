@@ -28,8 +28,11 @@ m = Basemap(projection='cyl', resolution=None,
             llcrnrlat=-90, urcrnrlat=90,
             llcrnrlon=-180, urcrnrlon=180, )
 m.scatter(-38, 66.4 ,30,marker='x',color='k')
+plt.text(-38, 68.4, "Helheim (66.4°N, -38°E)", fontsize = 16)
 m.scatter(8.072999708, 46.438664912, 30,marker='x',color='k')
+plt.text(-8, 49.4, "Jungfrau-Aletsch-Bietschhorn (46.44°N, 8.07°E)", fontsize = 16)
 m.scatter(-49.83333, 69.166666, 30,marker='x',color='k')
+plt.text(-155, 72.16, "Jakobshavn (69.16°N, -49.83°E)", fontsize = 16)
 draw_map(m)
 plt.savefig("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/plots/worldMap.pdf", dpi = 1000)
-plt.show()
+#plt.show()
