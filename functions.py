@@ -496,7 +496,7 @@ def loadCheckpoint(model, optimizer, path):
 
 
 def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
-              validationSet, validationStep, WandB, device, pathOrigin = pathOrigin):
+              validationSet, validationStep, WandB, device, batchSize, pathOrigin = pathOrigin):
     """
 
     data: list of list of input data and dates and targets
@@ -516,6 +516,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
         use weights and biases tool to monitor losses dynmaically
     device: string
         device on which the data should be stored
+    batchSize: int
 
 
     return: nn.class
@@ -567,15 +568,21 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
         ix = np.arange(0, len(data), 1)
         ix = np.random.choice(ix, len(data), replace=False, p=None)
 
-        for i in ix:
+        for i in range(len(ix)- batchSize):
             # get data
-            helper = data[i]
+            helper = data[i:i+batchSize]
 
-            # move to cuda
-            helper = moveToCuda(helper, device)
+            # move to cuda; batch
+            helper = list(map(lambda x: moveToCuda(x, device), helper))
+            Inp = torch.stack([helper[i][0][0] for i in range(len(helper))])
+            tar = torch.stack([helper[i][1][0] for i in range(len(helper))])
+            inpDat = torch.stack([helper[i][0][1] for i in range(len(helper))])
+            tarDat = torch.stack([helper[i][1][1] for i in range(len(helper))])
+
+            helper = [[Inp, inpDat], [tar, tarDat]]
 
             #define target
-            y = helper[1][0]
+            y = helper[1][0].unsqueeze(dim = 2)
 
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -586,7 +593,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             predictions = forward[0]
             loss = MSEpixelLoss(predictions, y) + forward[1] + forward[2] # output loss, latent space loss, recopnstruction loss
             loss.backward()
-            torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=4.0) # gradient clipping; no exploding gradient
+            torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=3.0) # gradient clipping; no exploding gradient
             optimizer.step()
             trainCounter += 1
 
@@ -625,7 +632,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
                     # predictions = forward[0].to(device='cuda')
                     predictions = forward[0]
                     trainCounterValidation += 1
-                    testLoss = MSEpixelLoss(predictions, y) + forward[1] + forward[2]
+                    testLoss = MSEpixelLoss(predictions, y[0:3]) + forward[1] + forward[2]
                     validationLoss += testLoss.item()
                     meanValidationLoss = validationLoss / trainCounterValidation
                     validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter])  # save trainCounter as well for comparison with interpolation
@@ -669,7 +676,7 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
             print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
 
             # save memory
-            del loss, forward, helper, y
+            del loss, forward, helper, y, predictions, Inp, tar, inpDat, tarDat
 
     path = pathOrigin + "/results"
     os.chdir(path)
@@ -866,7 +873,7 @@ def automatePatching(data, patchSize, stride, roi, applyKernel):
 
     return res
 
-def getTrainTest(patches, window, inputBands, outputBands):
+def getTrainTest(patches, window, inputBands, outputBands, stationary):
     """
     takes 5 relative time deltas between scenes and outputs patch sequences with their corresponding date vectors
 
@@ -876,47 +883,89 @@ def getTrainTest(patches, window, inputBands, outputBands):
         length of sequences for model
     inputBands: list of int
     outputBands: list of int
+    stationary: boolean
+        quantized time
 
     returns: list of list of input data, input date and target data, target date
 
     """
-    dataList = []
-    deltas = np.arange(1,6,1) # [1:5]
-    counter = 0
-    for delta in deltas:
-        patchList = patches[::delta]
-        for i in range((len(patchList) - 2*window) // 1 + 1): # formula from pytorch cnn classes
-            # create patches from random consecutive timepoints in the future
-            ## take next n scenes
-            x = patchList[i:i + window]
-            y = patchList[i + window: i + (2 * window)]
-            ## take random next scenes
-            # sample 2*window consecutive indices
-            #seq = np.arange(0, len(patches))
-            #seq = np.random.choice(seq, 2*window, replace = False).tolist()
-            #seq.sort()
-            #seqX = seq[0:window]
-            #seqY = seq[window:]
-            #x = [patches[t] for t in seqX]
-            #y = [patches[t] for t in seqY]
-            for z in range(x[0][1].shape[0]):
-                xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
-                xDates = torch.stack(xDates, dim=0)
-                yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
-                yDates = torch.stack(yDates, dim=0)
-                xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
-                xHelper = torch.stack(xHelper, dim = 0)
-                yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
-                yHelper = torch.stack(yHelper, dim=0)
+    if stationary:
+        # remove empty lists
+        #patches = [ele for ele in patches if ele != []]
+        dataList = []
+        years = ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"] ## hard coded for aletsch !!
 
-                # sanity checks
-                assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+        # get list of consecutive patches in same time of year per year in list -> list of lists
+        listPatches = []
+        for year in years:
+            helper = []
+            for b in range(len(patches)):
+                if convertDatetoVector(patches[b][0])[2].item() == float(year):
+                    helper.append(patches[b])
+            listPatches.append(helper)
 
-                # save
-                dataList.append([[xHelper, xDates], [yHelper, yDates]])
 
-        print("delta ", counter, " done")
-        counter += 1
+        for i in range((len(listPatches) - 2 * window) // 1 + 1):  # formula from pytorch cnn classes, move over years
+            for o in range(400): # hard coded, sample 50 consecutive scene lists with 2* window elements
+                x = []
+                y = []
+                ## take next n scenes raondomly from consecutive years
+                for d in range(i+window):
+                    l = len(listPatches[d])
+                    e = len(listPatches[d+window])
+                    sceneX = listPatches[d][np.random.randint(l)]
+                    sceneY = listPatches[d+window][np.random.randint(e)]
+                    x.append(sceneX)
+                    y.append(sceneY)
+
+                for z in range(x[0][1].shape[0]): # iterate over patches in list
+                    xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
+                    xDates = torch.stack(xDates, dim=0)
+                    yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
+                    yDates = torch.stack(yDates, dim=0)
+                    xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
+                    xHelper = torch.stack(xHelper, dim=0)
+                    yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
+                    yHelper = torch.stack(yHelper, dim=0)
+
+                    # sanity checks
+                    assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper) == window
+                    assert xDates[0][2] < xDates[1][2] < xDates[2][2] < xDates[3][2] # delta t correct?
+                    assert yDates[0][2] < yDates[1][2] < yDates[2][2] < yDates[3][2]
+
+                    # save
+                    dataList.append([[xHelper, xDates], [yHelper, yDates]])
+
+
+    elif stationary == False:
+        dataList = []
+        deltas = np.arange(1,6,1) # [1:5]
+        counter = 0
+        for delta in deltas:
+            patchList = patches[::delta]
+            for i in range((len(patchList) - 2*window) // 1 + 1): # formula from pytorch cnn classes
+                # create patches from random consecutive timepoints in the future
+                ## take next n scenes
+                x = patchList[i:i + window]
+                y = patchList[i + window: i + (2 * window)]
+                for z in range(x[0][1].shape[0]):
+                    xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
+                    xDates = torch.stack(xDates, dim=0)
+                    yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
+                    yDates = torch.stack(yDates, dim=0)
+                    xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
+                    xHelper = torch.stack(xHelper, dim = 0)
+                    yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
+                    yHelper = torch.stack(yHelper, dim=0)
+
+                    # sanity checks
+                    assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+
+                    # save
+                    dataList.append([[xHelper, xDates], [yHelper, yDates]])
+
+            print("delta ", counter, " done")
+            counter += 1
 
     # save data object on drive
     with open("trainData", "wb") as fp:  # Pickling

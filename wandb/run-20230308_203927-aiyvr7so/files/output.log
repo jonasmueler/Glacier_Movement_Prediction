@@ -1,0 +1,84 @@
+epoch:  0 , example:  1  current loss =  1.367189645767212
+epoch:  0 , example:  2  current loss =  1.3289446234703064
+epoch:  0 , example:  3  current loss =  1.2932252486546834
+epoch:  1 , example:  4  current loss =  1.2613093554973602
+epoch:  1 , example:  5  current loss =  1.2213992357254029
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 84, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/pureTransformer.py", line 282, in forward
+    l = self.latentSpace(res[0], target, datesDecoder, training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/pureTransformer.py", line 186, in latentSpace
+    out = self.transformer(flattenedInput, targets, tgt_mask=targetMask)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 146, in forward
+    memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 280, in forward
+    output = mod(output, src_mask=mask, src_key_padding_mask=src_key_padding_mask_for_layers)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 538, in forward
+    x = self.norm1(x + self._sa_block(x, src_mask, src_key_padding_mask))
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 550, in _sa_block
+    return self.dropout1(x)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/dropout.py", line 59, in forward
+    return F.dropout(input, self.p, self.training, self.inplace)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 1252, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/fx/traceback.py", line 57, in format_stack
+    return traceback.format_stack()
+  File "/usr/lib/python3.10/traceback.py", line 213, in format_stack
+    return format_list(extract_stack(f, limit=limit))
+  File "/usr/lib/python3.10/traceback.py", line 227, in extract_stack
+    stack = StackSummary.extract(walk_stack(f), limit=limit)
+  File "/usr/lib/python3.10/traceback.py", line 379, in extract
+    linecache.checkcache(filename)
+  File "/usr/lib/python3.10/linecache.py", line 72, in checkcache
+    stat = os.stat(fullname)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 84, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/pureTransformer.py", line 282, in forward
+    l = self.latentSpace(res[0], target, datesDecoder, training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/pureTransformer.py", line 186, in latentSpace
+    out = self.transformer(flattenedInput, targets, tgt_mask=targetMask)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 146, in forward
+    memory = self.encoder(src, mask=src_mask, src_key_padding_mask=src_key_padding_mask)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 280, in forward
+    output = mod(output, src_mask=mask, src_key_padding_mask=src_key_padding_mask_for_layers)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 538, in forward
+    x = self.norm1(x + self._sa_block(x, src_mask, src_key_padding_mask))
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 550, in _sa_block
+    return self.dropout1(x)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/dropout.py", line 59, in forward
+    return F.dropout(input, self.p, self.training, self.inplace)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 1252, in dropout
+    return _VF.dropout_(input, p, training) if inplace else _VF.dropout(input, p, training)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/fx/traceback.py", line 57, in format_stack
+    return traceback.format_stack()
+  File "/usr/lib/python3.10/traceback.py", line 213, in format_stack
+    return format_list(extract_stack(f, limit=limit))
+  File "/usr/lib/python3.10/traceback.py", line 227, in extract_stack
+    stack = StackSummary.extract(walk_stack(f), limit=limit)
+  File "/usr/lib/python3.10/traceback.py", line 379, in extract
+    linecache.checkcache(filename)
+  File "/usr/lib/python3.10/linecache.py", line 72, in checkcache
+    stat = os.stat(fullname)

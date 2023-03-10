@@ -515,7 +515,7 @@ class AE_Transformer(nn.Module):
         # take last channel -> snow/Ice map
         #s = s[:,2, :, :].squeeze()
         #reconstructionLoss = nn.MSELoss()(reconstruction, s)
-        reconstructionLoss = torch.zeros(1) # no reconstruction loss
+        reconstructionLoss = torch.zeros(1).to(self.device) # no reconstruction loss
 
         # latent space
         l = self.latentSpace(res[0], target, datesDecoder, training)

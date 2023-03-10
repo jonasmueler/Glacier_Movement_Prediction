@@ -1,0 +1,26 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py:95: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  return torch.tensor(s).to(self.device)
+torch.Size([5, 4000])
+torch.Size([1, 4000])
+/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: UserWarning: Using a target size (torch.Size([3, 4000])) that is different to the input size (torch.Size([1, 4000])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 82, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 517, in forward
+    s = self.decoder(l[0], skipConnections, poolingInd, res[3], 0.9)  # output encoder: [result, skipConnections, poolingIndices]
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 467, in decoder
+    del skips, indices, meanImage, updateAdd
+UnboundLocalError: local variable 'updateAdd' referenced before assignment
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 82, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 517, in forward
+    s = self.decoder(l[0], skipConnections, poolingInd, res[3], 0.9)  # output encoder: [result, skipConnections, poolingIndices]
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 467, in decoder
+    del skips, indices, meanImage, updateAdd
+UnboundLocalError: local variable 'updateAdd' referenced before assignment

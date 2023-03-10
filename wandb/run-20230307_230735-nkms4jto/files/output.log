@@ -1,0 +1,36 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerSoftConditioning.py:116: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: UserWarning: Using a target size (torch.Size([3, 1, 50, 50])) that is different to the input size (torch.Size([1, 50, 50])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 81, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 589, in trainLoop
+    loss.backward()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/_tensor.py", line 488, in backward
+    torch.autograd.backward(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 190, in backward
+    grad_tensors_ = _make_grads(tensors, grad_tensors_, is_grads_batched=False)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 85, in _make_grads
+    raise RuntimeError("grad can be implicitly created only for scalar outputs")
+RuntimeError: grad can be implicitly created only for scalar outputs
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 81, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 589, in trainLoop
+    loss.backward()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/_tensor.py", line 488, in backward
+    torch.autograd.backward(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 190, in backward
+    grad_tensors_ = _make_grads(tensors, grad_tensors_, is_grads_batched=False)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 85, in _make_grads
+    raise RuntimeError("grad can be implicitly created only for scalar outputs")
+RuntimeError: grad can be implicitly created only for scalar outputs
+tensor([[[0.0833, 0.0326, 0.0490,  ..., 0.0018, 0.0312, 0.0033],
+         [0.0861, 0.0112, 0.0255,  ..., 0.0676, 0.0359, 0.0700],
+         [0.0534, 0.0877, 0.0407,  ..., 0.0530, 0.0799, 0.1477],
+         ...,
+         [0.0328, 0.0799, 0.0572,  ..., 0.0330, 0.1086, 0.0005],
+         [0.0537, 0.0012, 0.0746,  ..., 0.0382, 0.0471, 0.0036],
+         [0.0405, 0.0129, 0.0049,  ..., 0.0095, 0.0557, 0.0520]]],
+       grad_fn=<SelectBackward0>)
