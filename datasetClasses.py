@@ -2,16 +2,16 @@ import os
 from torch.utils.data import Dataset
 from torch import is_tensor
 import functions
+from torch.utils.data import DataLoader
 
 class glaciers(Dataset):
-    def __init__(self, path, mode):
+    def __init__(self, path):
         """
         dataset class for train loop
         path: str
             path to image and target folder
         """
         self.path = path
-        self.mode = mode
 
         # get list of all image paths in directory
         images = os.listdir(os.path.join(self.path, "images"))
@@ -48,10 +48,10 @@ class tokenizerData(Dataset):
         """
         dataset class for train loop
         path: str
-            path to image and target folder
+            path to image folder
         """
         self.path = path
-        self.mode = mode
+
 
         # get list of all image paths in directory
         images = os.listdir(self.path)
@@ -59,9 +59,7 @@ class tokenizerData(Dataset):
         self.images = paths
 
     def __len__(self):
-        _, _, files = next(os.walk(os.path.join(self.path, "images"))))
-        fileCount = len(files)
-        return fileCount
+        return len(self.images)
 
     def __getitem__(self, idx):
         """
@@ -79,3 +77,10 @@ class tokenizerData(Dataset):
         inpt = functions.openData(self.images[idx])
 
         return inpt
+"""
+training_data = glaciers("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched")
+train_dataloader = DataLoader(training_data, batch_size=2, shuffle=True)
+
+train_features, train_labels = next(iter(train_dataloader))
+print(train_features)
+"""

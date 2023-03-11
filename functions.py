@@ -1515,7 +1515,7 @@ def getTrainDataTokenizer(paths):
     paths: list of str
         paths to patches and targets
     """
-    counter = 0
+    counter = 34000
     for path in paths:
         ## images folder
         # get number of patches
@@ -1535,6 +1535,9 @@ def getTrainDataTokenizer(paths):
                     pickle.dump(img, fp)
                 os.chdir(currentPath)
                 counter += 1
+                if counter % 1000 == 0:
+                    print("image: ", counter, " done")
+        print("path: ", path, " images done")
 
         ## targets folder
         # get number of patches
@@ -1554,13 +1557,19 @@ def getTrainDataTokenizer(paths):
                     pickle.dump(img, fp)
                 os.chdir(currentPath)
                 counter += 1
+                if counter % 1000 == 0:
+                    print("image: ", counter, " done")
+        print("path: ", path, " targets done")
+        if path == "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched":
+            quit()
 
     return
 
-d = ["/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched",
-     "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched",
+d = [ #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched"] #,
+     #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched"]#,
      "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched"]
 getTrainDataTokenizer(d)
+
 
 
 
