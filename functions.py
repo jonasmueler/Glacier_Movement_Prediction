@@ -35,6 +35,7 @@ torch.backends.cudnn.benchmark = True
 from PIL import Image
 import wandb
 from torch.autograd import Variable
+from collections import Counter
 
 
 ## global variables for project
@@ -889,11 +890,11 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
     returns: list of list of input data, input date and target data, target date
 
     """
+    Path = os.getcwd()
     if stationary:
         # remove empty lists
         #patches = [ele for ele in patches if ele != []]
-        dataList = []
-        years = ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"] ## hard coded for aletsch !!
+        years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"] ## hard coded for aletsch !!
 
         # get list of consecutive patches in same time of year per year in list -> list of lists
         listPatches = []
@@ -902,15 +903,16 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
             for b in range(len(patches)):
                 if convertDatetoVector(patches[b][0])[2].item() == float(year):
                     helper.append(patches[b])
+            print(len(helper))
             listPatches.append(helper)
-
+        counter = 0
 
         for i in range((len(listPatches) - 2 * window) // 1 + 1):  # formula from pytorch cnn classes, move over years
-            for o in range(400): # hard coded, sample 50 consecutive scene lists with 2* window elements
+            for o in range(20): # hard coded, sample 50 consecutive scene lists with 2* window elements
                 x = []
                 y = []
                 ## take next n scenes raondomly from consecutive years
-                for d in range(i+window):
+                for d in range(window):
                     l = len(listPatches[d])
                     e = len(listPatches[d+window])
                     sceneX = listPatches[d][np.random.randint(l)]
@@ -928,14 +930,37 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
                     yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
                     yHelper = torch.stack(yHelper, dim=0)
 
+                    counter += 1
                     # sanity checks
+                    #print(len(xDates))
+                    #print(len(yDates))
+                    #print(len(xHelper))
+                    #print(len(yHelper))
                     assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper) == window
                     assert xDates[0][2] < xDates[1][2] < xDates[2][2] < xDates[3][2] # delta t correct?
                     assert yDates[0][2] < yDates[1][2] < yDates[2][2] < yDates[3][2]
 
-                    # save
-                    dataList.append([[xHelper, xDates], [yHelper, yDates]])
+                    # save with dates
+                    #dataList.append([[xHelper, xDates], [yHelper, yDates]])
 
+                    # just save images and targets in folder
+                    # input
+                    os.chdir(Path)
+                    os.makedirs("images", exist_ok=True)
+                    os.chdir(os.path.join(os.getcwd(), "images"))
+
+                    # save data object on drive
+                    with open(str(counter), "wb") as fp:  # Pickling
+                        pickle.dump(xHelper, fp)
+
+                    # targets
+                    os.chdir(Path)
+                    os.makedirs("targets", exist_ok=True)
+                    os.chdir(os.path.join(os.getcwd(), "targets"))
+
+                    # save data object on drive
+                    with open(str(counter), "wb") as fp:  # Pickling
+                        pickle.dump(yHelper, fp)
 
     elif stationary == False:
         dataList = []
@@ -967,12 +992,15 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
             print("delta ", counter, " done")
             counter += 1
 
-    # save data object on drive
-    with open("trainData", "wb") as fp:  # Pickling
-        pickle.dump(dataList, fp)
-    print("data saved!")
+        ## save complete dataset
 
-    return dataList
+        # save data object on drive
+        with open("trainData", "wb") as fp:  # Pickling
+            pickle.dump(dataList, fp)
+        print("data saved!")
+
+        return dataList
+    return
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
 def fullSceneLoss(inputScenes, inputDates, targetScenes, targetDates,
@@ -1479,6 +1507,61 @@ def plotPatches(model, data, path, plot):
         plt.show()
 
     return
+
+def getTrainDataTokenizer(paths):
+    """
+    saves each patch created as 50x50 tensor
+
+    paths: list of str
+        paths to patches and targets
+    """
+    counter = 0
+    for path in paths:
+        ## images folder
+        # get number of patches
+        images = os.listdir(os.path.join(path, "images"))
+        pathsImg = [os.path.join(os.path.join(path, "images"), item) for item in images]
+
+        for imgPath in pathsImg:
+            tensor = openData(imgPath)
+            for i in range(tensor.size(0)):
+                img = tensor[i, 2, :, :]
+
+                # save into folder
+                currentPath = os.getcwd()
+                outputPath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/tokenizer"
+                os.chdir(outputPath)
+                with open(str(counter), "wb") as fp:  # Pickling
+                    pickle.dump(img, fp)
+                os.chdir(currentPath)
+                counter += 1
+
+        ## targets folder
+        # get number of patches
+        targets = os.listdir(os.path.join(path, "targets"))
+        pathsImg = [os.path.join(os.path.join(path, "targets"), item) for item in targets]
+
+        for imgPath in pathsImg:
+            tensor = openData(imgPath)
+            for i in range(tensor.size(0)):
+                img = tensor[i, :, :]
+
+                # save into folder
+                currentPath = os.getcwd()
+                outputPath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/tokenizer"
+                os.chdir(outputPath)
+                with open(str(counter), "wb") as fp:  # Pickling
+                    pickle.dump(img, fp)
+                os.chdir(currentPath)
+                counter += 1
+
+    return
+
+d = ["/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched",
+     "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched",
+     "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched"]
+getTrainDataTokenizer(d)
+
 
 
 
