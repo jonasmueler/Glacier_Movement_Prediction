@@ -36,6 +36,7 @@ from PIL import Image
 import wandb
 from torch.autograd import Variable
 from collections import Counter
+from scipy.interpolate import RegularGridInterpolator
 
 
 ## global variables for project
@@ -81,7 +82,7 @@ def getData(bbox, bands, timeRange, cloudCoverage, allowedMissings):
     print("found ", len(items), " scenes")
 
     # stack
-    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:32625")
+    stack = stackstac.stack(items, bounds_latlon=bbox, epsg = "EPSG:32643")
 
     # use common_name for bands
     stack = stack.assign_coords(band=stack.common_name.fillna(stack.band).rename("band"))
@@ -448,24 +449,6 @@ def convertDatetoVector(date):
 
     return res
 
-def MSEpixelLoss(predictions, y):
-    """
-
-    predictions: tensor
-        dims = (seqLen, x,y)
-    y: list of (x,y)
-
-    return: float
-        pixel loss for all images
-    """
-
-    #y = torch.stack(y, 0)
-    y = y.to(torch.float32)
-
-    loss = torch.nn.MSELoss()(predictions, y)
-
-    return loss
-
 def saveCheckpoint(model, optimizer, filename):
     """
     saves current model and optimizer step
@@ -489,57 +472,71 @@ def loadCheckpoint(model, optimizer, path):
     return: list of optimizer and model
      
     """
-    checkpoint = torch.load(path)
-    model.load_state_dict(checkpoint['model'])
-    optimizer.load_state_dict(checkpoint['optimizer'])
-    print("checkpoint loaded")
-    return
+    if optimizer != None:
+        checkpoint = torch.load(path)
+        model.load_state_dict(checkpoint['model'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+        print("checkpoint loaded")
+        return [model, optimizer]
+    elif optimizer == None:
+        checkpoint = torch.load(path)
+        model.load_state_dict(checkpoint['model'])
+        return model
 
-
-def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping, epochs,
-              validationSet, validationStep, WandB, device, batchSize, pathOrigin = pathOrigin):
+def tokenizerBatch(model, x, mode, device, flatten = torch.nn.Flatten(start_dim=1, end_dim=2)):
     """
+    encoding and decoding function for transformer model
 
-    data: list of list of input data and dates and targets
-    model: pytorch nn.class
+    model: nn.Module
+    x: tensor
+    mode: string
+    device: string
+    flatten: nn.Flatten for latent space input
+    return: torch.tensor
+        encoding/decoding for tarnsformer model
+    """
+    model.eval()
+    if mode == "encoding":
+        encoding = [model.encoder(flatten(x[i, :, :, :].to(device))) for i in range(x.size(0))]
+        encoding = torch.stack(encoding)
+
+        return encoding
+
+    if mode == "decoding":
+        decoding = [model.decoder(x[i, :, :].to(device)) for i in range(x.size(0))]
+        decoding = torch.stack(decoding)
+
+        return decoding
+
+
+def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, modelName, params,  WandB, device, pathOrigin = pathOrigin):
+    """
+    trains a given model on the data
+
+    dataLoader: torch DataLoader object
+    valLoader: torch DataLoader object
+    tokenizer: nn.Module
+        trained tokenizer, fixed in training
+    model: torch nn.class
     loadModel: boolean
     modelName: string
         .pth.tar model name on harddrive with path
-    lr: float
-    weightDecay: float
-    earlyStopping: float
-    criterionFunction: nn.lossfunction
-    epochs: int
-    validationSet: same as data
-    validationStep: int
-        timepoint when validation set is evaluated for early stopping regularization
+    params: dict
+        lr, weightDecay, epochs, batchSize, validationStep, optimizer
     WandB: boolean
         use weights and biases tool to monitor losses dynmaically
     device: string
         device on which the data should be stored
-    batchSize: int
-
 
     return: nn.class
-        trained model
+        trained model and saved training monitoring data
     """
+    # variables
     torch.autograd.set_detect_anomaly(True)
-    runningLoss = 0
-    runningLossLatentSpace = np.zeros(len(data) * epochs)
-    meanRunningLossLatentSpace = 0
-    runningLossReconstruction = np.zeros(len(data) * epochs)
-    meanRunningLossReconstruction = 0
-    stoppingCounter = 0
-    lastLoss = 0
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weightDecay)
-    trainLosses = np.zeros(len(data) * epochs)
-    validationLosses = np.zeros((len(data) * epochs, 2))
-    validationLoss = 0
+    trainLosses = np.ones(len(trainLoader) * params["batchSize"])
+    validationLosses = np.ones(len(trainLoader) * params["batchSize"])
     trainCounter = 0
-    trainCounterValidation = 0
-    meanValidationLoss = 0
-
-
+    valLoss = torch.zeros(1)
     # WandB
     if WandB:
         wandb.init(
@@ -548,159 +545,96 @@ def trainLoop(data, model, loadModel, modelName, lr, weightDecay, earlyStopping,
 
             # track hyperparameters and run metadata
             config={
-                "learning_rate": lr,
+                "learning_rate": params["learningRate"],
                 "architecture": modelName,
                 "dataset": "Helheim, Aletsch, jakobshavn",
-                "epochs": epochs,
+                "epochs": params["epochs"],
             }
         )
 
-    # load model
+    # get optimizer
+    if params["optimizer"] == "adam":
+        optimizer = torch.optim.AdamW(model.parameters(),
+                                      lr = params["learningRate"],
+                                      weight_decay= params["weightDecay"])
+
+    # load model and optimizer from checkpoint
     if loadModel:
         # get into folder
         os.chdir(pathOrigin + "/models")
         lastState = loadCheckpoint(model, optimizer, pathOrigin + "/models/" + modelName)
         model = lastState[0]
         optimizer = lastState[1]
+
+    ###################### start training #############################
+
     model.train()
-    
-    for x in range(epochs):
-        # get indices for epoch
-        ix = np.arange(0, len(data), 1)
-        ix = np.random.choice(ix, len(data), replace=False, p=None)
+    for b in range(params["epochs"]):
+        for inpts, targets in trainLoader:
+            # use tokenizer on gpu
+            inpts = inpts.to(device).float() # three maps, just use snow map as input
+            targets = targets.to(device).float()
 
-        for i in range(len(ix)- batchSize):
-            # get data
-            helper = data[i:i+batchSize]
-
-            # move to cuda; batch
-            helper = list(map(lambda x: moveToCuda(x, device), helper))
-            Inp = torch.stack([helper[i][0][0] for i in range(len(helper))])
-            tar = torch.stack([helper[i][1][0] for i in range(len(helper))])
-            inpDat = torch.stack([helper[i][0][1] for i in range(len(helper))])
-            tarDat = torch.stack([helper[i][1][1] for i in range(len(helper))])
-
-            helper = [[Inp, inpDat], [tar, tarDat]]
-
-            #define target
-            y = helper[1][0].unsqueeze(dim = 2)
+            # encode with tokenizer and put to gpu
+            inpts = tokenizerBatch(tokenizer, inpts, "encoding", device)
+            targets = tokenizerBatch(tokenizer, targets, "encoding", device)
 
             # zero the parameter gradients
             optimizer.zero_grad()
-            model.zero_grad()
 
             # forward + backward + optimize
-            forward = model.forward(helper, training = True)
-            predictions = forward[0]
-            loss = MSEpixelLoss(predictions, y) + forward[1] + forward[2] # output loss, latent space loss, recopnstruction loss
+            forward = model.forward(inpts, targets, training = True)
+            loss = criterion(forward, targets)
             loss.backward()
             torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=3.0) # gradient clipping; no exploding gradient
             optimizer.step()
             trainCounter += 1
 
-            # print loss
-            meanRunningLossLatentSpace += forward[1].cpu().detach().item()
-            meanRunningLossLatentSpace = meanRunningLossLatentSpace/trainCounter
-            runningLossLatentSpace[trainCounter - 1] = meanRunningLossLatentSpace
-            meanRunningLossReconstruction += forward[2].cpu().detach().item()
-            meanRunningLossReconstruction = meanRunningLossReconstruction/trainCounter
-            runningLossReconstruction[trainCounter - 1] = meanRunningLossReconstruction
-            runningLoss += loss.detach().cpu().item()
-            meanRunningLoss = runningLoss / trainCounter
-            trainLosses[trainCounter - 1] = meanRunningLoss
+            # save loss
+            with torch.no_grad():
+                if trainCounter % params["validationStep"] == 0 and trainCounter != 0:
+                    x, y = next(iter(valLoader))
+                    x = x.float()
+                    y = y.float()
 
-            ## log to wandb
-            if WandB:
-                wandb.log({"train loss": meanRunningLoss,
-                           "latentSpaceLoss": meanRunningLossLatentSpace,
-                           "reconstructionLoss": meanRunningLossReconstruction,
-                           "validationLoss": meanValidationLoss})
+                    # encode with tokenizer and put to gpu
+                    x = tokenizerBatch(tokenizer, x, "encoding", device)
+                    y = tokenizerBatch(tokenizer, y, "encoding", device)
+
+                    # predict
+                    pred = model.forward(x,y, training = False)
+                    valLoss = criterion(pred, y)
 
 
-            if i % validationStep == 0 and i != 0:
-                if validationSet != None:
-                    # sample validation set datum
-                    ind = np.random.randint(0, len(validationSet))
-                    helper = validationSet[ind]
+                ## log to wandb
+                if WandB:
+                    wandb.log({"trainLoss": loss.detach().cpu().item(),
+                            "validationLoss": valLoss.detach().cpu().item()})
 
-                    # move to cuda
-                    helper = moveToCuda(helper, device)
-
-                    y = helper[1][0]
-
-                    # forward
-                    forward = model.forward(helper, training=True)
-                    # predictions = forward[0].to(device='cuda')
-                    predictions = forward[0]
-                    trainCounterValidation += 1
-                    testLoss = MSEpixelLoss(predictions, y[0:3]) + forward[1] + forward[2]
-                    validationLoss += testLoss.item()
-                    meanValidationLoss = validationLoss / trainCounterValidation
-                    validationLosses[trainCounter - 1] = np.array([meanValidationLoss, trainCounter])  # save trainCounter as well for comparison with interpolation
-                    # of in between datapoints
-
-                    print("current validation loss: ", meanValidationLoss)
-
-                # early stopping
-            if earlyStopping > 0:
-                if lastLoss < meanValidationLoss:
-                    stoppingCounter += 1
-
-                if stoppingCounter == 1000:
-                    print("model converged, early stopping")
-
-                    # navigate/create order structure
-                    path = pathOrigin + "/results"
-                    os.chdir(path)
-                    os.makedirs(modelName, exist_ok=True)
-                    os.chdir(path + "/" + modelName)
-                    saveCheckpoint(model, optimizer, modelName)
-
-                    # save losses
-                    dict = {"trainLoss": trainLosses, "validationLoss": [np.NaN for x in range(len(trainLosses))]}
-                    trainResults = pd.DataFrame(dict)
-
-                    # fill in validation losses with index
-                    for i in range(len(validationLosses)):
-                        trainResults.iloc[int(validationLosses[i, 1].item()), 1] = validationLosses[i, 0].item()
-
-                    # save dartaFrame to csv
-                    trainResults.to_csv("resultsTraining.csv")
-                    return
+                #save for csv
+                trainLosses[trainCounter] = loss.detach().cpu().item()
+                validationLosses[trainCounter] = valLoss.detach().cpu().item()
 
             # save model and optimizer checkpoint in case of memory overlow
             if trainCounter % 5000 == 0:
                 saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
 
-            lastLoss = meanValidationLoss
+                # save gradient descent
+                df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses})
+                df.to_csv(os.path.join(pathOrigin, modelName) + ".csv", index=False)
 
-            print("epoch: ", x, ", example: ", trainCounter, " current loss = ", meanRunningLoss)
+            # print loss
+            print("epoch: ", b, ", example: ", trainCounter, " current loss = ", loss.detach().cpu().item())
 
-            # save memory
-            del loss, forward, helper, y, predictions, Inp, tar, inpDat, tarDat
 
-    path = pathOrigin + "/results"
+    # save results of gradient descent
+    path = os.path.join(pathOrigin, "/models")
     os.chdir(path)
-    os.makedirs(modelName, exist_ok = True)
-    os.chdir(path + "/" + modelName)
+    df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses})
+    df.to_csv(modelName + ".csv", index=False)
 
-    ## save model anyways in case it did not converge
+    ## save model state
     saveCheckpoint(model, optimizer, modelName)
-
-    # save losses
-    dict = {"trainLoss": trainLosses,
-            "validationLoss" : [np.NaN for x in range(len(trainLosses))],
-            "latentSpaceLoss": runningLossLatentSpace,
-            "reconstructionLoss": runningLossReconstruction}
-    trainResults = pd.DataFrame(dict)
-
-    # fill in validation losses with index
-    for i in range(len(validationLosses)):
-        trainResults.iloc[int(validationLosses[i, 1].item()), 1] = validationLosses[i, 0].item()
-
-    # save dartaFrame to csv
-    trainResults.to_csv("resultsTrainingPatches.csv")
-
     print("results saved!")
     return
 
@@ -806,7 +740,7 @@ plt.show()
 print(t_original.numpy()- t.numpy())
 """
 
-def createPatches(img, patchSize, stride, roi, applyKernel = False):
+def createPatches(img, patchSize, stride):
     """
     creates image patches sampled from a region of interest
 
@@ -814,30 +748,10 @@ def createPatches(img, patchSize, stride, roi, applyKernel = False):
     patchSize: int
         size of patches
     stride: int
-    roi: list of int
-        bounding box region of interest for importance sampling
-    applyKernel: boolean
-        if data still contains missings apply kernel to patches
 
     returns:  torch.tensor
         shape = (n_patches, bands, patchSize, patchSize)
     """
-
-    img = img[:, roi[0]:roi[1], roi[2]:roi[3]]  # roi x,y coordinates over all bands
-    # clean missings
-    if applyKernel:
-        # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
-        for z in [2,5]: # only use NDSI relevant bands
-            while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
-                img[z, :, :] = applyToImage(img[z, :, :])
-                print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
-            print("band: ", z, " of ", img.shape[0], "done")
-    print("application of kernel done")
-
-    # apply NDSI here
-    # add NDSI and snow masks
-    img = NDSI(img, 0.3)  # hardcoded snow value threshold
-
     # torch conversion, put into ndarray
     img = torch.from_numpy(img)
     patches = getPatches(img, patchSize, stride=stride)
@@ -847,7 +761,7 @@ def createPatches(img, patchSize, stride, roi, applyKernel = False):
     return out
 
 
-def automatePatching(data, patchSize, stride, roi, applyKernel):
+def automatePatching(data, patchSize, stride):
     """
     creates image patches sampled from a region of interest
 
@@ -857,10 +771,6 @@ def automatePatching(data, patchSize, stride, roi, applyKernel):
         size of patches
     maxPatches: int
         number of patches extracted
-    roi: list of int
-        bounding box region of interest for importance sampling
-    applyKernel: boolean
-        if data still contains missings apply kernel to patches
 
     returns:  list of tuple of datetime and np.array
         switch np array in tuple with np array with on more dimension -> patches
@@ -868,17 +778,135 @@ def automatePatching(data, patchSize, stride, roi, applyKernel):
 
     res = []
     for i in range(len(data)):
-        print("processing image: ", i)
-        patches = createPatches(data[i][1][:, :, :], patchSize, stride, roi, applyKernel=applyKernel)
-        res.append((data[i][0], patches))
+        print("patchify scene: ", i)
+        patches = createPatches(np.expand_dims(data[i], axis=0), patchSize, stride)
+        res.append(patches)
 
     return res
 
+def monthlyAverageScenes(d, ROI, applyKernel):
+
+    """
+    gets list of list with scenes from  different months in a year and returns monthly averages with missing images interpolated in between
+    d: list of tuple of datetime and np.array
+
+    ROI: list of int
+        region of interest to be processed
+    applyKernel: boolean
+
+    returns: list of list of torch.tensor
+    """
+    # check for the correct months to make data stationary -> summer data
+    l = []
+    imgAcc = np.zeros((ROI[1]-ROI[0], ROI[3]-ROI[2]))
+    counterImg = 0
+    usedMonths = []
+    for y in np.arange(2013, 2022, 1): # year
+        for m in np.arange(1,13,1): # month
+            month = 0
+            for i in range(len(d)):
+                if (convertDatetoVector(d[i][0])[1].item() == m) and (convertDatetoVector(d[i][0])[2].item() == y):
+                    # count months
+                    month += 1
+
+                    ## get roi and apply kernel
+                    img = d[i][1][[2,5], ROI[0]:ROI[1], ROI[2]:ROI[3]]  # hard coded bands get extracted
+
+                    # clean missings with kernel
+                    if applyKernel:
+                        # apply kernel to raw bands, do many times as sometimes division by zero gives nans in image
+                        for z in [0, 1]:  # only use NDSI relevant bands
+                            while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
+                                img[z, :, :] = applyToImage(img[z, :, :])
+                                print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
+                            print("band: ", z, " of ", img.shape[0], "done")
+                    print("application of kernel done")
+
+                    # apply NDSI here
+                    # add snow mask to average image
+                    threshold = 0.3
+                    NDSI = np.divide(np.subtract(img[0, :, :], img[1, :, :]),
+                                 np.add(img[0, :, :], img[1, :, :]))
+                    #nosnow = np.ma.masked_where(NDSI >= threshold, NDSI).filled(0) ## leave in case necessary to use in future
+                    snow = np.ma.masked_where(NDSI < threshold, NDSI).filled(0)
+                    imgAcc += snow
+
+            if month != 0:
+                # average over images
+                imgAcc = imgAcc / month
+                l.append(imgAcc)
+
+            ## mark months with no scenes
+            if month  == 0:
+                l.append(np.full((ROI[1]-ROI[0], ROI[3]-ROI[2]), np.nan))
+                counterImg += 1
+                print(counterImg, " missing imgs")
+
+            usedMonths.append(np.array([[m,y]]))
+
+        print("averaging of year: ", y, " done")
+
+    # interpolate missing scenes for months
+    print("start image interpolation")
+
+    # sanity check
+    assert len(usedMonths) == len(l) == 9*12 # 9 years, 12 months
+
+
+    # interpolate between images
+    ## first images can not be interpolated take first not missing image as template and impute
+    indices = [i for i in range(len(l)) if not np.any(np.isnan(l[i]))]
+
+    for i in range(len(indices)-1):
+        idx = indices[i]
+        succ = indices[i+1]
+
+        if succ - idx == 1:
+            pass
+
+        elif succ - idx > 1:
+            diff = succ - idx
+            delta = (l[succ] - l[idx])/diff
+            for t in range(diff):
+                l[idx + t + 1] = l[idx] + (t+1) * delta
+
+    arr = np.transpose(np.dstack(l), (2, 0, 1))
+    print("interpolation done")
+    result = [arr[i, :, :] for i in range(arr.shape[0])]
+
+    ## save on harddrive
+    print("start saving scenes")
+    path = os.getcwd()
+    os.makedirs("monthlyAveragedScenes", exist_ok=True)
+    os.chdir(os.path.join(path, "monthlyAveragedScenes"))
+    os.makedirs("images", exist_ok=True)
+    os.makedirs("dates", exist_ok=True)
+    counter = 0
+    for i in range(len(result)):
+        # save images
+        os.chdir(os.path.join(path,"monthlyAveragedScenes", "images"))
+
+        # save data object on drive
+        with open(str(counter), "wb") as fp:
+            pickle.dump(result[i], fp)
+
+        # save dates
+        os.chdir(os.path.join(path, "monthlyAveragedScenes", "dates"))
+
+        # save data object on drive
+        with open(str(counter), "wb") as fp:
+            pickle.dump(usedMonths[i], fp)
+        counter += 1
+
+    print("saving scenes done")
+
+    return result
+
 def getTrainTest(patches, window, inputBands, outputBands, stationary):
     """
-    takes 5 relative time deltas between scenes and outputs patch sequences with their corresponding date vectors
+    converts patches to image data for deep learning models
 
-    patches: list of list of tensor and tensor and list of tensor and tensor
+    patches: list of tensor
         data createPatches.py
     window: int
         length of sequences for model
@@ -892,9 +920,7 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
     """
     Path = os.getcwd()
     if stationary:
-        # remove empty lists
-        #patches = [ele for ele in patches if ele != []]
-        years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"] ## hard coded for aletsch !!
+        years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
 
         # get list of consecutive patches in same time of year per year in list -> list of lists
         listPatches = []
@@ -932,16 +958,9 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
 
                     counter += 1
                     # sanity checks
-                    #print(len(xDates))
-                    #print(len(yDates))
-                    #print(len(xHelper))
-                    #print(len(yHelper))
                     assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper) == window
                     assert xDates[0][2] < xDates[1][2] < xDates[2][2] < xDates[3][2] # delta t correct?
                     assert yDates[0][2] < yDates[1][2] < yDates[2][2] < yDates[3][2]
-
-                    # save with dates
-                    #dataList.append([[xHelper, xDates], [yHelper, yDates]])
 
                     # just save images and targets in folder
                     # input
@@ -963,43 +982,42 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
                         pickle.dump(yHelper, fp)
 
     elif stationary == False:
-        dataList = []
-        deltas = np.arange(1,6,1) # [1:5]
         counter = 0
-        for delta in deltas:
-            patchList = patches[::delta]
-            for i in range((len(patchList) - 2*window) // 1 + 1): # formula from pytorch cnn classes
-                # create patches from random consecutive timepoints in the future
-                ## take next n scenes
-                x = patchList[i:i + window]
-                y = patchList[i + window: i + (2 * window)]
-                for z in range(x[0][1].shape[0]):
-                    xDates = [convertDatetoVector(x[t][0]) for t in range(len(x))]
-                    xDates = torch.stack(xDates, dim=0)
-                    yDates = [convertDatetoVector(y[t][0]) for t in range(len(y))]
-                    yDates = torch.stack(yDates, dim=0)
-                    xHelper = list(map(lambda x: torch.from_numpy(x[1][z, inputBands, :, :]), x))
-                    xHelper = torch.stack(xHelper, dim = 0)
-                    yHelper = list(map(lambda x: torch.from_numpy(x[1][z, outputBands, :, :]), y))
-                    yHelper = torch.stack(yHelper, dim=0)
+        for i in range((len(patches) - 2*window) // 1 + 1): # formula from pytorch cnn classes
+            # create patches from random consecutive timepoints in the future
+            ## take next n scenes
+            x = patches[i:i + window]
+            y = patches[i + window: i + (2 * window)]
+            for z in range(x[0].shape[0]):
 
-                    # sanity checks
-                    assert len(xDates) == len(yDates) == len(xHelper) == len(yHelper)
+                xHelper = list(map(lambda x: torch.from_numpy(x[z, inputBands, :, :]), x))
+                xHelper = torch.stack(xHelper, dim = 0)
+                yHelper = list(map(lambda x: torch.from_numpy(x[z, outputBands, :, :]), y))
+                yHelper = torch.stack(yHelper, dim=0)
 
-                    # save
-                    dataList.append([[xHelper, xDates], [yHelper, yDates]])
+                # sanity checks
+                assert len(xHelper) == len(yHelper)
 
-            print("delta ", counter, " done")
-            counter += 1
+                # just save images and targets in folder
+                # input
+                os.chdir(Path)
+                os.makedirs("images", exist_ok=True)
+                os.chdir(os.path.join(os.getcwd(), "images"))
 
-        ## save complete dataset
+                # save data object on drive
+                with open(str(counter), "wb") as fp:  # Pickling
+                    pickle.dump(xHelper, fp)
 
-        # save data object on drive
-        with open("trainData", "wb") as fp:  # Pickling
-            pickle.dump(dataList, fp)
-        print("data saved!")
+                # targets
+                os.chdir(Path)
+                os.makedirs("targets", exist_ok=True)
+                os.chdir(os.path.join(os.getcwd(), "targets"))
 
-        return dataList
+                # save data object on drive
+                with open(str(counter), "wb") as fp:  # Pickling
+                    pickle.dump(yHelper, fp)
+                counter += 1
+
     return
 
 # input 5, 3, 50, 50; targets: 5, 1, 50, 50
@@ -1564,11 +1582,12 @@ def getTrainDataTokenizer(paths):
             quit()
 
     return
-
+"""
 d = [ #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched"] #,
      #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched"]#,
      "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched"]
 getTrainDataTokenizer(d)
+"""
 
 
 

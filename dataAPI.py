@@ -84,11 +84,11 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
 
     #plot as check in RGB
     if plot: # sanity check
-        for i in range(2):
+        for i in range(4):
             rgb = functions.createImage(d[i][1][1:4, :, :], 0.40)
             plt.imshow(rgb)
             plt.axis("off")
-
+            """
             # clear date string
             name = str(d[i][0])
             name = name.replace(":", "-")
@@ -96,15 +96,15 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
 
             # save
             plt.savefig(name + ".pdf", dpi = 1000)
-            """"
-            if i == 4:
-                plt.show()
+            """
+
+            plt.show()
         for i in range(len(d)): #rgb
             rgb = functions.createImage(d[i][1][1:4,:,:], 0.40)
             plt.subplot(round(len(d)/2)+1, 2, i + 1)
             plt.imshow(rgb)
         plt.show()
-        """
+
     # change back to origin folder
     os.chdir(pathOrigin)
 
@@ -136,8 +136,8 @@ for b in range(len(years)):
     os.chdir(path)
     if b < 10:
         string = years[b] + "-01-01/" + years[b+1] + "-01-01"
-        API((-49.707011136141695, 69.0891590033335, -49.374331387606546, 69.1869693618585),
-              string, 20, 0.5, years[b], "Jakobshavn", plot = True)
+        API((77.4879532598204, 31.992646374004327, 77.82063300835557, 32.225292222190056),
+              string, 20, 0.5, years[b], "parbati", plot = True)
         print(years[b] + " done")
     if b == 10:
         print("finished!")

@@ -1,0 +1,150 @@
+
+current loss:  0.22274011373519897
+current loss:  0.21776533126831055
+current loss:  0.18935155868530273
+current loss:  0.1581564098596573
+current loss:  0.14115072786808014
+current loss:  0.125732421875
+current loss:  0.1141919270157814
+current loss:  0.11283411085605621
+current loss:  0.09895376116037369
+current loss:  0.0917874425649643
+current loss:  0.0967683419585228
+current loss:  0.08172015845775604
+current loss:  0.0815148875117302
+current loss:  0.06772839277982712
+current loss:  0.0765705555677414
+current loss:  0.07261088490486145
+current loss:  0.0701465979218483
+current loss:  0.06216784194111824
+current loss:  0.05917342007160187
+current loss:  0.061861053109169006
+current loss:  0.052255820482969284
+current loss:  0.05257715657353401
+current loss:  0.05780993774533272
+current loss:  0.05782103165984154
+current loss:  0.05128110200166702
+current loss:  0.04767082631587982
+current loss:  0.04783646762371063
+current loss:  0.04528146982192993
+current loss:  0.046759750694036484
+current loss:  0.04818068444728851
+current loss:  0.0353938564658165
+current loss:  0.04193113371729851
+current loss:  0.04063764959573746
+current loss:  0.04105149954557419
+current loss:  0.03566863387823105
+current loss:  0.03424159064888954
+current loss:  0.030461858958005905
+current loss:  0.034332435578107834
+current loss:  0.033119168132543564
+current loss:  0.03607747703790665
+current loss:  0.030230239033699036
+current loss:  0.032783713191747665
+current loss:  0.03400619700551033
+current loss:  0.030434349551796913
+current loss:  0.03180774673819542
+current loss:  0.028862209990620613
+current loss:  0.0345238633453846
+current loss:  0.030379535630345345
+current loss:  0.029693784192204475
+current loss:  0.02711712010204792
+current loss:  0.029855594038963318
+current loss:  0.029004324227571487
+current loss:  0.030969180166721344
+current loss:  0.02914930321276188
+current loss:  0.02713165432214737
+current loss:  0.031809352338314056
+current loss:  0.025518449023365974
+current loss:  0.0315689742565155
+current loss:  0.027420630678534508
+current loss:  0.027638375759124756
+current loss:  0.028672978281974792
+current loss:  0.021979309618473053
+current loss:  0.02925196848809719
+current loss:  0.030222328379750252
+current loss:  0.031021784991025925
+current loss:  0.03457785025238991
+current loss:  0.0287320576608181
+current loss:  0.024462910369038582
+current loss:  0.02576664462685585
+current loss:  0.025448298081755638
+current loss:  0.02730274200439453
+current loss:  0.025002537295222282
+current loss:  0.02707834541797638
+current loss:  0.024682706221938133
+current loss:  0.0258026160299778
+current loss:  0.02721364237368107
+current loss:  0.023018425330519676
+current loss:  0.029161816462874413
+current loss:  0.027107488363981247
+current loss:  0.02138541080057621
+current loss:  0.024256568402051926
+current loss:  0.025442982092499733
+current loss:  0.021172495558857918
+current loss:  0.02424337901175022
+current loss:  0.026487695053219795
+current loss:  0.02476683259010315
+current loss:  0.029010804370045662
+current loss:  0.02610786445438862
+current loss:  0.022745303809642792
+current loss:  0.025562992319464684
+current loss:  0.02689090557396412
+current loss:  0.027864353731274605
+current loss:  0.025493305176496506
+current loss:  0.02287886291742325
+current loss:  0.02696896530687809
+current loss:  0.02332407794892788
+current loss:  0.021853690966963768
+current loss:  0.02324446476995945
+current loss:  0.026796750724315643
+current loss:  0.02600850537419319
+current loss:  0.022107340395450592
+current loss:  0.0251725222915411
+current loss:  0.023817963898181915
+current loss:  0.02320675179362297
+current loss:  0.02649283967912197
+current loss:  0.02175208181142807
+current loss:  0.020843075588345528
+current loss:  0.027607766911387444
+current loss:  0.020915551111102104
+current loss:  0.023182090371847153
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 106, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 82, in trainTokenizer
+    for inputs in trainLoader:
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 671, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/datasetClasses.py", line 77, in __getitem__
+    inpt = functions.openData(self.images[idx])
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 404, in openData
+    data = pickle.load(fp)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/storage.py", line 239, in _load_from_bytes
+    def _load_from_bytes(b):
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 106, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 82, in trainTokenizer
+    for inputs in trainLoader:
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 671, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/datasetClasses.py", line 77, in __getitem__
+    inpt = functions.openData(self.images[idx])
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 404, in openData
+    data = pickle.load(fp)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/storage.py", line 239, in _load_from_bytes
+    def _load_from_bytes(b):

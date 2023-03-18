@@ -21,15 +21,15 @@ class tokenizer(nn.Module):
         self.encoder = nn.Sequential(nn.Linear(2500, 1000),
                                     nn.BatchNorm1d(1000),
                                     nn.LayerNorm(1000),
-                                    nn.ReLU(),
+                                    nn.GELU(),
                                     nn.Linear(1000, 1000),
                                     nn.BatchNorm1d(1000),
                                     nn.LayerNorm(1000),
-                                    nn.ReLU())
+                                    nn.GELU())
         self.decoder = nn.Sequential(nn.Linear(1000, 2500),
                                     nn.BatchNorm1d(2500),
                                     nn.LayerNorm(2500),
-                                    nn.ReLU(),
+                                    nn.GELU(),
                                     nn.Linear(2500, 2500),
                                     nn.ReLU())
     def forward(self, x):
@@ -39,15 +39,6 @@ class tokenizer(nn.Module):
         x = torch.reshape(x, (x.size(0), 50, 50))
 
         return x
-
-device = "cuda"
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
-model = tokenizer().float().to(device)
-tkData = datasetClasses.tokenizerData(os.path.join(pathOrigin, "datasets", "tokenizer"))
-trainLoader = DataLoader(tkData, 1000, shuffle = True)
-optimizer = torch.optim.Adam(model.parameters(), lr = 0.0001)
-criterion = torch.nn.MSELoss()
-
 
 def trainTokenizer(model, trainLoader, optimizer, criterion, device, epochs, pathOrigin, WandB):
     """
@@ -101,9 +92,17 @@ def trainTokenizer(model, trainLoader, optimizer, criterion, device, epochs, pat
         functions.saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + "tokenizer")
         np.savetxt(os.path.join(pathOrigin, "models", "tokenizerRun.csv"), losses, delimiter=",")
     return
+"""
+device = "cuda"
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+model = tokenizer().float().to(device)
+tkData = datasetClasses.tokenizerData(os.path.join(pathOrigin, "datasets", "tokenizer"))
+trainLoader = DataLoader(tkData, 500, shuffle = True)
+optimizer = torch.optim.AdamW(model.parameters(), lr = 0.0001, weight_decay=0.0001)
+criterion = torch.nn.MSELoss()
+trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
 
-
-trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin)
+"""
 
 
 

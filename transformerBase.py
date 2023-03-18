@@ -109,20 +109,14 @@ class Transformer(nn.Module):
             out = self.transformer(flattenedInput, targets, tgt_mask=targetMask)
             out = out[:,1: , :]
 
-            # MSE loss for latent space
-            loss = nn.MSELoss()(out, targets)
-
-            # free memory
-            del targets, targetMask, flattenedInput, targets, inputMatrix, positionalEmbedding, helper
-
-            return [out, loss]
+            return out
 
         if training == False:  # inference ## add temporal embeddings?; #### not in batch mode !!!!!
             ### len(targetsT) = self.predictionInterval -> variable prediction length
             # add start token to sequences
             yInput = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
             helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
-            flattenedInput = torch.vstack([helper, flattenedInput])
+            flattenedInput = torch.vstack([helper, flattenedInput.squeeze()])
             predictionList = []
             for q in range(self.predictionInterval):
                 # positional information to input
@@ -141,46 +135,29 @@ class Transformer(nn.Module):
                 yInput = torch.vstack([yInput, nextItem]).squeeze()
 
             # calculate loss
-            output = torch.stack(predictionList)
+            output = torch.stack(predictionList).unsqueeze(dim = 0)
 
             return output
 
-    def forward(self, d, training):
+    def forward(self, x, y, training):
         """
         forward pass
-        training has to be argument of forward method not full class!!
 
-        d: list of tensor
-            input and target representations
+        x: torch.tensor
+        y: torch.tensor
         training: boolean
             return latent space loss or just prediction of patches
-        returns: list of tensor and int
-            if training: model predictions and latent space loss
-            else: model predictions
+        returns: torch.tensor
 
         """
-        x = d[0]
-        targets = d[1]
 
         # latent space
-        l = self.latentSpace(x, targets, training)
+        l = self.latentSpace(x, y, training)
 
-        if training:
-            l[0] = l[0].unsqueeze(dim = 2) # for loss
+        return l
 
-            # save memory
-            del x, l, targets
 
-            return [l[0], l[1]] # model prediction, latent space loss, reconstruction loss
 
-        elif training == False:
-
-            l[0] = l[0].unsqueeze(dim=2) # for loss
-
-            # save memory
-            del x, l, targets
-
-            return l
 
 
 

@@ -5,7 +5,7 @@ import pickle
 from collections import Counter
 
 ########### first check images with plot, then save patched pickle files #######################
-glacier = "aletsch"
+glacier = "parbati"
 
 if glacier == "aletsch":
     years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
@@ -156,6 +156,35 @@ if glacier == "Jakobshavn":
 
 
 
+if glacier == "parbati":
+    years = ["2013", "2014" , "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
+    path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati"
+    os.chdir(path)
+    d = functions.loadData(path, years)
+
+    # check for the correct months to make data stationary -> summer data
+    d = functions.monthlyAverageScenes(d, [0,800,0,800], True)
+
+    ##################### plotting ########################
+    """
+    # find roi and good images
+    for i in range(len(d)):  # rgb
+        #img = functions.createImage(d[i][1][1:4, :, :], 0.4)
+        img = d[i]
+        plt.imshow(img)
+        plt.show()
+
+    """
+
+
+    d = functions.automatePatching(d, 50, 10)
+
+    os.makedirs(path + "/patched", exist_ok = True)
+    os.chdir(path + "/patched")
+
+    with open("parbatiPatched", "wb") as fp:  # Pickling
+        pickle.dump(d, fp)
+    print("data saved!")
 
 
 

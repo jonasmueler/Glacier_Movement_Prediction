@@ -3,6 +3,7 @@ from torch.utils.data import Dataset
 from torch import is_tensor
 import functions
 from torch.utils.data import DataLoader
+import numpy as np
 
 class glaciers(Dataset):
     def __init__(self, path):
@@ -37,9 +38,17 @@ class glaciers(Dataset):
         if is_tensor(idx):
             idx = idx.tolist()
 
-        # get data in tensor format
-        inpt = functions.openData(self.images[idx])
-        target = functions.openData(self.targets[idx])
+        try:
+            # get data in tensor format
+            inpt = functions.openData(self.images[idx])
+            inpt = inpt[:, 2, :, :]
+            target = functions.openData(self.targets[idx])
+        except:
+            # get data in tensor format
+            index = np.random.randint(self.__len__())
+            inpt = functions.openData(self.images[index])
+            inpt = inpt[:, 2, :, :]
+            target = functions.openData(self.targets[index])
 
         return inpt, target
 
@@ -72,9 +81,13 @@ class tokenizerData(Dataset):
         """
         if is_tensor(idx):
             idx = idx.tolist()
-
-        # get data in tensor format
-        inpt = functions.openData(self.images[idx])
+        try:
+            # get data in tensor format
+            inpt = functions.openData(self.images[idx])
+        except:
+            # get data in tensor format
+            index = np.random.randint(self.__len__())
+            inpt = functions.openData(self.images[index])
 
         return inpt
 """
