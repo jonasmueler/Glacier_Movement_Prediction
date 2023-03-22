@@ -56,7 +56,7 @@ def trainTokenizer(model, trainLoader, optimizer, criterion, device, epochs, pat
     return
     """
     model.train()
-    losses = np.ones(len(trainLoader))
+    losses = np.ones(len(trainLoader)*epochs)
 
     if WandB == True:
         wandb.init(
@@ -92,17 +92,17 @@ def trainTokenizer(model, trainLoader, optimizer, criterion, device, epochs, pat
         functions.saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + "tokenizer")
         np.savetxt(os.path.join(pathOrigin, "models", "tokenizerRun.csv"), losses, delimiter=",")
     return
-"""
+
 device = "cuda"
 pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 model = tokenizer().float().to(device)
-tkData = datasetClasses.tokenizerData(os.path.join(pathOrigin, "datasets", "tokenizer"))
+tkData = datasetClasses.tokenizerData("/home/jonas/datasets/parbati")
 trainLoader = DataLoader(tkData, 500, shuffle = True)
-optimizer = torch.optim.AdamW(model.parameters(), lr = 0.0001, weight_decay=0.0001)
+optimizer = torch.optim.AdamW(model.parameters(), lr = 0.001, weight_decay=0.0001)
 criterion = torch.nn.MSELoss()
 trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
 
-"""
+
 
 
 

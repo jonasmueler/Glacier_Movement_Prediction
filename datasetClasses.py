@@ -6,22 +6,44 @@ from torch.utils.data import DataLoader
 import numpy as np
 
 class glaciers(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, mode):
         """
         dataset class for train loop
         path: str
             path to image and target folder
+        mode: str
+            train, val
         """
+        self.mode = mode
         self.path = path
 
-        # get list of all image paths in directory
-        images = os.listdir(os.path.join(self.path, "images"))
-        paths = [os.path.join(os.path.join(self.path, "images"), item) for item in images]
-        self.images = paths
 
-        targets = os.listdir(os.path.join(self.path, "targets"))
-        paths = [os.path.join(os.path.join(self.path, "targets"), item) for item in targets]
-        self.targets = paths
+        if self.mode == "train":
+            # get list of all image paths in directory
+            images = os.listdir(os.path.join(self.path, "images"))
+            paths = [os.path.join(os.path.join(self.path, "images"), item) for item in images]
+            # take 80% of data as training
+            criterion = round(len(paths) * 0.80)
+            paths = paths[0:criterion]
+            self.images = paths
+
+            targets = os.listdir(os.path.join(self.path, "targets"))
+            paths = [os.path.join(os.path.join(self.path, "targets"), item) for item in targets]
+            paths = paths[0:criterion]
+            self.targets = paths
+
+        if self.mode == "val":
+            # get list of all image paths in directory
+            images = os.listdir(os.path.join(self.path, "images"))
+            paths = [os.path.join(os.path.join(self.path, "images"), item) for item in images]
+            criterion = round(len(paths) * 0.80)
+            paths = paths[criterion:]
+            self.images = paths
+
+            targets = os.listdir(os.path.join(self.path, "targets"))
+            paths = [os.path.join(os.path.join(self.path, "targets"), item) for item in targets]
+            paths = paths[criterion:]
+            self.targets = paths
 
     def __len__(self):
         return len(self.images)
@@ -41,13 +63,13 @@ class glaciers(Dataset):
         try:
             # get data in tensor format
             inpt = functions.openData(self.images[idx])
-            inpt = inpt[:, 2, :, :]
+            #inpt = inpt[:, 2, :, :]
             target = functions.openData(self.targets[idx])
         except:
             # get data in tensor format
             index = np.random.randint(self.__len__())
             inpt = functions.openData(self.images[index])
-            inpt = inpt[:, 2, :, :]
+            #inpt = inpt[:, 2, :, :]
             target = functions.openData(self.targets[index])
 
         return inpt, target
@@ -61,14 +83,17 @@ class tokenizerData(Dataset):
         """
         self.path = path
 
-
         # get list of all image paths in directory
-        images = os.listdir(self.path)
-        paths = [os.path.join(self.path, item) for item in images]
+        images = os.listdir(os.path.join(self.path, "images"))
+        paths = [os.path.join(os.path.join(self.path, "images"), item) for item in images]
         self.images = paths
 
+        targets = os.listdir(os.path.join(self.path, "targets"))
+        paths = [os.path.join(os.path.join(self.path, "targets"), item) for item in targets]
+        self.targets = paths
+
     def __len__(self):
-        return len(self.images)
+        return len(self.targets)
 
     def __getitem__(self, idx):
         """
@@ -82,12 +107,19 @@ class tokenizerData(Dataset):
         if is_tensor(idx):
             idx = idx.tolist()
         try:
+            # flip coin if targets or images
+            flip = np.random.randint(0, 2, size=1)[0]
+
             # get data in tensor format
-            inpt = functions.openData(self.images[idx])
+            if flip == 0:
+                inpt = functions.openData(self.images[idx])[np.random.randint(0, 4, size=1)[0], :, :]
+            if flip == 1:
+                inpt = functions.openData(self.targets[idx])[np.random.randint(0, 4, size=1)[0], :, :]
+
         except:
             # get data in tensor format
             index = np.random.randint(self.__len__())
-            inpt = functions.openData(self.images[index])
+            inpt = functions.openData(self.targets[index])[np.random.randint(0, 4, size=1)[0], :, :]
 
         return inpt
 """

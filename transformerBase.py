@@ -3,6 +3,32 @@ import torch
 from torch.autograd import Variable
 import functions
 import math
+from torch import nn, Tensor
+
+
+class PositionalEncoding(nn.Module):
+
+    def __init__(self, d_model: int, device: str, dropout: float = 0.1, max_len: int = 20):
+        super().__init__()
+        self.dropout = nn.Dropout(p=dropout)
+
+        self.device = device
+        position = torch.arange(max_len).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
+        pe = torch.zeros(max_len, 1, d_model)
+        pe[:, 0, 0::2] = torch.sin(position * div_term)
+        pe[:, 0, 1::2] = torch.cos(position * div_term)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x: Tensor) -> Tensor:
+        """
+        Args:
+            x: Tensor, shape [seq_len, batch_size, embedding_dim]
+        """
+        x = x.permute((1,0, 2), x)
+        x = x + self.pe[:x.size(0)].to(self.device)
+        x = x.permute((1,0,2), x)
+        return self.dropout(x)
 
 class Transformer(nn.Module):
     def __init__(self, hiddenLenc, attLayers, attentionHeads, device, Training=True, predictionInterval=None):
@@ -16,40 +42,14 @@ class Transformer(nn.Module):
         self.hiddenLenc = hiddenLenc
 
         # latent space
+        self.positional = PositionalEncoding(self.hiddenLenc, device, 0.1)
         self.attentionLayers = attLayers
         self.attentionHeads = attentionHeads
         self.transformer = nn.Transformer(d_model=self.hiddenLenc, nhead=self.attentionHeads,
                                           num_encoder_layers=self.attentionLayers,
-                                          num_decoder_layers=self.attentionLayers)
-
-    def positionalEncodings(self, seqLen):
-        """
-        creates positional encoding matrix for the transformer model based on vasmari et al
-
-        seqLen: int
-            length of sequence
-        inputLen:
-            length of input
-
-        returns: 2d tensor
-            constants added for positional encodings
-        """
-        # create constant 'pe' matrix with values dependant on pos and i
-        pe = torch.zeros(seqLen, self.hiddenLenc).to(self.device)
-        for pos in range(seqLen):
-            for i in range(0, self.hiddenLenc, 2):
-                pe[pos, i] = \
-                    math.sin(pos / (10000 ** ((2 * i) / self.hiddenLenc)))
-                pe[pos, i + 1] = \
-                    math.cos(pos / (10000 ** ((2 * (i + 1)) / self.hiddenLenc)))
-
-        pe = pe.unsqueeze(0)
-
-        # make relatively larger
-        x = pe * math.sqrt(self.hiddenLenc)
-        pe = pe + x
-
-        return pe.to(self.device)
+                                          num_decoder_layers=self.attentionLayers,
+                                          batch_first=True,
+                                          dropout=0.5)
 
     def get_tgt_mask(self, size):
         """
@@ -84,58 +84,39 @@ class Transformer(nn.Module):
 
         """
         if training:  # ~teacher forcing
+            # add positional information to input
+            flattenedInput = self.positional(flattenedInput)
 
             # add start tokens to sequences
             helper = torch.zeros(flattenedInput.size(0), 1,  self.hiddenLenc, dtype=torch.float32).to(self.device)
             targets = torch.cat([helper, targets], dim = 1).to(self.device)
             flattenedInput = torch.cat([helper, flattenedInput], dim = 1).to(self.device)
 
-            # positional information to data
-            positionalEmbedding = self.positionalEncodings(flattenedInput.size(1) * 2).squeeze()
-
-            # divide for input and output
-            idx = int(flattenedInput.size(1))
-            inputMatrix = positionalEmbedding[0:idx, :]
-
-            # for batch
-            inputMatrix = torch.stack([inputMatrix for i in range(flattenedInput.size(0))])
-
-            # add positional information
-            flattenedInput = flattenedInput + inputMatrix
-            flattenedInput = flattenedInput.squeeze(0)
-
-            targetMask = self.get_tgt_mask(targets.size(0))
+            targetMask = self.get_tgt_mask(targets.size(1))
 
             out = self.transformer(flattenedInput, targets, tgt_mask=targetMask)
             out = out[:,1: , :]
 
             return out
 
-        if training == False:  # inference ## add temporal embeddings?; #### not in batch mode !!!!!
-            ### len(targetsT) = self.predictionInterval -> variable prediction length
-            # add start token to sequences
-            yInput = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
-            helper = torch.zeros(1, self.hiddenLenc, dtype=torch.float32).to(self.device)
-            flattenedInput = torch.vstack([helper, flattenedInput.squeeze()])
+        if training == False:  # inference ## add temporal embeddings? ## batchMode fixed
+            # add start tokens to sequences
+            helper = torch.zeros(flattenedInput.size(0), 1, self.hiddenLenc, dtype=torch.float32).to(self.device)
+            yInput = torch.zeros(flattenedInput.size(0), 1, self.hiddenLenc, dtype=torch.float32).to(self.device)
+            flattenedInput = torch.cat([helper, self.positional(flattenedInput)], dim=1).to(self.device)
+
             predictionList = []
             for q in range(self.predictionInterval):
-                # positional information to input
-                positionalEmbedding = self.positionalEncodings(flattenedInput.size(0) + (q + 1))
-                positionalEmbedding = positionalEmbedding.squeeze()
-                flattenedInput = flattenedInput + positionalEmbedding[0:flattenedInput.size(0)]
-                yInput = yInput
-
                 # get mask
-                targetMask = self.get_tgt_mask(yInput.size(0))
+                targetMask = self.get_tgt_mask(yInput.size(1))
 
                 # forward pass
                 out = self.transformer(flattenedInput, yInput, tgt_mask=targetMask)
-                nextItem = out[-1]
+                nextItem = out[:, -1, :].unsqueeze(dim = 1) # last element for all sequences in batch
                 predictionList.append(nextItem)
-                yInput = torch.vstack([yInput, nextItem]).squeeze()
+                yInput = torch.cat([yInput, nextItem], dim = 1)
 
-            # calculate loss
-            output = torch.stack(predictionList).unsqueeze(dim = 0)
+            output = torch.stack(predictionList)
 
             return output
 
@@ -156,8 +137,13 @@ class Transformer(nn.Module):
 
         return l
 
+"""
+# test
+# args: hiddenLenc, attLayers, attentionHeads, device, Training=True, predictionInterval=None)
 
+model = Transformer(1000, 1,1,"cuda", predictionInterval=4).to("cuda")
 
-
+print(model.forward(torch.rand(3, 4, 1000).to("cuda"), torch.rand(3, 4, 1000).to("cuda"), training = False))
+"""
 
 

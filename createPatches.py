@@ -5,7 +5,7 @@ import pickle
 from collections import Counter
 
 ########### first check images with plot, then save patched pickle files #######################
-glacier = "parbati"
+glacier = "helheim"
 
 if glacier == "aletsch":
     years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
@@ -39,7 +39,7 @@ if glacier == "aletsch":
 
         months = dict(Counter(months))
         print(months)
-
+        """
         d = functions.automatePatching(l, 50, 40, [50, 650, 100, 700] , applyKernel=True)
 
         os.makedirs(path + "/patched", exist_ok = True)
@@ -50,7 +50,7 @@ if glacier == "aletsch":
         print("data saved!")
         print("year: ", year, " done" )
 
-
+        """
 
 
 
@@ -90,7 +90,7 @@ if glacier == "helheim":
         months = dict(Counter(months))
         print(months)
 
-
+        """
         d = functions.automatePatching(l, 50, 40, [100, 400, 200, 500] , applyKernel=True)
 
         os.makedirs(path + "/patched", exist_ok = True)
@@ -100,7 +100,7 @@ if glacier == "helheim":
             pickle.dump(d, fp)
         print("data saved!")
         print("year: ", year, " done" )
-
+        """
 
 if glacier == "Jakobshavn":
     years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
@@ -168,15 +168,12 @@ if glacier == "parbati":
     ##################### plotting ########################
     """
     # find roi and good images
-    for i in range(len(d)):  # rgb
+    for i in range(2):  # rgb
         #img = functions.createImage(d[i][1][1:4, :, :], 0.4)
         img = d[i]
         plt.imshow(img)
         plt.show()
-
     """
-
-
     d = functions.automatePatching(d, 50, 10)
 
     os.makedirs(path + "/patched", exist_ok = True)

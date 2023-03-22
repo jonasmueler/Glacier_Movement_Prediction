@@ -557,6 +557,10 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
         optimizer = torch.optim.AdamW(model.parameters(),
                                       lr = params["learningRate"],
                                       weight_decay= params["weightDecay"])
+    if params["optimizer"] == "RMSProp":
+        optimizer = torch.optim.RMSprop(model.parameters(),
+                                      lr = params["learningRate"],
+                                      weight_decay= params["weightDecay"])
 
     # load model and optimizer from checkpoint
     if loadModel:
@@ -874,6 +878,7 @@ def monthlyAverageScenes(d, ROI, applyKernel):
     print("interpolation done")
     result = [arr[i, :, :] for i in range(arr.shape[0])]
 
+
     ## save on harddrive
     print("start saving scenes")
     path = os.getcwd()
@@ -882,7 +887,11 @@ def monthlyAverageScenes(d, ROI, applyKernel):
     os.makedirs("images", exist_ok=True)
     os.makedirs("dates", exist_ok=True)
     counter = 0
-    for i in range(len(result)):
+
+    # get beginning and end missings
+    indices = [i for i in range(len(result)) if not np.any(np.isnan(result[i]))]
+
+    for i in indices:
         # save images
         os.chdir(os.path.join(path,"monthlyAveragedScenes", "images"))
 
@@ -900,7 +909,7 @@ def monthlyAverageScenes(d, ROI, applyKernel):
 
     print("saving scenes done")
 
-    return result
+    return [result[i] for i in indices]
 
 def getTrainTest(patches, window, inputBands, outputBands, stationary):
     """
@@ -918,7 +927,8 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
     returns: list of list of input data, input date and target data, target date
 
     """
-    Path = os.getcwd()
+    #Path = os.getcwd()
+    Path = "/home/jonas/datasets"
     if stationary:
         years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
 
@@ -1533,7 +1543,7 @@ def getTrainDataTokenizer(paths):
     paths: list of str
         paths to patches and targets
     """
-    counter = 34000
+    counter = 0
     for path in paths:
         ## images folder
         # get number of patches
@@ -1543,11 +1553,12 @@ def getTrainDataTokenizer(paths):
         for imgPath in pathsImg:
             tensor = openData(imgPath)
             for i in range(tensor.size(0)):
-                img = tensor[i, 2, :, :]
+                #img = tensor[i, 2, :, :]
+                img = tensor[i,:,:]
 
                 # save into folder
                 currentPath = os.getcwd()
-                outputPath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/tokenizer"
+                outputPath = "/home/jonas/datasets/parbati/tokenizer"
                 os.chdir(outputPath)
                 with open(str(counter), "wb") as fp:  # Pickling
                     pickle.dump(img, fp)
@@ -1569,7 +1580,7 @@ def getTrainDataTokenizer(paths):
 
                 # save into folder
                 currentPath = os.getcwd()
-                outputPath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/tokenizer"
+                outputPath = "/home/jonas/datasets/parbati/tokenizer"
                 os.chdir(outputPath)
                 with open(str(counter), "wb") as fp:  # Pickling
                     pickle.dump(img, fp)
@@ -1578,14 +1589,17 @@ def getTrainDataTokenizer(paths):
                 if counter % 1000 == 0:
                     print("image: ", counter, " done")
         print("path: ", path, " targets done")
-        if path == "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched":
-            quit()
+        #if path == "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched":
+        #    quit()
 
     return
 """
 d = [ #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Helheim/patched"] #,
      #"/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jakobshavn/patched"]#,
      "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/patched"]
+"""
+"""
+d = ["/home/jonas/datasets/parbati"]
 getTrainDataTokenizer(d)
 """
 
