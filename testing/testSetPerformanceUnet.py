@@ -11,9 +11,9 @@ from unet_model import UNet
 
 ## global variables for project
 ### change here to run on cluster ####
-#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
-device = "cpu"
+pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+device = "cuda"
 tokenizer = False
 
 if tokenizer:
@@ -31,9 +31,9 @@ model = functions.loadCheckpoint(model, None, os.path.join(pathOrigin, "models",
 print("loading models finished")
 
 # dataLoader /home/jonas/datasets/parbati
-#datasetVal = datasetClasses.glaciers(os.path.join(pathOrigin, "datasets", "parbati"), "test", bootstrap = True)
-datasetTest = datasetClasses.glaciers("/home/jonas/datasets/parbati", "test", bootstrap = True)
-dataTest = DataLoader(datasetTest, 1, shuffle = True)
+datasetTest = datasetClasses.glaciers(os.path.join(pathOrigin, "datasets", "parbati"), "test", bootstrap = False)
+#datasetTest = datasetClasses.glaciers("/home/jonas/datasets/parbati", "test", bootstrap = True)
+dataTest = DataLoader(datasetTest, 100, shuffle = True)
 
 with torch.no_grad():
     # do 2000 bootstrap iterations
@@ -71,16 +71,12 @@ with torch.no_grad():
             # get loss
             MSE = MSELoss(forward, targets)
             MAE = MAELoss(forward, targets)
-            print(MSE)
-            print(MAE)
             MSElosses[counter] = MSE
             MAElosses[counter] = MAE
             counter += 1
 
         MSE = torch.mean(MSElosses)
         MAE = torch.mean(MAElosses)
-        print(MSE)
-        print(MAE)
         modelResults[b, 0] = MSE.detach().cpu().numpy()
         modelResults[b, 1] = MAE.detach().cpu().numpy()
 

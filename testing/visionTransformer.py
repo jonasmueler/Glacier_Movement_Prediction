@@ -1,9 +1,10 @@
 import torch
-import torchvision.models as models
+#import torchvision.models as models
 import torch.nn as nn
-import torchvision
+#import torchvision
 #from torchvision.models import VisionTransformer
 from visionTransformer2 import VisionTransformer
+
 class visionFuturePrediction(nn.Module):
     def __init__(self, predictionInterval):
         super(visionFuturePrediction, self).__init__()
@@ -16,7 +17,7 @@ class visionFuturePrediction(nn.Module):
         #         dropout: float = 0.0,
         #         attention_dropout: float = 0.0,
         #         num_classes: int = 1000,
-        self.transformer = VisionTransformer(50,10, 12, 12, 800, 3000, 0.4, 0.2, num_classes = 2500)
+        self.transformer = VisionTransformer(50,5, 6, 10, 800, 2500, 0.1, 0.1, num_classes = 2500)
         self.predictionInterval = predictionInterval
 
     def forward(self, x, y, training):

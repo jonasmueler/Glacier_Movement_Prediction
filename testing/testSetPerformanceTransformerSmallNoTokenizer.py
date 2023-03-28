@@ -32,7 +32,7 @@ model = functions.loadCheckpoint(model, None, os.path.join(pathOrigin, "models",
 print("loading models finished")
 
 # dataLoader /home/jonas/datasets/parbati
-datasetTest = datasetClasses.glaciers(os.path.join(pathOrigin, "datasets", "parbati"), "test", bootstrap = True)
+datasetTest = datasetClasses.glaciers(os.path.join(pathOrigin, "datasets", "parbati"), "test", bootstrap = False)
 #datasetTest = datasetClasses.glaciers("/home/jonas/datasets/parbati", "test", bootstrap = True)
 dataTest = DataLoader(datasetTest, 100, shuffle = True)
 
