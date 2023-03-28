@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "LSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 719, in trainLoopConvLSTM
+    forward = model.forward(inpts, targets) ## teacher forcing??
+TypeError: ConvLSTMFuturePredictor.forward() takes 2 positional arguments but 3 were given
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "LSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 719, in trainLoopConvLSTM
+    forward = model.forward(inpts, targets) ## teacher forcing??
+TypeError: ConvLSTMFuturePredictor.forward() takes 2 positional arguments but 3 were given

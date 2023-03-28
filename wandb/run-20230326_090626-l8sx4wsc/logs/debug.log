@@ -1,0 +1,26 @@
+2023-03-26 09:06:26,516 INFO    MainThread:14133 [wandb_setup.py:_flush():68] Configure stats pid to 14133
+2023-03-26 09:06:26,517 INFO    MainThread:14133 [wandb_setup.py:_flush():68] Loading settings from /home/jonas/.config/wandb/settings
+2023-03-26 09:06:26,517 INFO    MainThread:14133 [wandb_setup.py:_flush():68] Loading settings from /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/settings
+2023-03-26 09:06:26,517 INFO    MainThread:14133 [wandb_setup.py:_flush():68] Loading settings from environment variables: {'_require_service': 'True'}
+2023-03-26 09:06:26,518 INFO    MainThread:14133 [wandb_setup.py:_flush():68] Inferring run settings from compute environment: {'program_relpath': 'tokenizer.py', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py'}
+2023-03-26 09:06:26,519 INFO    MainThread:14133 [wandb_init.py:_log_setup():492] Logging user logs to /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_090626-l8sx4wsc/logs/debug.log
+2023-03-26 09:06:26,520 INFO    MainThread:14133 [wandb_init.py:_log_setup():493] Logging internal logs to /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_090626-l8sx4wsc/logs/debug-internal.log
+2023-03-26 09:06:26,521 INFO    MainThread:14133 [wandb_init.py:init():532] calling init triggers
+2023-03-26 09:06:26,521 INFO    MainThread:14133 [wandb_init.py:init():538] wandb.init called with sweep_config: {}
+config: {}
+2023-03-26 09:06:26,521 INFO    MainThread:14133 [wandb_init.py:init():588] starting backend
+2023-03-26 09:06:26,522 INFO    MainThread:14133 [wandb_init.py:init():592] setting up manager
+2023-03-26 09:06:26,535 INFO    MainThread:14133 [backend.py:_multiprocessing_setup():106] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2023-03-26 09:06:26,544 INFO    MainThread:14133 [wandb_init.py:init():599] backend started and connected
+2023-03-26 09:06:26,545 INFO    MainThread:14133 [wandb_init.py:init():687] updated telemetry
+2023-03-26 09:06:26,561 INFO    MainThread:14133 [wandb_init.py:init():727] communicating run to backend with 60.0 second timeout
+2023-03-26 09:06:27,154 INFO    MainThread:14133 [wandb_run.py:_on_init():2134] communicating current version
+2023-03-26 09:06:27,287 INFO    MainThread:14133 [wandb_run.py:_on_init():2143] got version response upgrade_message: "wandb version 0.14.0 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2023-03-26 09:06:27,288 INFO    MainThread:14133 [wandb_init.py:init():775] starting run threads in backend
+2023-03-26 09:06:27,375 INFO    MainThread:14133 [wandb_run.py:_console_start():2114] atexit reg
+2023-03-26 09:06:27,376 INFO    MainThread:14133 [wandb_run.py:_redirect():1969] redirect: SettingsConsole.WRAP_RAW
+2023-03-26 09:06:27,377 INFO    MainThread:14133 [wandb_run.py:_redirect():2034] Wrapping output streams.
+2023-03-26 09:06:27,377 INFO    MainThread:14133 [wandb_run.py:_redirect():2059] Redirects installed.
+2023-03-26 09:06:27,377 INFO    MainThread:14133 [wandb_init.py:init():817] run started, returning control to user process
+2023-03-26 09:06:37,066 WARNING MsgRouterThr:14133 [router.py:message_loop():77] message_loop has been closed

@@ -1,0 +1,30 @@
+/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: UserWarning: Using a target size (torch.Size([20, 50, 50])) that is different to the input size (torch.Size([20, 1, 56, 56])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 241, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 213, in trainTokenizer
+    loss = criterion(outputs, inputs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py", line 536, in forward
+    return F.mse_loss(input, target, reduction=self.reduction)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 3291, in mse_loss
+    expanded_input, expanded_target = torch.broadcast_tensors(input, target)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/functional.py", line 74, in broadcast_tensors
+    return _VF.broadcast_tensors(tensors)  # type: ignore[attr-defined]
+RuntimeError: The size of tensor a (56) must match the size of tensor b (50) at non-singleton dimension 3
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 241, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 213, in trainTokenizer
+    loss = criterion(outputs, inputs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py", line 536, in forward
+    return F.mse_loss(input, target, reduction=self.reduction)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 3291, in mse_loss
+    expanded_input, expanded_target = torch.broadcast_tensors(input, target)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/functional.py", line 74, in broadcast_tensors
+    return _VF.broadcast_tensors(tensors)  # type: ignore[attr-defined]
+RuntimeError: The size of tensor a (56) must match the size of tensor b (50) at non-singleton dimension 3

@@ -1,0 +1,38 @@
+
+epoch:  0 , example:  1  current loss =  8.355228424072266
+epoch:  0 , example:  2  current loss =  10.779264450073242
+epoch:  0 , example:  3  current loss =  12.144782066345215
+epoch:  0 , example:  4  current loss =  9.577448844909668
+epoch:  0 , example:  5  current loss =  10.392379760742188
+epoch:  0 , example:  6  current loss =  9.9404296875
+epoch:  0 , example:  7  current loss =  7.204505920410156
+epoch:  0 , example:  8  current loss =  8.402434349060059
+epoch:  0 , example:  9  current loss =  5.54907751083374
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "ConvLSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 736, in trainLoopConvLSTM
+    pred = model.forward(x) ## teacher forcing??
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 100, in forward
+    x = self.encoder(x)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 70, in encoder
+    x = self.convLSTM1(x)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 45, in forward
+    cat_x = torch.cat([x, h], dim=1)
+RuntimeError: Tensors must have same number of dimensions: got 3 and 4
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "ConvLSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 736, in trainLoopConvLSTM
+    pred = model.forward(x) ## teacher forcing??
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 100, in forward
+    x = self.encoder(x)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 70, in encoder
+    x = self.convLSTM1(x)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTM.py", line 45, in forward
+    cat_x = torch.cat([x, h], dim=1)
+RuntimeError: Tensors must have same number of dimensions: got 3 and 4
