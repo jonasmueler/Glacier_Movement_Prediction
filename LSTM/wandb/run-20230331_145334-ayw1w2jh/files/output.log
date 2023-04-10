@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTM/LSTMTrain.py", line 41, in <module>
+    functions.trainLoopUnet(dataTrain, dataVal,  model, loss, False, "LSTMEncDec", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTM/functions.py", line 1083, in trainLoopUnet
+    optimizer.step()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/optimizer.py", line 280, in wrapper
+    out = func(*args, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/optimizer.py", line 33, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 171, in step
+    adamw(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 321, in adamw
+    func(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 564, in _multi_tensor_adamw
+    exp_avg_sq_sqrt = torch._foreach_sqrt(device_exp_avg_sqs)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 96.00 MiB (GPU 0; 1.96 GiB total capacity; 1.69 GiB already allocated; 46.12 MiB free; 1.86 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTM/LSTMTrain.py", line 41, in <module>
+    functions.trainLoopUnet(dataTrain, dataVal,  model, loss, False, "LSTMEncDec", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTM/functions.py", line 1083, in trainLoopUnet
+    optimizer.step()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/optimizer.py", line 280, in wrapper
+    out = func(*args, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/optimizer.py", line 33, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 171, in step
+    adamw(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 321, in adamw
+    func(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/optim/adamw.py", line 564, in _multi_tensor_adamw
+    exp_avg_sq_sqrt = torch._foreach_sqrt(device_exp_avg_sqs)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 96.00 MiB (GPU 0; 1.96 GiB total capacity; 1.69 GiB already allocated; 46.12 MiB free; 1.86 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

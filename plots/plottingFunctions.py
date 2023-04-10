@@ -326,9 +326,9 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     # inference mode
     model.eval()
 
+    inputScenes = data[0]
+    targetScenes = data[1]
 
-    inputScenes = data[0][0]
-    targetScenes = data[1][0]
 
     # get patches from input images and targets
     inputList = []
@@ -339,16 +339,17 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
 
         helper = getPatches(targetScenes[i], patchSize, stride)
         targetList.append(helper)
-
+    print("start model predictions")
     # get predictions from input patches
     for i in range(len(inputList[0])):
         helperInpt = list(x[i] for x in inputList)
         targetInpt = list(x[i] for x in targetList)
-        inputPatches = torch.stack(helperInpt, dim=0)
+        inputPatches = torch.stack(helperInpt, dim=0) # for vision Transformer; remove squeeze bla if not working
         targetPatches = torch.stack(targetInpt, dim=0)
 
         # predict with model
-        prediction = model.forward(inputPatches, targetPatches, training=False)
+        modelInpt = inputPatches.squeeze().unsqueeze(dim = 0)
+        prediction = model.forward(modelInpt, targetPatches, training=False)
 
         # switch input with predictions; z = scene index, i = patch index
         for z in range(prediction.size(0)):
@@ -364,10 +365,10 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         plotList = [x.detach().cpu().numpy() for x in plotList]
         plotList = [np.transpose(x, (1,2,0)) for x in plotList]
 
-        fig, axs = plt.subplots(2, 5)
+        fig, axs = plt.subplots(2, 4)
 
-        for i in range(10):
-            ax = axs[i // 5, i % 5]
+        for i in range(8):
+            ax = axs[i // 4, i % 4]
             ax.imshow(plotList[i])
             ax.axis('off')
 
@@ -389,6 +390,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
 
         path = os.getcwd()
         for i in range(len(scenePredictions)):
+            plt.clf()
             # model predictions
             os.chdir(path)
             os.makedirs("predictions", exist_ok=True)
@@ -398,7 +400,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
             # save on harddrive
             p = os.getcwd()+ "/" + str(i) + ".pdf"
             plt.savefig(p, dpi=1000)
-
+            plt.clf()
             with open(str(i), "wb") as fp:  # Pickling
                 pickle.dump(scenePredictions[i].cpu().detach().numpy(), fp)
 
@@ -419,6 +421,44 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
     print("prediction scenes saved")
     #return scenePredictions
     return
+
+
+def saveCheckpoint(model, optimizer, filename):
+    """
+    saves current model and optimizer step
+
+    model: nn.model
+    optimizer: torch.optim.optimzer class
+    filename: string
+    """
+    checkpoint = {
+        'model': model.state_dict(),
+        'optimizer': optimizer.state_dict()}
+    torch.save(checkpoint, os.path.join(pathOrigin, filename))
+    print("checkpoint saved")
+    return
+
+
+def loadCheckpoint(model, optimizer, path):
+    """
+    loads mode and optimzer for further training
+    model: nn.model
+    optimizer: torch.optim.optimzer class
+    path: string
+    return: list of optimizer and model
+
+    """
+    if optimizer != None:
+        checkpoint = torch.load(path)
+        model.load_state_dict(checkpoint['model'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+        print("checkpoint loaded")
+        return [model, optimizer]
+    elif optimizer == None:
+        checkpoint = torch.load(path)
+        model.load_state_dict(checkpoint['model'])
+        return model
+
 
 def tokenizerBatch(model, x, mode, device, flatten = torch.nn.Flatten(start_dim=1, end_dim=2)):
     """
@@ -446,13 +486,12 @@ def tokenizerBatch(model, x, mode, device, flatten = torch.nn.Flatten(start_dim=
         return decoding
 
 
-def plotPatches(model, data, transformer, tokenizer, device, plot):
+def plotPatches(model, data, tokenizer, device, plot):
     """
     plots patches and targets and saves on harddrive
 
     model: nn.model object
     data: list of tensor
-    transformer: boolean
     tokenizer: nn.object module
     plot: boolean
     """
@@ -460,27 +499,25 @@ def plotPatches(model, data, transformer, tokenizer, device, plot):
     model.eval()
     x = data[0]
     # predictions
-    if transformer:
-        if tokenizer:
-            x = tokenizerBatch(tokenizer, data[0].to(device).float(), "encoding", device)
-            #y = tokenizerBatch(tokenizer, data[1], "encoding", device)
 
-            # forward + backward + optimize
-            forward = model.forward(x,None, training=False)
-            forward = tokenizerBatch(tokenizer, forward, "decoding", device)
-            forward = torch.reshape(forward, (forward.size(0), forward.size(1), 50, 50))
+    if tokenizer:
+        x = tokenizerBatch(tokenizer, data[0].to(device).float(), "encoding", device)
+        #y = tokenizerBatch(tokenizer, data[1], "encoding", device)
 
-        elif tokenizer == False:
-            forward = model.forward(x, None, training=False)
+        # forward + backward + optimize
+        forward = model.forward(x,None, training=False)
+        forward = tokenizerBatch(tokenizer, forward, "decoding", device)
+        forward = torch.reshape(forward, (forward.size(0), forward.size(1), 50, 50))
 
-    predictions = forward
+    elif tokenizer == False:
+        forward = model.forward(x, None, training=False)
+
+    predictions = forward.unsqueeze(dim =0)
     targets = data[1].to(device).float()
-
     # put into list
     predList = []
     targetList = []
     for i in range(4):
-
         pred = predictions[:, i, :, :].detach().cpu().numpy().squeeze()
         predList.append(pred)
 
@@ -514,5 +551,4 @@ def plotPatches(model, data, transformer, tokenizer, device, plot):
     # Show the plot
     if plot:
         plt.show()
-
     return

@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 #import matplotlib.image as mpimg
 from numpy import array
-#import cv2
+import cv2
 #import imutils
 from torch import nn
 #from numpy import linalg as LA
@@ -36,6 +36,8 @@ from PIL import Image
 import wandb
 from torch.autograd import Variable
 from collections import Counter
+from geoarray import GeoArray
+from arosics import COREG, COREG_LOCAL
 
 
 
@@ -312,20 +314,16 @@ def gaussianBlurring(Input, kSize, band):
 
 
 ### image alignment with ORB features and RANSAC algorithm (see paper), same parameters used
-def alignImages(image, template, RGB, maxFeatures, keepPercent):
+def alignImages(image, template, maxFeatures, keepPercent):
     """
     image: 2d or 3d nd array
         input image to be aligned
     template: 2d or 3d nd array
         template for alignment
-    RGB: boolean
-        is image in RGB format 3d ndarray?
     maxFeatures: int
         max. amount of features used for alignment
     keepPercent: float
         amount of features kept for aligning
-
-
 
     returns: ndarray
         alignend image
@@ -333,15 +331,10 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
     """
 
     # convert both the input image and template to grayscale
-    if RGB:
-        imageGray = cv2.cvtColor(image.astype('uint8'), cv2.COLOR_BGR2GRAY)
-        templateGray =  cv2.cvtColor(template.astype('uint8'), cv2.COLOR_BGR2GRAY)
-    if RGB == False:
-        imageGray = image
-        imageGray = imageGray.astype('uint8')
-
-        templateGray = template
-        templateGray = templateGray.astype('uint8')
+    imageGray = image.astype(np.float32)
+    templateGray = template.astype(np.float32)
+    imageGray = cv2.merge([imageGray, imageGray, imageGray])
+    templateGray = cv2.merge([templateGray, templateGray, templateGray])
 
     # use ORB to detect keypoints and extract (binary) local
     # invariant features
@@ -382,6 +375,7 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
     # points
     #print(ptsA)
     #print(ptsB)
+
     (H, mask) = cv2.findHomography(ptsA, ptsB, method=cv2.RANSAC)
 
     # use the homography matrix to align the images
@@ -390,6 +384,80 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
     aligned = cv2.warpPerspective(image, H, (w, h))
 
     return aligned
+
+def aligneOverTime(data):
+    """
+    alligns 6 consecutive scenes a extracted mean image from the 6 scenes
+
+    data: list of torch tensor
+
+    returns: list of torch.tensor
+
+        list of aligned images
+
+    """
+
+    flows = []
+    for i in range(len(data) - 1):
+        img = data[i + 1]
+        reference = data[i]
+        helper = alignImages(img, reference, 5000, 0.2)
+        flow = opticalFlow(img, reference, False)
+        data[i+1] = helper
+        flows.append(flow)
+
+    # save images on hard drive
+    #os.makedirs("alignedPatches")
+    #os.chdir(os.getcwd(), "alignedPatches")
+    #for i in range(len(data)):
+    #    with open(str(i), "wb") as fp:  # Pickling
+    #        pickle.dump(data[i], fp)
+
+    return data
+
+def opticalFlow(frame1, frame2, plot):
+    """
+    calculates optical flow between images
+
+    frame1: np.array
+    frame2: np.array
+    plot: boolean
+    return: float
+        avg visual flow between images
+    """
+    frame1 = frame1.astype(np.float32)
+    frame2 = frame2.astype(np.float32)
+    frame1= cv2.merge([frame1,frame1, frame1])
+    frame2 = cv2.merge([frame2, frame2, frame2])
+
+
+    # Convert frames to grayscale
+    prev_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+    curr_gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+
+    # Compute optical flow using Lucas-Kanade method
+    flow = cv2.calcOpticalFlowFarneback(prev_gray, curr_gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+
+    # Visualize optical flow
+    if plot:
+        h, w = prev_gray.shape
+        x, y = np.meshgrid(np.arange(0, w, 10), np.arange(0, h, 10))
+        x_flow = flow[..., 0][::10, ::10]
+        y_flow = flow[..., 1][::10, ::10]
+        plt.quiver(x, y, x_flow, y_flow)
+        plt.show()
+
+    # Compute magnitude and angle of optical flow
+    mag, ang = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+
+    # Visualize magnitude of optical flow
+    #plt.imshow(mag, cmap='gray')
+
+    # Compute average magnitude of optical flow as a measure of glacier motion
+    avg_mag = np.mean(mag)
+    print("Average magnitude of optical flow:", avg_mag)
+
+    return avg_mag
 
 def openData(name):
     """
@@ -661,7 +729,7 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
                 trainCounter += 1
 
             # save model and optimizer checkpoint in case of memory overlow
-            if trainCounter % 5000 == 0:
+            if trainCounter % 500 == 0:
                 saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
 
                 # save gradient descent
@@ -1132,11 +1200,6 @@ def trainLoopConvLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadM
     print("results saved!")
     return
 
-
-
-
-
-
 def getPatches(tensor, patchSize, stride=50):
 
     """
@@ -1283,6 +1346,38 @@ def automatePatching(data, patchSize, stride):
 
     return res
 
+def imageAlignArcosics(img, reference):
+    """
+    aligns the array to the reference array using fourier space transformations
+
+    img: np.array
+    reference: np.array
+    return: np.array
+        aligned array to the input
+    """
+
+    # convert to geoARray
+    img = GeoArray(img, projection= "EPSG:32643")
+    reference = GeoArray(reference, projection= "EPSG:32643" )
+
+    # parameters
+    kwargs = {
+        'grid_res': 50,
+        'window_size': (50, 50),
+        'path_out': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets',
+        'projectDir': 'my_project',
+        'q': False,
+    }
+
+    # apply
+    CR = COREG_LOCAL(img, reference, **kwargs)
+    #CR = COREG(img, reference, align_grids=True, ws = (50, 50))
+    res = CR.correct_shifts()
+
+    return res["arr_shifted"]
+
+
+
 def monthlyAverageScenes(d, ROI, applyKernel):
 
     """
@@ -1295,13 +1390,32 @@ def monthlyAverageScenes(d, ROI, applyKernel):
 
     returns: list of list of torch.tensor
     """
+    # get region of interest in data
+
+    for i in range(len(d)):
+        d[i] = (d[i][0] ,d[i][1][:, ROI[0]:ROI[1], ROI[2]:ROI[3]])
+
+    """
+    ## align images
+    # get ref image in middle
+    print("get reference image")
+    ref = d[round(len(d)/2)-2][1][[2,5], :, :]
+    for z in [0, 1]:  # only use NDSI relevant bands
+        while np.count_nonzero(np.isnan(ref[z, :, :])) > 0:
+            ref[z, :, :] = applyToImage(ref[z, :, :])
+            print("still missing ", np.count_nonzero(np.isnan(ref[z, :, :])), " pixels")
+        print("band: ", z, " of ", ref.shape[0], "done")
+    print("application of kernel done")
+    """
+
+
     # check for the correct months to make data stationary -> summer data
     l = []
-    imgAcc = np.zeros((ROI[1]-ROI[0], ROI[3]-ROI[2]))
     counterImg = 0
     usedMonths = []
     for y in np.arange(2013, 2022, 1): # year
         for m in np.arange(1,13,1): # month
+            imgAcc = np.zeros((ROI[1] - ROI[0], ROI[3] - ROI[2]))
             month = 0
             for i in range(len(d)):
                 if (convertDatetoVector(d[i][0])[1].item() == m) and (convertDatetoVector(d[i][0])[2].item() == y):
@@ -1309,7 +1423,7 @@ def monthlyAverageScenes(d, ROI, applyKernel):
                     month += 1
 
                     ## get roi and apply kernel
-                    img = d[i][1][[2,5], ROI[0]:ROI[1], ROI[2]:ROI[3]]  # hard coded bands get extracted
+                    img = d[i][1][[2,5], :, :]  # hard coded bands get extracted
 
                     # clean missings with kernel
                     if applyKernel:
@@ -1318,6 +1432,7 @@ def monthlyAverageScenes(d, ROI, applyKernel):
                             while np.count_nonzero(np.isnan(img[z, :, :])) > 0:
                                 img[z, :, :] = applyToImage(img[z, :, :])
                                 print("still missing ", np.count_nonzero(np.isnan(img[z, :, :])), " pixels")
+                            #img[z, :, :] = imageAlignArcosics(img[z, :, :], ref[z, :, :])
                             print("band: ", z, " of ", img.shape[0], "done")
                     print("application of kernel done")
 
@@ -1328,11 +1443,20 @@ def monthlyAverageScenes(d, ROI, applyKernel):
                                  np.add(img[0, :, :], img[1, :, :]))
                     #nosnow = np.ma.masked_where(NDSI >= threshold, NDSI).filled(0) ## leave in case necessary to use in future
                     snow = np.ma.masked_where(NDSI < threshold, NDSI).filled(0)
-                    imgAcc += snow
+
+                    # align
+                    if month == 1:
+                        imgAcc += snow
+                    if month > 1:
+                        # align before averaging
+                        snow = alignImages(snow, imgAcc, 5000, 0.1)
+                        plt.imshow(snow)
+                        plt.show()
+                        imgAcc = (imgAcc + snow) / 2 # average
 
             if month != 0:
                 # average over images
-                imgAcc = imgAcc / month
+                #imgAcc = imgAcc / month
                 l.append(imgAcc)
 
             ## mark months with no scenes
@@ -1373,7 +1497,6 @@ def monthlyAverageScenes(d, ROI, applyKernel):
     print("interpolation done")
     result = [arr[i, :, :] for i in range(arr.shape[0])]
 
-
     ## save on harddrive
     print("start saving scenes")
     path = os.getcwd()
@@ -1386,7 +1509,16 @@ def monthlyAverageScenes(d, ROI, applyKernel):
     # get beginning and end missings
     indices = [i for i in range(len(result)) if not np.any(np.isnan(result[i]))]
 
-    for i in indices:
+    result = [result[i] for i in indices]
+    usedMonths = [usedMonths[i] for i in indices]
+
+    # align images
+    result = aligneOverTime(result)
+
+    # crop edges in case of shifting
+    result = [result[i][50:750, 50:750] for i in range(len(result))]
+
+    for i in range(len(result)):
         # save images
         os.chdir(os.path.join(path,"monthlyAveragedScenes", "images"))
 
@@ -1404,7 +1536,7 @@ def monthlyAverageScenes(d, ROI, applyKernel):
 
     print("saving scenes done")
 
-    return [result[i] for i in indices]
+    return result
 
 def getTrainTest(patches, window, inputBands, outputBands, stationary):
     """

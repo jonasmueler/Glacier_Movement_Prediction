@@ -1,7 +1,4 @@
-import torch.nn as nn
 import torch
-from torch.autograd import Variable
-import functions
 import math
 from torch import nn, Tensor
 
@@ -38,7 +35,7 @@ class Transformer(nn.Module):
         self.training = Training
         self.predictionInterval = predictionInterval
         self.device = torch.device(device)
-        self.flatten = nn.Flatten(start_dim=0, end_dim=-1)
+        self.flatten = nn.Flatten(start_dim=2, end_dim=-1)
         self.hiddenLenc = hiddenLenc
 
         # latent space
@@ -49,7 +46,7 @@ class Transformer(nn.Module):
                                           num_encoder_layers=self.attentionLayers,
                                           num_decoder_layers=self.attentionLayers,
                                           batch_first=True,
-                                          dropout=0.5)
+                                          dropout=0.3)
 
     def get_tgt_mask(self, size):
         """
@@ -130,17 +127,20 @@ class Transformer(nn.Module):
         """
 
         # latent space
+        x = self.flatten(x)
+        y = self.flatten(y)
         l = self.latentSpace(x, y, training)
+        l = torch.reshape(l, (l.size(0), l.size(1), 50, 50))
 
         return l
 
 
 # test
 # args: hiddenLenc, attLayers, attentionHeads, device, Training=True, predictionInterval=None)
-"""
-model = Transformer(1000, 1,1,"cuda", predictionInterval=4).to("cuda")
 
-print(model.forward(torch.rand(5, 4, 1000).to("cuda"), torch.rand(3, 4, 1000).to("cuda"), training = False).size())
-"""
+model = Transformer(2500, 1,1,"cuda", predictionInterval=4).to("cuda")
+
+print(model.forward(torch.rand(5, 4, 50,50).to("cuda"), torch.rand(3, 4, 50,50).to("cuda"), training = False).size())
+
 
 

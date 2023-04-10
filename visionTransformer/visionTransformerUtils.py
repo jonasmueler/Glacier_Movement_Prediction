@@ -8,11 +8,6 @@ import collections
 import torch
 import torch.nn as nn
 
-#from ..utils import _log_api_usage_once
-#from ._api import register_model, Weights, WeightsEnum
-#from ._meta import _IMAGENET_CATEGORIES
-#from ._utils import _ovewrite_named_param, handle_legacy_interface
-
 
 class MLP(torch.nn.Sequential):
     """This block implements the multi-layer perceptron (MLP) module.
@@ -355,7 +350,7 @@ class VisionTransformer(nn.Module):
             self.conv_proj: nn.Module = seq_proj
         else:
             self.conv_proj = nn.Conv2d(
-                in_channels=3, out_channels=hidden_dim, kernel_size=patch_size, stride=patch_size
+                in_channels=1, out_channels=hidden_dim, kernel_size=patch_size, stride=patch_size ######################
             )
 
         seq_length = (image_size // patch_size) ** 2
@@ -553,3 +548,12 @@ def interpolate_embeddings(
             model_state = model_state_copy
 
     return model_state
+"""
+model = VisionTransformer(image_size =  50,
+        patch_size = 50 ,
+        num_layers = 1,
+        num_heads = 1,
+        hidden_dim = 10,
+        mlp_dim = 10)
+print(model)
+"""
