@@ -2,7 +2,7 @@ from torch import nn
 import torch
 
 
-device = "cuda"
+device = "cpu"
 class ConvLSTM(nn.Module):
     def __init__(self, input_channel, num_filter, b_h_w, kernel_size, stride=1, padding=1):
         super().__init__()
@@ -96,26 +96,53 @@ class ConvLSTMFuturePredictor(nn.Module):
         out = torch.permute(out, (1,0,2,3,4)).squeeze()
         return out
 
-    def forward(self, x):
-        x = self.encoder(x)
-        lastOutput = x[0][-1].unsqueeze(dim = 0)
-        lastHidden = x[1][0]
-        lastCell = x[1][1]
+    def forward(self, x, y, training):
+        if training == True:
+            x = torch.permute(x, (1, 0, 2, 3)).unsqueeze(dim=2)
+            y = torch.permute(y, (1, 0, 2, 3)).unsqueeze(dim=2)
+            x = self.encoder(x)
+            lastOutput = x[0][-1].unsqueeze(dim=0)
+            lastHidden = x[1][0]
+            lastCell = x[1][1]
 
-        # start predicting
-        predictions = []
-        for i in range(self.future_horizon):
-            s = self.convLSTM4(lastOutput, (lastHidden, lastCell))
+            # start predicting
+            predictions = []
+            targets = []
+            for i in range(self.future_horizon):
+                s = self.convLSTM4(lastOutput, (lastHidden, lastCell))
 
-            # save predictions
-            predictions.append(s[0][-1])
+                # save predictions
+                predictions.append(s[0][-1])
 
-            # update states
-            lastOutput = torch.stack(predictions, dim = 0)
-            lastHidden = s[1][0]
-            lastCell = s[1][1]
+                # update states
+                lastOutput = torch.stack(predictions, dim=0)
+                lastHidden = s[1][0]
+                lastCell = s[1][1]
 
-        lastOutput = self.decoder(lastOutput)
+            lastOutput = self.decoder(lastOutput)
+
+
+        if training == False:
+            x = torch.permute(x, (1,0,2,3)).unsqueeze(dim = 2)
+            x = self.encoder(x)
+            lastOutput = x[0][-1].unsqueeze(dim = 0)
+            lastHidden = x[1][0]
+            lastCell = x[1][1]
+
+            # start predicting
+            predictions = []
+            for i in range(self.future_horizon):
+                s = self.convLSTM4(lastOutput, (lastHidden, lastCell))
+
+                # save predictions
+                predictions.append(s[0][-1])
+
+                # update states
+                lastOutput = torch.stack(predictions, dim = 0)
+                lastHidden = s[1][0]
+                lastCell = s[1][1]
+
+            lastOutput = self.decoder(lastOutput)
 
         return lastOutput
 
@@ -125,7 +152,8 @@ class ConvLSTMFuturePredictor(nn.Module):
 model = ConvLSTMFuturePredictor(1, 20, (20, 50, 50), 3).to(device)
 #model = ConvLSTM(1, 60, (20, 50, 50), 3).to(device)
 
-test = torch.rand(4,20, 1, 50, 50).to(device)
+test = torch.rand(20,4, 50, 50).to(device)
 print(model(test).size())
 
 """
+

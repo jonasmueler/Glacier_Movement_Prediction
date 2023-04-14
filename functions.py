@@ -4,19 +4,19 @@
 #import dask
 import pandas as pd
 import pystac_client
-#import planetary_computer as pc
+import planetary_computer as pc
 #import ipyleaflet
 #import IPython.display as dsp
 #import geogif
 #from dateutil.parser import ParserError
-#import stackstac
+import stackstac
 #import bottleneck
 #import dask
 import matplotlib.pyplot as plt
 import numpy as np
 #import matplotlib.image as mpimg
 from numpy import array
-#import cv2
+import cv2
 #import imutils
 from torch import nn
 #from numpy import linalg as LA
@@ -41,8 +41,8 @@ from collections import Counter
 
 ## global variables for project
 ### change here to run on cluster ####
-#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 
@@ -597,7 +597,7 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
                 loss = criterion(forward, targets)
 
             if tokenizer == None:
-               # targetsOrg = targets.clone()
+                targetsOrg = targets.clone()
 
                 # encode with tokenizer and put to gpu
                 inpts = torch.flatten(inpts, start_dim = 2, end_dim = 3)
@@ -609,8 +609,8 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
                 # forward + backward + optimize
                 forward = model.forward(inpts, targets, training=True)
 
-               # forward = torch.reshape(forward, (forward.size(0), forward.size(1), 50, 50))
-                loss = criterion(forward[0], targets) + forward[1]
+                forward = torch.reshape(forward, (forward.size(0), forward.size(1), 50, 50))
+                loss = criterion(forward, targetsOrg)
 
 
             loss.backward()
@@ -636,7 +636,7 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
                         pred = model.forward(x,y, training = False)
                         #pred = tokenizerBatch(tokenizer, pred, "decoding", device)
                         #pred = torch.reshape(pred, (pred.size(0), pred.size(1),  50, 50))
-                        valLoss = criterion(pred, y) 
+                        valLoss = criterion(pred, y)
 
                     if tokenizer == None:
                         # encode with tokenizer and put to gpu
@@ -645,8 +645,8 @@ def trainLoop(trainLoader, valLoader, tokenizer, model, criterion, loadModel, mo
 
                         # predict
                         pred = model.forward(x, y, training=False)
-                       # pred = torch.reshape(pred, (pred.size(0), pred.size(1), 50, 50))
-                        valLoss = criterion(pred[0], y) + pred[1]
+                        pred = torch.reshape(pred, (pred.size(0), pred.size(1), 50, 50))
+                        valLoss = criterion(pred, yOrg)
 
 
                 ## log to wandb
@@ -934,7 +934,6 @@ def trainLoopLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadModel
             # use tokenizer on gpu
             inpts = inpts.to(device).float() # three maps, just use snow map as input
             targets = targets.to(device).float()
-            model.train()
 
             # encode with tokenizer and put to gpu
             inpts = tokenizerBatch(tokenizer, inpts, "encoding", device)
@@ -957,7 +956,6 @@ def trainLoopLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadModel
                     x, y = next(iter(valLoader))
                     x = x.float()
                     y = y.float()
-                    model.eval()
 
                     # encode with tokenizer and put to gpu
                     x = tokenizerBatch(tokenizer, x, "encoding", device)
@@ -984,9 +982,11 @@ def trainLoopLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadModel
                 saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
 
                 # save gradient descent
+                path = os.path.join(pathOrigin, "models")
+                os.chdir(path)
                 df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses, "epoch": epochs})
                 df.to_csv(os.path.join(pathOrigin, modelName) + ".csv", index=False)
-
+                os.chdir(pathOrigin)
             # print loss
             print("epoch: ", b, ", example: ", trainCounter, " current loss = ", loss.detach().cpu().item())
 
@@ -1004,14 +1004,12 @@ def trainLoopLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadModel
 
 
 
-def trainLoopConvLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadModel, modelName, params,  WandB, device, pathOrigin = pathOrigin):
+def trainLoopUnet(trainLoader, valLoader, model, criterion, loadModel, modelName, params,  WandB, device, pathOrigin = pathOrigin):
     """
     trains a given model on the data
 
     dataLoader: torch DataLoader object
     valLoader: torch DataLoader object
-    tokenizer: nn.Module
-        trained tokenizer, fixed in training
     model: torch nn.class
     loadModel: boolean
     modelName: string
@@ -1067,20 +1065,18 @@ def trainLoopConvLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadM
 
     ###################### start training #############################
 
-    model.train()
     for b in range(params["epochs"]):
         for inpts, targets in trainLoader:
             # use tokenizer on gpu
-            inpts = inpts.to(device).float() # three maps, just use snow map as input
+            model.train()
+            inpts = inpts.to(device).float()
             targets = targets.to(device).float()
 
             # zero the parameter gradients
             optimizer.zero_grad()
 
             # forward + backward + optimize
-
-            inpts = torch.permute(inpts, (1,0,2,3)).unsqueeze(dim = 2)
-            forward = model.forward(inpts) ## teacher forcing??
+            forward = model.forward(inpts, targets, training = True)
             loss = criterion(forward, targets)
             loss.backward()
             torch.nn.utils.clip_grad_value_(model.parameters(), clip_value=3.0) # gradient clipping; no exploding gradient
@@ -1090,13 +1086,13 @@ def trainLoopConvLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadM
             # save loss
             with torch.no_grad():
                 if trainCounter % params["validationStep"] == 0 and trainCounter != 0:
+                    model.eval()
                     x, y = next(iter(valLoader))
                     x = x.to(device).float()
                     y = y.to(device).float()
 
                     # predict
-                    x = torch.permute(x, (1,0,2,3)).unsqueeze(dim = 2)
-                    pred = model.forward(x) ## teacher forcing??
+                    pred = model.forward(x, y, training = False)
                     valLoss = criterion(pred, y)
 
 
@@ -1110,19 +1106,22 @@ def trainLoopConvLSTM(trainLoader, valLoader, tokenizer, model, criterion, loadM
                 validationLosses[trainCounter] = valLoss.detach().cpu().item()
 
             # save model and optimizer checkpoint in case of memory overlow
-            if trainCounter % 5000 == 0:
+            if trainCounter % 500 == 0:
                 saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
 
                 # save gradient descent
+                path = os.path.join(pathOrigin, "models")
+                os.chdir(path)
                 df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses})
                 df.to_csv(os.path.join(pathOrigin, modelName) + ".csv", index=False)
+                os.chdir(pathOrigin)
 
             # print loss
             print("epoch: ", b, ", example: ", trainCounter, " current loss = ", loss.detach().cpu().item())
 
 
     # save results of gradient descent
-    path = os.path.join(pathOrigin, "/models")
+    path = os.path.join(pathOrigin, "models")
     os.chdir(path)
     df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses})
     df.to_csv(modelName + ".csv", index=False)

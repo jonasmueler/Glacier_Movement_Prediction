@@ -348,8 +348,11 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         targetPatches = torch.stack(targetInpt, dim=0)
 
         # predict with model
+
         modelInpt = inputPatches.squeeze().unsqueeze(dim = 0)
-        prediction = model.forward(modelInpt, targetPatches, training=False)
+
+        prediction = model.forward(modelInpt, targetPatches, training=False).squeeze()
+        print(prediction.size())
 
         # switch input with predictions; z = scene index, i = patch index
         for z in range(prediction.size(0)):
@@ -486,11 +489,12 @@ def tokenizerBatch(model, x, mode, device, flatten = torch.nn.Flatten(start_dim=
         return decoding
 
 
-def plotPatches(model, data, tokenizer, device, plot):
+def plotPatches(model, modelName, data, tokenizer, device, plot):
     """
     plots patches and targets and saves on harddrive
 
     model: nn.model object
+    modelName: string
     data: list of tensor
     tokenizer: nn.object module
     plot: boolean
@@ -532,6 +536,8 @@ def plotPatches(model, data, tokenizer, device, plot):
     # start plotting
     path = pathOrigin + "/predictions"
     os.chdir(path)
+    os.makedirs(modelName, exist_ok= True)
+    os.chdir(os.path.join(path, modelName))
     name = str(np.random.randint(50000))
     os.makedirs(name, exist_ok=True)
     os.chdir(path + "/" + name)

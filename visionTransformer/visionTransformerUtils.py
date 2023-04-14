@@ -556,4 +556,5 @@ model = VisionTransformer(image_size =  50,
         hidden_dim = 10,
         mlp_dim = 10)
 print(model)
+
 """

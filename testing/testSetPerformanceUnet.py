@@ -28,7 +28,7 @@ model = UNet(1,1).to(device)
 
 # load weights to transformers
 model = functions.loadCheckpoint(model, None, os.path.join(pathOrigin, "models", "Unet"))
-print("loading models finished")
+print("loading model finished")
 
 # dataLoader /home/jonas/datasets/parbati
 datasetTest = datasetClasses.glaciers(os.path.join(pathOrigin, "datasets", "parbati"), "test", bootstrap = False)
