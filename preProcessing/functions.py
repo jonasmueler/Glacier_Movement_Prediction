@@ -1405,31 +1405,44 @@ def enhancedCorAlign(imgStack):
     imgStack = imageStack.astype('float32')
     avgTemporalImage = np.mean(imgStack, axis=0).astype('float32')
 
+    # median filter noise
+    # Apply median filter to each channel separately
+    filteredImg = np.zeros_like(avgTemporalImage)
+    for i in range(2):
+        filteredImg[:, :, i] = cv2.medianBlur(avgTemporalImage[:, :, i], 3)
+
+    avgTemporalImage = filteredImg.astype('float32')
+
     # Compute gradient of averaged RGB channels
-    grayAvgTemporalImage = cv2.cvtColor(avgTemporalImage, cv2.COLOR_BGR2GRAY)
-    gradientAvgTemporalImage = cv2.Sobel(grayAvgTemporalImage, cv2.CV_64F, 1, 1, ksize=3).astype('float32')
+    grayAvgTemporalImage = cv2.cvtColor(avgTemporalImage, cv2.COLOR_BGR2GRAY).astype('float32')
 
     # Define motion model
-    motionModel = cv2.MOTION_TRANSLATION
+    motionModel = cv2.MOTION_HOMOGRAPHY
 
     # Define ECC algorithm parameters
-    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10000, 1e-9)
-    warpMatrix = np.eye(2, 3, dtype=np.float32)
+    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10000, 1e-4)
+
+    warpMatrix = np.eye(3, 3, dtype=np.float32)
 
     # Define ECC mask
     mask = None  # all pixels used as missings are already cleared
 
     # Apply ECC registration
     registeredStack = []
+    counter = 0
     for frame in imageStack:
-        grayFrame = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY)
-        gradientFrame = cv2.Sobel(grayFrame, cv2.CV_64F, 1, 1, ksize=3).astype('float32')
-        (cc, warpMatrix) = cv2.findTransformECC(gradientAvgTemporalImage, gradientFrame, warpMatrix, motionModel,
+        grayFrame = cv2.cvtColor(frame.astype('float32'), cv2.COLOR_BGR2GRAY).astype('float32')
+        (cc, warpMatrix) = cv2.findTransformECC(grayAvgTemporalImage, grayFrame, warpMatrix, motionModel,
                                                 criteria, mask, 1)
-        registeredFrame = cv2.warpAffine(frame, warpMatrix, (frame.shape[1], frame.shape[0]),
+        #registeredFrame = cv2.warpAffine(frame, warpMatrix, (frame.shape[1], frame.shape[0]),
+        #                                 flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
+        registeredFrame = cv2.warpPerspective(frame, warpMatrix, (frame.shape[1], frame.shape[0]),
                                          flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP)
         registeredFrame = np.transpose(registeredFrame, (2, 0, 1))[[0, 1], :, :]
         registeredStack.append(registeredFrame)
+        counter += 1
+
+        print("scene: ", counter, "done")
 
     return registeredStack
 
@@ -1500,7 +1513,8 @@ def monthlyAverageScenesEnCC(d, ROI, applyKernel):
                     if month > 1:
                         imgAcc = (imgAcc + img) / 2 # average
 
-            # apply NDSI here
+
+            # apply NDSI
             # add snow mask to average image
             threshold = 0.3
             NDSI = np.divide(np.subtract(imgAcc[0, :, :], imgAcc[1, :, :]),

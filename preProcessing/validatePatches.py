@@ -49,7 +49,7 @@ axs[1].imshow(img1, cmap='gray')
 plt.tight_layout()
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/plots"
 os.chdir(path)
-plt.savefig("parbatiFlow.pdf", dpi = 1000)
+#plt.savefig("parbatiFlow.pdf", dpi = 1000)
 plt.show()
 
 """

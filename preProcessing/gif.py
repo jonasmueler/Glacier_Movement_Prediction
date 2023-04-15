@@ -16,7 +16,7 @@ for i in range(34):
 
 
 # Create a GIF from the numpy arrays
-with imageio.get_writer("animation.gif", mode="I") as writer:
+with imageio.get_writer("animationParvatiHomography.gif", mode="I") as writer:
     for arr in arr_list:
         writer.append_data(arr)
 """

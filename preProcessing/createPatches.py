@@ -164,7 +164,7 @@ if glacier == "parbati":
 
     # check for the correct months to make data stationary -> summer data
     d = functions.monthlyAverageScenesEnCC(d, [0,800,0,800], True)
-
+    """
     ##################### plotting ########################
     print(len(d))
     # find roi and good images
@@ -173,7 +173,7 @@ if glacier == "parbati":
         img = d[i]
         plt.imshow(img)
         plt.show()
-
+    """
     d = functions.automatePatching(d, 50, 10)
 
     os.makedirs(path + "/patched", exist_ok = True)

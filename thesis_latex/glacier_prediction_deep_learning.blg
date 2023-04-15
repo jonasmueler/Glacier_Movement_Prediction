@@ -1,0 +1,82 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: glacier_prediction_deep_learning.aux
+The style file: apacite.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: references.bib
+Repeated entry---line 180 of file references.bib
+ : @article{vaswani2017attention
+ :                              ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 188 of file references.bib
+ : @article{hochreiter1997long
+ :                            ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 214 of file references.bib
+ : @inproceedings{petrou2017prediction
+ :                                    ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 223 of file references.bib
+ : @inproceedings{srivastava2015unsupervised
+ :                                          ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 238 of file references.bib
+ : @inproceedings{ronneberger2015u
+ :                                ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 353 of file references.bib
+ : @article{petrou2019prediction
+ :                              ,
+I'm skipping whatever remains of this entry
+apacite.bst [2013/07/21 v6.03 APA bibliography style]
+Warning--No journal in marochovautomated
+You've used 38 entries,
+            6951 wiz_defined-function locations,
+            1493 strings with 19667 characters,
+and the built_in function-call counts, 84478 in all, are:
+= -- 10202
+> -- 837
+< -- 4204
++ -- 4490
+- -- 87
+* -- 5567
+:= -- 15396
+add.period$ -- 157
+call.type$ -- 38
+change.case$ -- 668
+chr.to.int$ -- 0
+cite$ -- 77
+duplicate$ -- 2553
+empty$ -- 3124
+format.name$ -- 1522
+if$ -- 15647
+int.to.chr$ -- 0
+int.to.str$ -- 118
+missing$ -- 0
+newline$ -- 1013
+num.names$ -- 304
+pop$ -- 1317
+preamble$ -- 1
+purify$ -- 152
+quote$ -- 0
+skip$ -- 5294
+stack$ -- 0
+substring$ -- 4882
+swap$ -- 1429
+text.length$ -- 119
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 3424
+warning$ -- 1
+while$ -- 510
+width$ -- 0
+write$ -- 1344
+(There were 6 error messages)
