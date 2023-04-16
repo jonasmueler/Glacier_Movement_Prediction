@@ -162,7 +162,7 @@ In the optimization process the backpropagation algorithm is then used across ti
 	\frac{\partial \mathbf{c'}}{\partial \mathbf{c}} \mathbf{f} \odot \mathbf{c} + \mathbf{i} \odot \mathbf{g} = \mathbf{f},
 \end{equation}
 
-as the derivative of the cell state with respect to itself is always a vector of 1 (the so called \textit{constant error carousel} \citep{hochreiter1997long}). If the biases in the forget gate are initialized with high values, the gradients never vanish or explode as both bounds are regulated by the forget gate, which learns its activation across training. 
+as the derivative of the cell state with respect to itself is always a vector of 1 (the so called \textit{constant error carousel} \citep{hochreiter1997long}) multiplied by the forget gate output. If the biases in the forget gate are initialized with high values, the gradients never vanish or explode as both bounds are regulated by the forget gate, which learns its activation across training. 
 
 The used model is an encoder decoder architecture with LSTM cells, which uses the input in the encoder, copys cell and hidden states to the decoder and then recurrently predicts into the future by using the model predictions from previous timesteps.
 
@@ -188,14 +188,28 @@ The network structure of the U-net follows a contracting and an expanding path i
 
 The contracting path uses a typical convolutional network architecture consisting of repeated 3x3 convolutions, ReLU activations, and 2x2 max pooling operations with downsampling. At each downsampling step, the number of feature channels is doubled. In the expansive path the feature maps are upsampled followed by a 2x2 convolution that halves the number of feature maps again, then the cropped feature map (necessary due to the loss of border pixels in every convolution) from the corresponding part of the contracting path is concatenated and two 3x3 convolutions are performed, which are followed by ReLu activation functions. The final layer consists of a 1x1 convolutional layer in order to map the channel dimension back to 1 for prediction. 
 
-\subsubsection{Self Attention Transformer Model}
+The used model is adapted in order to predict patches over time with a future prediction module. Therefore the model always predicts the next patch from the patch of previous timestep recurrently.
+
+\subsubsection{Self Attention Transformer-LSTM Hybrid Model}
+The next model comes form a newly developed class of models that show promising results in natural language processing tasks  \citep{vaswani2017attention}. In its essence the transformer model is an encoder-decoder model. While the encoder generates hidden representations of the input sequence data, the decoder recursively generates the next element in a sequence with the ability to generalise to arbitrary long sequences, making the architecture interesting and well suited for the task at hand. At the core the architecture side steps the bottleneck of accumulating context information and exploding or vanishing gradients and instead uses a mechanism that attends to all elements in a sequence in parallel, called \textit{multi-headed self attention}. In analogy to database systems the attention mechanism uses three matrices, the query ($\mathbf{Q}$), the key ($\mathbf{K}$) and the value ($\mathbf{V}$) matrix. These three matrices are multiplied by three copies of the input sequence. After that the query and the key matrices are combined to form \textit{attention weights}. The matrices are then multiplied, scaled by the square root of the dimensionality of the matrices and fed through a softmax activation function. These calculated weights then control the attention of the system to different parts of the value matrix:
 \begin{equation}
 \begin{aligned}
-	\text{Attention}(Q, K, V) &= \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V \
+	\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) &= \text{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}}\right)\mathbf{V} \
 \end{aligned}
 \end{equation}
+In order for the attention mechanism to become multi headed this process is repeated multiple times, where the outputs are concatenated and then fed through linear layers to decrease dimensionality for further processing. As the model does not understand the order of the sequences by design, positional encodings are added as sinusoidal and cosinusoidal functions of the input dimsensions \citep{vaswani2017attention}:
 
-\citet{vaswani2017attention}
+\begin{equation}
+	\mathbf{p}_{i,j} =
+	\begin{cases}
+		\sin\left(\frac{i}{10000^{2 \frac{j}{d}}}\right) & \text{if } j \text{ is even} \\
+		\cos\left(\frac{i}{10000^{2 \frac{j-1}{d}}}\right) & \text{if } j \text{ is odd}, 
+	\end{cases}
+\end{equation}
+where d is the dimensionality of the input vectors in the sequence.
+
+
+The encoder of the model takes copies of the input and feeds them through multi-headed attention layers. In addition residual connections are used in order to increase gradient flow in the backpropagation step and to not loose information in the forward pass. These circumvent attention layers and are added to the respective output and then normed with layer normalization. The encoding layer outputs one matrix which is then copied and given to the decoder as query and key matrices. To this matrix then a special token is concatenated in the beginning of the future prediction sequence indicating the start of model predictions, the \textit{start token}. In the inference step the decoder then recurrently predicts the next patch token from the model input and the concatenated predictions until the given future timepoint until the sequence is completed. The model is trained with a mechanism similar to teacher forcing in LSTM networks \citep{gers2002learning}. This is accomplished with the input of the correct target values in the sequence in order to bootstrap training success, while the model outputs for future timesteps are used for loss calculations and backpropagation. Therefore a masking matrix is used which only shows the model the correct input until a given timestep, without the correct solutions for the current or future timesteps.
 
 \subsubsection{Vision Transformer Model}
 
@@ -228,7 +242,7 @@ The Parvati glacier is well suited for the prediction of glacier movmements, bec
 
 \section{Experiment 2: Fine Tuning on Different Glaciers}
 
-\section{Experiment 3: Gneralisation to Full Scenes}
+\section{Experiment 3: Generalisation to Full Scenes}
 \subsection{Full Scene Learning}
  In a next step the models are retrained and fine-tuned in order to predict full scenes across time. In order to achieve this the models should learn smooth borders between patches of each scene in order to create a full consistent image. Thus a new dataset is used containing only non overlapping patches from consecutive scenes. 
  

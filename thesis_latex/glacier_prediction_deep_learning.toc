@@ -7,16 +7,16 @@
 \contentsline {subsubsection}{\numberline {2.2.1}LSTM model}{7}{subsubsection.2.2.1}%
 \contentsline {subsubsection}{\numberline {2.2.2}Convolutional LSTM Network}{9}{subsubsection.2.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.3}Convolutional U-net Autoencoder}{9}{subsubsection.2.2.3}%
-\contentsline {subsubsection}{\numberline {2.2.4}Self Attention Transformer Model}{10}{subsubsection.2.2.4}%
-\contentsline {subsubsection}{\numberline {2.2.5}Vision Transformer Model}{10}{subsubsection.2.2.5}%
-\contentsline {section}{\numberline {3}Experiment 1: Prediction of Patches}{10}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Parvati Glacier}{10}{subsection.3.1}%
-\contentsline {section}{\numberline {4}Experiment 2: Fine Tuning on Different Glaciers}{11}{section.4}%
-\contentsline {section}{\numberline {5}Experiment 3: Gneralisation to Full Scenes}{11}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Full Scene Learning}{11}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}U-net Denoising Autoencoder}{11}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Results}{11}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}Generalisation Test}{11}{subsection.5.4}%
-\contentsline {section}{\numberline {6}Discussion}{11}{section.6}%
-\contentsline {section}{\numberline {7}Limitations}{11}{section.7}%
-\contentsline {section}{\numberline {8}Summary}{11}{section.8}%
+\contentsline {subsubsection}{\numberline {2.2.4}Self Attention Transformer-LSTM Hybrid Model}{10}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}Vision Transformer Model}{11}{subsubsection.2.2.5}%
+\contentsline {section}{\numberline {3}Experiment 1: Prediction of Patches}{11}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Parvati Glacier}{11}{subsection.3.1}%
+\contentsline {section}{\numberline {4}Experiment 2: Fine Tuning on Different Glaciers}{12}{section.4}%
+\contentsline {section}{\numberline {5}Experiment 3: Generalisation to Full Scenes}{12}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Full Scene Learning}{12}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}U-net Denoising Autoencoder}{12}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Results}{12}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Generalisation Test}{12}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Discussion}{12}{section.6}%
+\contentsline {section}{\numberline {7}Limitations}{13}{section.7}%
+\contentsline {section}{\numberline {8}Summary}{13}{section.8}%

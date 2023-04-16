@@ -86,3 +86,9 @@ class UNet(nn.Module):
         self.up3 = torch.utils.checkpoint(self.up3)
         self.up4 = torch.utils.checkpoint(self.up4)
         self.outc = torch.utils.checkpoint(self.outc)
+
+model = UNet(1,1)
+
+res = torch.flatten(model.encoder(torch.rand(1, 1,50,50))[1][3], start_dim=1, end_dim=-1)
+
+print(res.size())

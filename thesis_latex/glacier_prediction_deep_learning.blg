@@ -36,6 +36,10 @@ Repeated entry---line 353 of file references.bib
  : @article{petrou2019prediction
  :                              ,
 I'm skipping whatever remains of this entry
+Repeated entry---line 443 of file references.bib
+ : @article{gers2002learning
+ :                          ,
+I'm skipping whatever remains of this entry
 apacite.bst [2013/07/21 v6.03 APA bibliography style]
 Warning--No journal in marochovautomated
 You've used 38 entries,
@@ -79,4 +83,4 @@ warning$ -- 1
 while$ -- 510
 width$ -- 0
 write$ -- 1344
-(There were 6 error messages)
+(There were 7 error messages)
