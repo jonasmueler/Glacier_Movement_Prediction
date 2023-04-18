@@ -17,7 +17,11 @@
 \usepackage{multirow,booktabs,setspace,caption}
 \usepackage{tikz}
 
+
+
 \usepackage{amsmath}
+
+\usepackage{float}
 
 % apa table
 \DeclareCaptionLabelSeparator*{spaced}{\\[2ex]}
@@ -93,30 +97,26 @@ The generated dataset consists of landsat-8 level 2 satellite images of multiple
 	\end{array}
 	\right. $$
 	
-
-	
  In order to capture each glacier fully, large regions are used, e.g. 800x800 pixels for the parvati glacier. Because of that, the scenes are sampled in patches of size (50, 50) to decrease the computational load of the used models. In order to generate the final model input, patches of the same coordinates in different scenes are used over time, therefore sampling the same region at different timepoints. The models get 4 patches from different consecutive scenes as an input
- $\{a_{k, t} \in A, b_{k, t+1} \in B, c_{k, t+2} \in C, d_{k, t+3} \in D, \;  k \in K,  t \in T\}$ and predict the next 4 patches in the same coordinates $\{f_{k, t+4} \in F, g_{k, t+5} \in G, h_{k, t+6} \in H, i_{k, t+7} \in I,\;  k \in K,  t \in T \}$, where $k$ denotes the patch number and $t$ the time index.  Because the intervals between scenes are not evenly spaced (e.g. exclusions because of clouds or missing data) the scenes are averaged over months (3 months in 1. experiment, 6 months in second experiment). Thus the model input and target dimensions, ignoring the batch dimension, in summary are 4x50x50 tensors.
+ $\{\mathbf{a}_{k, t} \in A, \mathbf{b}_{k, t+1} \in B, \mathbf{c}_{k, t+2} \in C, \mathbf{d}_{k, t+3} \in D, \;  k \in K,  t \in T\}$ and predict the next 4 patches in the same coordinates $\{\mathbf{f}_{k, t+4} \in F, \mathbf{g}_{k, t+5} \in G, \mathbf{h}_{k, t+6} \in H, \mathbf{i}_{k, t+7} \in I,\;  k \in K,  t \in T \}$, where $k$ denotes the patch number and $t$ the time index.  Because the intervals between scenes are not evenly spaced (e.g. exclusions because of clouds or missing data) the scenes are averaged over months (3 months in 1. experiment, 6 months in second experiment). Thus the model input and target dimensions, ignoring the batch dimension, in summary are 4x50x50 tensors.
  
  The different bands of the satellite contain some amount of missing pixel values which is why a kernel is used to average out missing values. The procedure is adapted from \citet{vonica2021glacier}. The Kernel selects missing pixels, places a 5x5 kernel on top of the missing value, replaces all missing pixels in the respective image space the kernel is targeted at with 0, and calculates a weighted average for the missing pixel in question.
  
- Because landsat-8 imaging is not completely accurate \citep{vonica2021glacier}, an allignment procedure is used to compensate for pixel shifts in images to produce more robust model predictions. For this the enhanced correlation coefficient maximization algorithm is used \citep{evangelidis2008parametric}. The algorithm iteratively refines an estimate of alignment paramters, e.g. image translation transformations by maximiziing the \textit{enhanced correlation coefficient} between two images. First a mean image is created with all images of the scene and then all scenes are aligned to this mean image with translation transformations on parallel lines. This transformation moves the scenes without rotating and scaling, is therefore computationally fast, should leave no bias in the scenes (e.g. aligning pixels that actually represent glacier movements) and improves the prediction accuracy of the models. 
- 
-Glacier movements are characterized by seasonal and annual changes \citet{sam2018heterogeneity}. Figure \ref{fig:figure3} shows the estimated optical flow between two consecutive scenes from the parvati glacier with a 3 month timedelta. For the optical flow estimation the dense optical flow algorithm by \citet{farneback2003two} is used. In comparison to sparse optical flow algorithms which use only a small subset of pixels for motion estimation, dense optical flow algorithms estimate the movement of every pixel in the image. The algorithm uses a image pyramid which smoothes and resamples the image at multiple levels (resampling factor: 0.5, levels of pyramid: 6, thus decreasing the size of the image by a factor of 0.5). At each level of the pyramid the algorithm uses quadratic polynomials in order to estimate the local local brightness changes between the two images. The algorithm uses 10 iterations at each level of the pyramid. All other parameters are adapted to their standard values \citep{vonica2021glacier}. Figure \ref{fig:figure3} shows two aligned consecutive scenes of the parvati glacier and estimated optical flow vectors. In order not to populate the whole scene with motion vectors the vectors are only drawn every 40 pixels (1200 meter).
- 
- %The algorithm uses \textit{ORB} features, a mixture of the fast accelerated segment test [FAST] keypoint detector and binary robust independent elementary features [BRIEF] in order to find matching keypoints between two images. The images are then aligned based on feature matches using the random sample consensus [RANSAC] algorithm \citep{derpanis2010overview}.  
+Because landsat-8 imaging is not completely accurate \citep{vonica2021glacier}, an allignment procedure is used to compensate for pixel shifts in images to produce more robust model predictions. For this the enhanced correlation coefficient maximization algorithm is used \citep{evangelidis2008parametric}. The algorithm iteratively refines an estimate of alignment paramters, e.g. image translation transformations by maximiziing the \textit{enhanced correlation coefficient} between two images. The algorithm used $\min(10000,x)$ iterations and a stopping criterion of .0001. First a mean image (median-filtered) is created with all images of the scene and then all scenes are aligned to this mean image with e.g. rotation, translation, scaling and shearing transformations through a homography matrix. 
+
+\begin{figure}[H]
 	
+	\centering
+	\includegraphics[scale = 0.35]{scenesYear.pdf}\hfill
 	
-%	\begin{figure}[htp]
-		
-	%	\centering
-	%	\includegraphics[scale = 0.5]{aletschSnow.jpg}\hfill
-		
-	%	\caption{Snow mask extracted from the generated NDSI index map. Scene taken from  Jungfrau-Aletsch-Bietschhorn Glacier ($46.477 ^{\circ} N, 8.056^{\circ} E$) on the 23 of March 2015.}
-	%	\label{fig:figure2}
-		
-	%\end{figure} 
-\begin{figure}[h]
+	\caption{Extracted and aligned scene masks of the parvati glacier from April 2013 until March 2015.}
+	\label{figure4}
+	
+\end{figure} 
+ 
+Glacier movements (figure \ref{figure4}) are characterized by seasonal and annual changes \citet{sam2018heterogeneity}. Figure \ref{fig:figure3} in addition shows the estimated optical flow between two consecutive scenes. For the optical flow estimation the dense optical flow algorithm by \citet{farneback2003two} is used. In comparison to sparse optical flow algorithms which use only a small subset of pixels for motion estimation, dense optical flow algorithms estimate the movement of every pixel in the image. The algorithm uses a image pyramid which smoothes and resamples the image at multiple levels (resampling factor: 0.5, levels of pyramid: 6, thus decreasing the size of the image by a factor of 0.5). At each level of the pyramid the algorithm uses quadratic polynomials in order to estimate the local local brightness changes between the two images. The algorithm uses 10 iterations at each level of the pyramid. All other parameters are adapted to their standard values \citep{vonica2021glacier}. Figure \ref{fig:figure3} shows two aligned consecutive scenes of the parvati glacier and estimated optical flow vectors. In order not to populate the whole scene with motion vectors the vectors are only drawn every 40 pixels (1200 meter).
+ 
+\begin{figure}[H]
 	
 	\centering
 	\includegraphics[scale = 0.25]{parbatiFlow.pdf}\hfill
@@ -134,7 +134,7 @@ As described above, all models get 4 consecutive scene patches as input and pred
 \begin{equation}
 	MSE = \frac{\sum_{i}^{N} \sum_{t}^{T} \sum_{x}^{X} \sum_{y}^{Y} (\tilde{y}_{i, t, x, y} - y_{i, t, x, y})^2}{N \times T \times X \times Y },
 \end{equation}
-where $\tilde{y}$ represents the snow mask prediction of the model at timepoint and $y$ represents the snow mask ground truth. In addition $i\in N$ represents the index of the training example, $t \in T$ the time index, $x \in X$ the image width coordinate and $y \in Y $ the image height coordinate.  
+where $\tilde{y}$ represents the snow mask prediction of the model and $y$ represents the snow mask ground truth. In addition $i\in N$ represents the index of the training example, $t \in T$ the time index, $x \in X$ the image width coordinate and $y \in Y $ the image height coordinate.  
 
 \subsubsection{LSTM model}
 The first model uses the LSTM cell developed by \citet{hochreiter1997long}. The LSTM cell has four different gates that are used recursively in order to predict sequential data (equation \ref{lstm}). The LSTM cell gets a hidden state representation, a cell state representation and a flattened input patch vector as an input. The central idea is that context information is accumulated and integrated at each timestep in the hidden and cell states. In the beginning the hidden and cell states are initialized as tensors containing 0 values. The different gate activations are then calculated with the following equations (note that vectors and matrices are bold):  
@@ -146,7 +146,7 @@ The first model uses the LSTM cell developed by \citet{hochreiter1997long}. The 
 		\mathbf{f} &= \sigma(\mathbf{W}_{if}\mathbf{x} + \mathbf{b}_{if} + \mathbf{W}_{hf}\mathbf{h} + \mathbf{b}_{hf}), \\
 		\mathbf{g} &= \mathrm{tanh}(\mathbf{W}_{ig}\mathbf{x} + \mathbf{b}_{ig} + \mathbf{W}_{hg}\mathbf{h} + \mathbf{b}_{hg}), \\
 		\mathbf{o} &= \sigma(\mathbf{W}_{io}\mathbf{x} + \mathbf{b}_{io} + \mathbf{W}_{ho}\mathbf{h} + \mathbf{b}_{ho}), \\
-		\mathbf{c'} &= \mathbf{f} \odot \mathbf{c} + \mathbf{i} \odot \mathbf{g}, \\
+		\mathbf{c'} &= \mathbf{f} \odot \mathbf{c} +       \mathbf{i} \odot \mathbf{g}, \\
 		\mathbf{h'} &= \mathbf{o} \odot \mathrm{tanh}(\mathbf{c'}),
 	\end{aligned}
 	\label{lstm}
@@ -164,7 +164,7 @@ In the optimization process the backpropagation algorithm is then used across ti
 
 as the derivative of the cell state with respect to itself is always a vector of 1 (the so called \textit{constant error carousel} \citep{hochreiter1997long}) multiplied by the forget gate output. If the biases in the forget gate are initialized with high values, the gradients never vanish or explode as both bounds are regulated by the forget gate, which learns its activation across training. 
 
-The used model is an encoder decoder architecture with LSTM cells, which uses the input in the encoder, copys cell and hidden states to the decoder and then recurrently predicts into the future by using the model predictions from previous timesteps.
+The used model is an encoder decoder architecture with LSTM cells (3 encoder, 3 decoder cells), which uses the input in the encoder, copys cell and hidden states to the decoder and then recurrently predicts into the future by using the model predictions from previous timesteps.
 
 \subsubsection{Convolutional LSTM Network}
 The next model has a similar structure to the LSTM network described above, with the difference, that now instead of vector representations of image patches, the patches itself are fed into the network. Therefore all the matrix multiplication operations now become convolution operations: 
@@ -188,59 +188,63 @@ The network structure of the U-net follows a contracting and an expanding path i
 
 The contracting path uses a typical convolutional network architecture consisting of repeated 3x3 convolutions, ReLU activations, and 2x2 max pooling operations with downsampling. At each downsampling step, the number of feature channels is doubled. In the expansive path the feature maps are upsampled followed by a 2x2 convolution that halves the number of feature maps again, then the cropped feature map (necessary due to the loss of border pixels in every convolution) from the corresponding part of the contracting path is concatenated and two 3x3 convolutions are performed, which are followed by ReLu activation functions. The final layer consists of a 1x1 convolutional layer in order to map the channel dimension back to 1 for prediction. 
 
-The used model is adapted in order to predict patches over time with a future prediction module. Therefore the model always predicts the next patch from the patch of previous timestep recurrently.
+The used model is adapted in order to predict patches over time with a future prediction module. Therefore the model always predicts the next patch from the patch of the previous timestep recurrently.
 
-\subsubsection{Self Attention Transformer-LSTM Hybrid Model}
-The next model comes form a newly developed class of models that show promising results in natural language processing tasks  \citep{vaswani2017attention}. In its essence the transformer model is an encoder-decoder model. While the encoder generates hidden representations of the input sequence data, the decoder recursively generates the next element in a sequence with the ability to generalise to arbitrary long sequences, making the architecture interesting and well suited for the task at hand. At the core the architecture side steps the bottleneck of accumulating context information and exploding or vanishing gradients and instead uses a mechanism that attends to all elements in a sequence in parallel, called \textit{multi-headed self attention}. In analogy to database systems the attention mechanism uses three matrices, the query ($\mathbf{Q}$), the key ($\mathbf{K}$) and the value ($\mathbf{V}$) matrix. These three matrices are multiplied by three copies of the input sequence. After that the query and the key matrices are combined to form \textit{attention weights}. The matrices are then multiplied, scaled by the square root of the dimensionality of the matrices and fed through a softmax activation function. These calculated weights then control the attention of the system to different parts of the value matrix:
+\subsubsection{Self Attention LSTM Hybrid Model}
+The next model stems from a recently developed class of models, the so called \textit{transformer} models, that show promising results in e.g. natural language processing \citep{vaswani2017attention}, computer vision \citep{khan2022transformers} or audio processing tasks \citep{gong2021ast}. At the core of the architectures attention mechanisms are used, which side step the bottleneck of accumulating context information and exploding or vanishing gradients and instead use a mechanism that attends to all elements in a sequence in parallel. One prominent example of an atttention mechanisms is the so called \textit{multi-head self attention} [MHSA]. In analogy to database systems the attention mechanism uses three matrices, the query ($\mathbf{Q}$), the key ($\mathbf{K}$) and the value ($\mathbf{V}$) matrix. These three matrices are multiplied by three copies of the input sequence. After that, the query and the key matrices are combined to form \textit{attention weights}. The matrices are here multiplied, scaled by the square root of the dimensionality of the key matrix and fed through a softmax activation function. These calculated weights then control the attention of the system to different parts of the value matrix:
 \begin{equation}
 \begin{aligned}
 	\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) &= \text{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}}\right)\mathbf{V} \
 \end{aligned}
 \end{equation}
-In order for the attention mechanism to become multi headed this process is repeated multiple times, where the outputs are concatenated and then fed through linear layers to decrease dimensionality for further processing. As the model does not understand the order of the sequences by design, positional encodings are added as sinusoidal and cosinusoidal functions of the input dimsensions \citep{vaswani2017attention}:
+In order for the attention mechanism to become multi headed this process is repeated multiple times, where the outputs are concatenated and then fed through linear layers to decrease dimensionality for further processing. Therefore the mechanism can abstract hierarchical patterns from the input sequences. 
 
-\begin{equation}
-	\mathbf{p}_{i,j} =
-	\begin{cases}
-		\sin\left(\frac{i}{10000^{2 \frac{j}{d}}}\right) & \text{if } j \text{ is even} \\
-		\cos\left(\frac{i}{10000^{2 \frac{j-1}{d}}}\right) & \text{if } j \text{ is odd}, 
-	\end{cases}
-\end{equation}
-where d is the dimensionality of the input vectors in the sequence.
+In the search process of finding a suitable arhcitecture for the task at hand, multiple architectures have been tried, e.g. a language transformer model (as descirbed by \citep{vaswani2017attention}) without tokenizer and flattened scene masks as input, a language transformer model with multilayer perceptron or convolutional tokenizer, a vision transformer model \citep{dosovitskiy2020image} with future prediction module (predicting future frames from last frames) and a self attention LSTM hybrid [SA-LSTM-H] Model. The model architecture search for the attention based model class was based on the data of the first experiment descirbed below. The only model producing visually sound results, not prone to overfitting because of high model capacity and good validation set generalisation was the SA-LSTM-H. 
 
+The SA-LSTM-H, inspired by \citet{mu2023icetft}, processes the flattened input patches in the LSTM layer (3 LSTM cells) in order to generate hidden state representations (last LSTM cell). These are then fed into a MHSA layer which produces a matrix of size (ignoring batch dimension) 4x2500 (timesteps $t_{-3}$ to $t$). This matrix is then flattened to a 1x10000 vector which is then fed through a linear layer and projected to a size of 1x2500, producing the output for timestep $t_{+1}$. This vector is then concatenated to the output of the hidden states of the LSTM layer. The LSTM layer then recursively predicts the next hidden state outputs using timesteps $t_{-2}$ until $t_{+1}$. This process is repeated until all future timesteps are predicted.
 
-The encoder of the model takes copies of the input and feeds them through multi-headed attention layers. In addition residual connections are used in order to increase gradient flow in the backpropagation step and to not loose information in the forward pass. These circumvent attention layers and are added to the respective output and then normed with layer normalization. The encoding layer outputs one matrix which is then copied and given to the decoder as query and key matrices. To this matrix then a special token is concatenated in the beginning of the future prediction sequence indicating the start of model predictions, the \textit{start token}. In the inference step the decoder then recurrently predicts the next patch token from the model input and the concatenated predictions until the given future timepoint until the sequence is completed. The model is trained with a mechanism similar to teacher forcing in LSTM networks \citep{gers2002learning}. This is accomplished with the input of the correct target values in the sequence in order to bootstrap training success, while the model outputs for future timesteps are used for loss calculations and backpropagation. Therefore a masking matrix is used which only shows the model the correct input until a given timestep, without the correct solutions for the current or future timesteps.
+\section{Experiment 1: Parvati Glacier}
+\subsection{Experimental Design}
+The Parvati glacier is well suited for the prediction of glacier movements, because first the landsat-8 image catalog provides a high temporal density of scenes that are almost evenly distributed over the months in a year, and second because of the high glacier density in the region and the surroundings. Therefore a dataset was created in which scenes are averaged over a $\Delta_t$ of three months of each year from January 01, 2013 until January 01, 2021. If for a given month no scenes were available the missing months were interpolated linearly in order to prevent temporal bias in the data (one month in sequence). The patches were extraced from the provided coordinates (\ref{fig:figure1}) in regions of interest of 800x800 pixels with a stride of 10, resulting in 161 728 sequences of 4 scenes and 4 corresponding targets. the data was then splitted into 80\% training and 20\% test data, while 10\% of the training data was used for validation. The dataset was firstly used in order to test the different model architectures and get an understanding of the best performing architectures with the validation set performance. Afterwards generalization performance was tested on the test set. As data augmentation techniques teacher forcing, dropout and weight decay were used (see table \ref{modelPars1} for hyperparameter settings). All models except the convolutional LSTM [convLSTM] network model were trained on nvidia RTX 2080ti graphics processing units, while the convLSTM was trained on a nvidia v100 gpu bcaue of higher model capacity.
 
-\subsubsection{Vision Transformer Model}
-
-
-
-
-\section{Experiment 1: Prediction of Patches}
-\subsection{Parvati Glacier}
-The Parvati glacier is well suited for the prediction of glacier movmements, because first the landsat-8 image catalog provides a high temporal density of scenes that are almost evenly distributed over the months in a year, and second because of the high glacier density in the region and the surroundings. Therefore a dataset was created in which scenes are averaged over the months of each year from January 01, 2013 until January 01, 2021. If for a given month no scenes were available the missing months were interpolated linearly in order to prevent temporal bias in the data. The patches were extraced from the provided coordinates (\ref{fig:figure1}) in regions of interest of 800x800 pixels with a stride of 10, resulting in 566048 sequences of 4 scenes and 4 corresponding targets. the data was then splitted into 80\% training and 20\% test data, while 10\% of the training data was used for validation. The dataset was firstly used in order to test the different model architectures and get an understanding of the best performing architectures. In order to curtail the the architecture and parameter space a set of models was tested. This set contained two transformer models \citep{vaswani2017attention}, two vision transformer models adapted to predict sequences of patches over time  \citep{dosovitskiy2020image}, a LSTM encoder-decoder model with future prediction module \citep{srivastava2015unsupervised}, and a U-net model adapted to predict patches over time recurrently \citep{ronneberger2015u}. As data augmentation techniques teacher forcing, dropout, weight decay and early stopping were used 
-
-
-
-\begin{center}
-	\begin{tabular}{|c|c|c|}
-		\hline
-		Model & MSE & MAE \\
-		\hline
-		Unet & 0.0658 & 0.1810 \\
-		\hline
-		Transformer & 0.0668 & 0.2268 \\
-		\hline
-		LSTM & 0.0545 & 0.1651 \\
-		\hline
-		Vision Transformer & 0.0843 & 0.2085 \\
-		\label{key} \\
-		\hline
+\begin{table}[h]
+	\caption{Model Parameters}
+	\label{modelPars1}
+	\begin{tabular}{lccccc}
+		\toprule
+		\multicolumn{1}{c}{\textbf{Model}} & \textbf{Learning Rate} & \textbf{Weight Decay} & \textbf{Epochs} & \textbf{Batch Size} & \textbf{Optimizer} \\ 
+		\midrule
+		LSTM & .0001 & .001 & 40 & 100 & adamW \\
+		U- net & .001 & .01 & 20 & 100 & adamW \\
+		SA-LSTM-H & .0001 & .001 & 40 & 100 & adamW \\
+		ConvLSTM & .0001 & .001 & 40 & 100 & adamW \\
+		\bottomrule
 	\end{tabular}
-\end{center}
+\end{table}
+
+\subsection{Results}
+Except for the U-net architecture, all other models seem to capture the underlying data distribution. 
+
+\begin{table}[htbp]
+	%\centering
+	\caption{Testset Performance}
+	\begin{tabular}{lcc}
+		\toprule
+		& \multicolumn{1}{c}{\textit{MSE}} & \multicolumn{1}{c}{\textit{MAE}} \\
+		\midrule
+		U-net & 0.083 & 0.192 \\
+		MA-LSTM-H & 0.047 & 0.136 \\
+		LSTM Encoder-Decoder & 0.054 & 0.139 \\
+		ConvLSTM & 0.084 & 0.209 \\
+		\bottomrule
+	\end{tabular}%
+	\label{tab:performance_estimations}%
+\end{table}%
 
 
-\section{Experiment 2: Fine Tuning on Different Glaciers}
+\subsection{Discussion}
+
+\section{Experiment 2: Jungfrau-Aletsch-Bietschhorn Glacier}
 
 \section{Experiment 3: Generalisation to Full Scenes}
 \subsection{Full Scene Learning}
@@ -255,9 +259,17 @@ The Parvati glacier is well suited for the prediction of glacier movmements, bec
 \subsection{Generalisation Test}
 
 \section{Discussion}
-carbon footprint of model training
+
 dimensionality reduction techniques for image vector embeddings
+
+other method to combine scenes
+
+prediction forecasting warning system pakistan etc...
 \section{Limitations}
+
+carbon footprint of model training
+
+combine with alignment on ground 
 
 \section{Summary}
 

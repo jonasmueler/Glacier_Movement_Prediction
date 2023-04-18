@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.11.18)  16 APR 2023 19:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.11.18)  18 APR 2023 21:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -664,6 +664,14 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
 LaTeX Info: Redefining \[ on input line 2938.
 LaTeX Info: Redefining \] on input line 2939.
 )
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count323
+\float@exts=\toks36
+\float@box=\box63
+\@float@everytoks=\toks37
+\@floatcapt=\box64
+)
 (/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty
 Package: bm 2021/04/25 v1.2e Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup4
@@ -682,9 +690,9 @@ LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
 (/usr/share/texlive/texmf-dist/tex/latex/wrapfig/wrapfig.sty
 \wrapoverhang=\dimen290
 \WF@size=\dimen291
-\c@WF@wrappedlines=\count323
-\WF@box=\box63
-\WF@everypar=\toks36
+\c@WF@wrappedlines=\count324
+\WF@box=\box65
+\WF@everypar=\toks38
 Package: wrapfig 2003/01/31  v 3.6
 )
 (/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.sty
@@ -694,21 +702,21 @@ Package: expl3 2022-01-21 L3 programming layer (loader)
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count324
-\l__pdf_internal_box=\box64
+\l__color_backend_stack_int=\count325
+\l__pdf_internal_box=\box66
 ))
 Package: l3keys2e 2022-01-12 LaTeX2e option processing using LaTeX3 keys
 )
 Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
-\g__lipsum_par_int=\count325
-\l__lipsum_a_int=\count326
-\l__lipsum_b_int=\count327
+\g__lipsum_par_int=\count326
+\l__lipsum_a_int=\count327
+\l__lipsum_b_int=\count328
 
 (/usr/share/texlive/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex))
 (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
-\c@subfigure=\count328
-\c@subtable=\count329
+\c@subfigure=\count329
+\c@subtable=\count330
 )
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
@@ -716,24 +724,24 @@ Package csquotes Info: ... found 'babel' package.
 (./glacier_prediction_deep_learning.aux)
 \openout1 = `glacier_prediction_deep_learning.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 44.
+LaTeX Font Info:    ... okay on input line 44.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -769,13 +777,13 @@ LaTeX Font Info:    ... okay on input line 40.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@maskedRefs=\count330
+\c@maskedRefs=\count331
 (/usr/share/texlive/texmf-dist/tex/latex/apacite/english.apc
 File: english.apc 2013/07/21 v6.03 apacite language file
 LaTeX Info: Redefining \BPBI on input line 129.
 LaTeX Info: Redefining \BHBI on input line 130.
 )
-Package hyperref Info: Link coloring ON on input line 40.
+Package hyperref Info: Link coloring ON on input line 44.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -786,11 +794,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count331
+\c@section@level=\count332
 )
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
+LaTeX Info: Redefining \ref on input line 44.
+LaTeX Info: Redefining \pageref on input line 44.
+LaTeX Info: Redefining \nameref on input line 44.
 
 (./glacier_prediction_deep_learning.out)
 (./glacier_prediction_deep_learning.out)
@@ -800,17 +808,17 @@ LaTeX Info: Redefining \nameref on input line 40.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count332
+\scratchcounter=\count333
 \scratchdimen=\dimen292
-\scratchbox=\box65
-\nofMPsegments=\count333
-\nofMParguments=\count334
-\everyMPshowfont=\toks37
-\MPscratchCnt=\count335
+\scratchbox=\box67
+\nofMPsegments=\count334
+\nofMParguments=\count335
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count336
 \MPscratchDim=\dimen293
-\MPnumerator=\count336
-\makeMPintoPDFobject=\count337
-\everyMPtoPDFconversion=\toks38
+\MPnumerator=\count337
+\makeMPintoPDFobject=\count338
+\everyMPtoPDFconversion=\toks40
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -821,6 +829,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 
@@ -830,25 +839,25 @@ Package caption Info: End \AtBeginDocument code.
 \tf@toc=\write5
 \openout5 = `glacier_prediction_deep_learning.toc'.
 
-<map.pdf, id=152, 832.32256pt x 415.48526pt>
+<map.pdf, id=157, 832.32256pt x 415.48526pt>
 File: map.pdf Graphic file (type pdf)
 <use map.pdf>
-Package pdftex.def Info: map.pdf  used on input line 58.
+Package pdftex.def Info: map.pdf  used on input line 62.
 (pdftex.def)             Requested size: 483.57292pt x 241.39369pt.
-<jakobshavn.pdf, id=153, 298.33057pt x 267.68806pt>
+<jakobshavn.pdf, id=158, 298.33057pt x 267.68806pt>
 File: jakobshavn.pdf Graphic file (type pdf)
 <use jakobshavn.pdf>
-Package pdftex.def Info: jakobshavn.pdf  used on input line 61.
+Package pdftex.def Info: jakobshavn.pdf  used on input line 65.
 (pdftex.def)             Requested size: 145.11053pt x 130.20433pt.
-<helheim.pdf, id=154, 313.3627pt x 266.53177pt>
+<helheim.pdf, id=159, 313.3627pt x 266.53177pt>
 File: helheim.pdf Graphic file (type pdf)
 <use helheim.pdf>
-Package pdftex.def Info: helheim.pdf  used on input line 62.
+Package pdftex.def Info: helheim.pdf  used on input line 66.
 (pdftex.def)             Requested size: 145.11053pt x 123.42354pt.
-<aletsch.pdf, id=155, 278.09496pt x 266.53177pt>
+<aletsch.pdf, id=160, 278.09496pt x 266.53177pt>
 File: aletsch.pdf Graphic file (type pdf)
 <use aletsch.pdf>
-Package pdftex.def Info: aletsch.pdf  used on input line 63.
+Package pdftex.def Info: aletsch.pdf  used on input line 67.
 (pdftex.def)             Requested size: 145.11053pt x 139.07314pt.
 
 
@@ -856,40 +865,43 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [2] [3 <./map.pdf> <./jakobshavn.pdf> <./helheim.pdf> <./aletsch.pdf>] [4]
 [5]
-<parbatiFlow.pdf, id=346, 1879.02pt x 1300.86pt>
+<scenesYear.pdf, id=344, 1445.4pt x 1445.4pt>
+File: scenesYear.pdf Graphic file (type pdf)
+<use scenesYear.pdf>
+Package pdftex.def Info: scenesYear.pdf  used on input line 110.
+(pdftex.def)             Requested size: 505.89758pt x 505.89758pt.
+
+Overfull \hbox (22.20071pt too wide) in paragraph at lines 110--111
+ [][] 
+ []
+
+[6 <./scenesYear.pdf>]
+<parbatiFlow.pdf, id=387, 1879.02pt x 1300.86pt>
 File: parbatiFlow.pdf Graphic file (type pdf)
 <use parbatiFlow.pdf>
 Package pdftex.def Info: parbatiFlow.pdf  used on input line 122.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[6] [7 <./parbatiFlow.pdf>] [8] [9] [10] [11] [12] [13]
-(./glacier_prediction_deep_learning.bbl [14]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 7
-83.
+ [7 <./parbatiFlow.pdf>] [8] [9] [10] [11] [12] [13]
+[14] (./glacier_prediction_deep_learning.bbl [15]
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 8
+10.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [15])
-
-Package caption Warning: Unused \captionsetup[table] on input line 25.
-See the caption package documentation for explanation.
-
-[16] (./glacier_prediction_deep_learning.aux)
+) [16]) [17]
+(./glacier_prediction_deep_learning.aux)
 Package rerunfilecheck Info: File `glacier_prediction_deep_learning.out' has no
 t changed.
-(rerunfilecheck)             Checksum: 4977F6263C3F1B86FAD1E88E79BE1046;3361.
+(rerunfilecheck)             Checksum: 1135957184077B212082934C0E7DE766;3301.
  ) 
 Here is how much of TeX's memory you used:
- 24970 strings out of 480247
- 462655 string characters out of 5896150
- 839366 words of memory out of 5000000
- 42396 multiletter control sequences out of 15000+600000
+ 25052 strings out of 480247
+ 464085 string characters out of 5896150
+ 841014 words of memory out of 5000000
+ 42468 multiletter control sequences out of 15000+600000
  489042 words of font info for 76 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,10n,89p,1829b,580s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,9n,89p,1829b,582s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/jonas/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600
 pk> </home/jonas/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.60
 0pk> </home/jonas/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1200.6
@@ -902,19 +914,16 @@ pk> </home/jonas/.texlive2021/texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.60
 2074.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy8.pfb>
-Output written on glacier_prediction_deep_learning.pdf (16 pages, 16010487 byte
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on glacier_prediction_deep_learning.pdf (17 pages, 24643816 byte
 s).
 PDF statistics:
- 902 PDF objects out of 1000 (max. 8388607)
- 460 compressed objects within 5 object streams
- 86 named destinations out of 1000 (max. 500000)
- 206 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 937 PDF objects out of 1000 (max. 8388607)
+ 478 compressed objects within 5 object streams
+ 91 named destinations out of 1000 (max. 500000)
+ 219 words of extra memory for PDF output out of 10000 (max. 10000000)
 

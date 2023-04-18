@@ -40,47 +40,51 @@ Repeated entry---line 443 of file references.bib
  : @article{gers2002learning
  :                          ,
 I'm skipping whatever remains of this entry
+Repeated entry---line 460 of file references.bib
+ : @article{dosovitskiy2020image
+ :                              ,
+I'm skipping whatever remains of this entry
 apacite.bst [2013/07/21 v6.03 APA bibliography style]
 Warning--No journal in marochovautomated
-You've used 38 entries,
+You've used 39 entries,
             6951 wiz_defined-function locations,
-            1493 strings with 19667 characters,
-and the built_in function-call counts, 84478 in all, are:
-= -- 10202
-> -- 837
-< -- 4204
-+ -- 4490
-- -- 87
-* -- 5567
-:= -- 15396
-add.period$ -- 157
-call.type$ -- 38
-change.case$ -- 668
+            1497 strings with 19787 characters,
+and the built_in function-call counts, 86186 in all, are:
+= -- 10412
+> -- 856
+< -- 4272
++ -- 4560
+- -- 89
+* -- 5668
+:= -- 15671
+add.period$ -- 161
+call.type$ -- 39
+change.case$ -- 685
 chr.to.int$ -- 0
-cite$ -- 77
-duplicate$ -- 2553
-empty$ -- 3124
-format.name$ -- 1522
-if$ -- 15647
+cite$ -- 79
+duplicate$ -- 2610
+empty$ -- 3200
+format.name$ -- 1554
+if$ -- 15990
 int.to.chr$ -- 0
-int.to.str$ -- 118
+int.to.str$ -- 121
 missing$ -- 0
-newline$ -- 1013
-num.names$ -- 304
-pop$ -- 1317
+newline$ -- 1039
+num.names$ -- 312
+pop$ -- 1343
 preamble$ -- 1
-purify$ -- 152
+purify$ -- 156
 quote$ -- 0
-skip$ -- 5294
+skip$ -- 5421
 stack$ -- 0
-substring$ -- 4882
-swap$ -- 1429
-text.length$ -- 119
+substring$ -- 4961
+swap$ -- 1458
+text.length$ -- 121
 text.prefix$ -- 0
 top$ -- 1
-type$ -- 3424
+type$ -- 3504
 warning$ -- 1
-while$ -- 510
+while$ -- 522
 width$ -- 0
-write$ -- 1344
-(There were 7 error messages)
+write$ -- 1379
+(There were 8 error messages)

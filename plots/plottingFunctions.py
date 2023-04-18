@@ -518,6 +518,7 @@ def plotPatches(model, modelName, data, tokenizer, device, plot):
 
     predictions = forward.unsqueeze(dim =0)
     targets = data[1].to(device).float()
+
     # put into list
     predList = []
     targetList = []
@@ -538,21 +539,27 @@ def plotPatches(model, modelName, data, tokenizer, device, plot):
     os.chdir(path)
     os.makedirs(modelName, exist_ok= True)
     os.chdir(os.path.join(path, modelName))
+    path = os.path.join(path, modelName)
     name = str(np.random.randint(50000))
     os.makedirs(name, exist_ok=True)
     os.chdir(path + "/" + name)
 
     path = os.getcwd()
+
+    fig, axs = plt.subplots(ncols=int(len(plotData)/2), nrows=2)#, figsize=(20,30))
+    axs = axs.flat
     for i in range(len(plotData)):
         # model predictions
-        plt.imshow(minmaxScaler(plotData[i]), cmap='gray')
-        plt.axis('off')
-        # save on harddrive
-        p = os.getcwd() + "/" + str(i) + ".pdf"
-        plt.savefig(p, dpi=1000)
+        axs[i].imshow(minmaxScaler(plotData[i]), cmap='gray')
+        #axs[i].axis('off')
 
-        with open(str(i), "wb") as fp:  # Pickling
-            pickle.dump(plotData[i], fp)
+    # save on harddrive
+    plt.tight_layout()
+    p = os.getcwd() + "/" + str(i) + ".pdf"
+    plt.savefig(p, dpi=1000)
+
+    with open(str(i), "wb") as fp:  # Pickling
+        pickle.dump(plotData[i], fp)
 
     # Show the plot
     if plot:

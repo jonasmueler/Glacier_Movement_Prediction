@@ -4,7 +4,7 @@ import functions
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-
+"""
 img = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/0")
 img1 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/1")
 img2 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/3")
@@ -49,10 +49,10 @@ axs[1].imshow(img1, cmap='gray')
 plt.tight_layout()
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/plots"
 os.chdir(path)
-#plt.savefig("parbatiFlow.pdf", dpi = 1000)
+plt.savefig("parbatiFlow.pdf", dpi = 1000)
 plt.show()
 
-"""
+
 # Plot the third image on the third column
 frame1 = img1.astype(np.float32)
 frame2 = img2.astype(np.float32)
@@ -101,3 +101,48 @@ axs[1, 1].imshow(img3, cmap='gray')
 plt.tight_layout()
 plt.show()
 """
+
+################################# plot scenes ###################################
+image = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/0")
+image1 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/1")
+image2 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/2")
+image3 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/3")
+
+image4= functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/4")
+image5 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/5")
+image6 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/6")
+image7 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/7")
+
+image8= functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/8")
+image9 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/9")
+image10 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/10")
+image11 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/11")
+
+
+
+
+# create a figure object with 3 rows and 4 columns
+fig, axs = plt.subplots(3, 4, figsize=(20, 20))
+
+# remove the axes and ticks from all subplots
+for ax in axs.flat:
+    ax.axis('off')
+
+# plot the images in the subplots
+axs[0, 0].imshow(image, cmap= "gray")
+axs[0, 1].imshow(image1, cmap="gray")
+axs[0, 2].imshow(image2, cmap="gray")
+axs[0, 3].imshow(image3, cmap="gray")
+axs[1, 0].imshow(image4, cmap="gray")
+axs[1, 1].imshow(image5, cmap="gray")
+axs[1, 2].imshow(image6, cmap="gray")
+axs[1, 3].imshow(image7, cmap="gray")
+axs[2, 0].imshow(image8, cmap="gray")
+axs[2, 1].imshow(image9, cmap="gray")
+axs[2, 2].imshow(image10, cmap="gray")
+axs[2, 3].imshow(image11, cmap="gray")
+
+# display the figure
+plt.savefig("scenesYear.pdf", dpi = 1000)
+plt.tight_layout()
+plt.show()

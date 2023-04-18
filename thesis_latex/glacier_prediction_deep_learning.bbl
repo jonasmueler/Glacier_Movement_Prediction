@@ -405,6 +405,33 @@ Gleick, P\BPBI H.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Gong%
+, Chung%
+\BCBL {}\ \BBA {} Glass%
+}{%
+Gong%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {2021}}%
+}]{%
+gong2021ast}
+\APACinsertmetastar {%
+gong2021ast}%
+\begin{APACrefauthors}%
+Gong, Y.%
+, Chung, Y\BHBI A.%
+\BCBL {}\ \BBA {} Glass, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2021}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Ast: Audio spectrogram transformer} {Ast: Audio
+  spectrogram transformer}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{arXiv preprint arXiv:2104.01778}{}{}{}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 He%
 , Zhang%
 , Ma%

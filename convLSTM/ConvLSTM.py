@@ -1,159 +1,301 @@
 from torch import nn
 import torch
 
+class ConvLSTMCell(nn.Module):
 
-device = "cpu"
+    def __init__(self, input_dim, hidden_dim, kernel_size, bias):
+        """
+        Initialize ConvLSTM cell.
+        Parameters
+        ----------
+        input_dim: int
+            Number of channels of input tensor.
+        hidden_dim: int
+            Number of channels of hidden state.
+        kernel_size: (int, int)
+            Size of the convolutional kernel.
+        bias: bool
+            Whether or not to add the bias.
+        """
+
+        super(ConvLSTMCell, self).__init__()
+
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+
+        self.kernel_size = kernel_size
+        self.padding = kernel_size[0] // 2, kernel_size[1] // 2
+        self.bias = bias
+
+        self.conv = nn.Conv2d(in_channels=self.input_dim + self.hidden_dim,
+                              out_channels=4 * self.hidden_dim,
+                              kernel_size=self.kernel_size,
+                              padding=self.padding,
+                              bias=self.bias)
+
+    def forward(self, input_tensor, cur_state):
+        h_cur, c_cur = cur_state
+
+        combined = torch.cat([input_tensor, h_cur], dim=1)  # concatenate along channel axis
+
+        combined_conv = self.conv(combined)
+        cc_i, cc_f, cc_o, cc_g = torch.split(combined_conv, self.hidden_dim, dim=1)
+        i = torch.sigmoid(cc_i)
+        f = torch.sigmoid(cc_f)
+        o = torch.sigmoid(cc_o)
+        g = torch.tanh(cc_g)
+
+        c_next = f * c_cur + i * g
+        h_next = o * torch.tanh(c_next)
+
+        return h_next, c_next
+
+    def init_hidden(self, batch_size, image_size):
+        height, width = image_size
+        return (torch.zeros(batch_size, self.hidden_dim, height, width, device=self.conv.weight.device),
+                torch.zeros(batch_size, self.hidden_dim, height, width, device=self.conv.weight.device))
+
+
 class ConvLSTM(nn.Module):
-    def __init__(self, input_channel, num_filter, b_h_w, kernel_size, stride=1, padding=1):
-        super().__init__()
-        self._conv = nn.Conv2d(in_channels=input_channel + num_filter,
-                               out_channels=num_filter *4,
-                               kernel_size=kernel_size,
-                               stride=stride,
-                               padding=padding)
-        self._batch_size, self._state_height, self._state_width = b_h_w
-        # if using requires_grad flag, torch.save will not save parameters in deed although it may be updated every epoch.
-        # Howerver, if you use declare an optimizer like Adam(model.parameters()),
-        # parameters will not be updated forever.
-        self.Wci = nn.Parameter(torch.zeros(1, num_filter, self._state_height, self._state_width)).to(device)
-        self.Wcf = nn.Parameter(torch.zeros(1, num_filter, self._state_height, self._state_width)).to(device)
-        self.Wco = nn.Parameter(torch.zeros(1, num_filter, self._state_height, self._state_width)).to(device)
-        self._input_channel = input_channel
-        self._num_filter = num_filter
 
-    # inputs and states should not be all none
-    # inputs: S*B*C*H*W
-    def forward(self, inputs=None, states=None): # hardcoded
+    """
+    Parameters:
+        input_dim: Number of channels in input
+        hidden_dim: Number of hidden channels
+        kernel_size: Size of kernel in convolutions
+        num_layers: Number of LSTM layers stacked on each other
+        batch_first: Whether or not dimension 0 is the batch or not
+        bias: Bias or no bias in Convolution
+        return_all_layers: Return the list of computations for all layers
+        Note: Will do same padding.
+    Input:
+        A tensor of size B, T, C, H, W or T, B, C, H, W
+    Output:
+        A tuple of two lists of length num_layers (or length 1 if return_all_layers is False).
+            0 - layer_output_list is the list of lists of length T of each output
+            1 - last_state_list is the list of last states
+                    each element of the list is a tuple (h, c) for hidden state and memory
+    Example:
+        >> x = torch.rand((32, 10, 64, 128, 128))
+        >> convlstm = ConvLSTM(64, 16, 3, 1, True, True, False)
+        >> _, last_states = convlstm(x)
+        >> h = last_states[0][0]  # 0 for layer index, 0 for h index
+    """
 
-        if states is None:
-            c = torch.zeros((inputs.size(1), self._num_filter, self._state_height,
-                                  self._state_width), dtype=torch.float).to(device)
-            h = torch.zeros((inputs.size(1), self._num_filter, self._state_height,
-                             self._state_width), dtype=torch.float).to(device)
+    def __init__(self, input_dim, hidden_dim, kernel_size, num_layers,
+                 batch_first=False, bias=True, return_all_layers=False):
+        super(ConvLSTM, self).__init__()
+
+        self._check_kernel_size_consistency(kernel_size)
+
+        # Make sure that both `kernel_size` and `hidden_dim` are lists having len == num_layers
+        kernel_size = self._extend_for_multilayer(kernel_size, num_layers)
+        hidden_dim = self._extend_for_multilayer(hidden_dim, num_layers)
+        if not len(kernel_size) == len(hidden_dim) == num_layers:
+            raise ValueError('Inconsistent list length.')
+
+        self.input_dim = input_dim
+        self.hidden_dim = hidden_dim
+        self.kernel_size = kernel_size
+        self.num_layers = num_layers
+        self.batch_first = batch_first
+        self.bias = bias
+        self.return_all_layers = return_all_layers
+
+        cell_list = []
+        for i in range(0, self.num_layers):
+            cur_input_dim = self.input_dim if i == 0 else self.hidden_dim[i - 1]
+
+            cell_list.append(ConvLSTMCell(input_dim=cur_input_dim,
+                                          hidden_dim=self.hidden_dim[i],
+                                          kernel_size=self.kernel_size[i],
+                                          bias=self.bias))
+
+        self.cell_list = nn.ModuleList(cell_list)
+
+    def forward(self, input_tensor, hidden_state=None):
+        """
+        Parameters
+        ----------
+        input_tensor: todo
+            5-D Tensor either of shape (t, b, c, h, w) or (b, t, c, h, w)
+        hidden_state: todo
+            None. todo implement stateful
+        Returns
+        -------
+        last_state_list, layer_output
+        """
+        if not self.batch_first:
+            # (t, b, c, h, w) -> (b, t, c, h, w)
+            input_tensor = input_tensor.permute(1, 0, 2, 3, 4)
+
+        b, _, _, h, w = input_tensor.size()
+
+        # Implement stateful ConvLSTM
+        if hidden_state is not None:
+            raise NotImplementedError()
         else:
-            h, c = states
-        seq_len = inputs.size(dim = 0)
-        outputs = []
-        for index in range(seq_len):
-            # initial inputs
-            if inputs is None:
-                x = torch.zeros((h.size(0), self._input_channel, self._state_height,
-                                      self._state_width), dtype=torch.float).to(device)
-            else:
-                x = inputs[index, ...]
+            # Since the init is done in forward. Can send image size here
+            hidden_state = self._init_hidden(batch_size=b,
+                                             image_size=(h, w))
 
-            cat_x = torch.cat([x, h], dim=1)
-            conv_x = self._conv(cat_x)
+        layer_output_list = []
+        last_state_list = []
 
-            i, f, tmp_c, o = torch.chunk(conv_x, 4, dim=1)
+        seq_len = input_tensor.size(1)
+        cur_layer_input = input_tensor
 
-            i = torch.sigmoid(i+self.Wci*c)
-            f = torch.sigmoid(f+self.Wcf*c)
-            c = f*c + i*torch.tanh(tmp_c)
-            o = torch.sigmoid(o+self.Wco*c)
-            h = o*torch.tanh(c)
-            outputs.append(h)
-        return torch.stack(outputs), (h, c)
+        for layer_idx in range(self.num_layers):
 
-class ConvLSTMFuturePredictor(nn.Module):
-    def __init__(self, input_channel, num_filter, b_h_w, kernel_size, future_horizon = 4, stride=1, padding=1):
-        super().__init__()
-        self.future_horizon = future_horizon
-        self.convLSTM1 = ConvLSTM(input_channel, num_filter, b_h_w, kernel_size, stride, padding)
-        self.convLSTM2 = ConvLSTM(num_filter, num_filter, b_h_w, kernel_size, stride, padding)
-        self.convLSTM3 = ConvLSTM(num_filter, num_filter, b_h_w, kernel_size, stride, padding)
-        self.convLSTM4 = ConvLSTM(num_filter, num_filter, b_h_w, kernel_size, stride, padding)
-        self.conv1 = nn.Conv2d(20,1, 3, 1, 1)
+            h, c = hidden_state[layer_idx]
+            output_inner = []
+            for t in range(seq_len):
+                h, c = self.cell_list[layer_idx](input_tensor=cur_layer_input[:, t, :, :, :],
+                                                 cur_state=[h, c])
+                output_inner.append(h)
 
+            layer_output = torch.stack(output_inner, dim=1)
+            cur_layer_input = layer_output
+
+            layer_output_list.append(layer_output)
+            last_state_list.append([h, c])
+
+        if not self.return_all_layers:
+            layer_output_list = layer_output_list[-1:]
+            last_state_list = last_state_list[-1:]
+
+        return layer_output_list, last_state_list
+
+    def _init_hidden(self, batch_size, image_size):
+        init_states = []
+        for i in range(self.num_layers):
+            init_states.append(self.cell_list[i].init_hidden(batch_size, image_size))
+        return init_states
+
+    @staticmethod
+    def _check_kernel_size_consistency(kernel_size):
+        if not (isinstance(kernel_size, tuple) or
+                (isinstance(kernel_size, list) and all([isinstance(elem, tuple) for elem in kernel_size]))):
+            raise ValueError('`kernel_size` must be tuple or list of tuples')
+
+    @staticmethod
+    def _extend_for_multilayer(param, num_layers):
+        if not isinstance(param, list):
+            param = [param] * num_layers
+        return param
+
+class ConvLSTMPredictor(nn.Module):
+    def __init__(self, hidden_dim):
+        super(ConvLSTMPredictor, self).__init__()
+
+        self.convLSTMEnc = ConvLSTM(input_dim=1,
+                                    hidden_dim=hidden_dim[0:3],
+                                    kernel_size=(3,3),
+                                    num_layers=len(hidden_dim[0:3]),
+                                    batch_first=True,
+                                    bias=True,
+                                    return_all_layers=False)
+
+        self.convLSTMDec = ConvLSTM(input_dim=hidden_dim[3],
+                                 hidden_dim=hidden_dim[3:],
+                                 kernel_size=(3,3),
+                                 num_layers=len(hidden_dim[3:]),
+                                 batch_first=True,
+                                 bias=True,
+                                 return_all_layers=False)
+
+        self.conv = nn.Conv2d(hidden_dim[-1], 1,
+                              3,
+                              padding = 1)
 
     def encoder(self, x):
-        x = self.convLSTM1(x)
-        lastOutput = x[0]
-        lastHidden = x[1][0]
-        lastCell = x[1][1]
+        h, cell = self.convLSTMEnc(x)
+        out = h[0]
+        return out
 
-        x = self.convLSTM2(lastOutput, (lastHidden, lastCell))
-        lastOutput = x[0]
-        lastHidden = x[1][0]
-        lastCell = x[1][1]
+    def decoder(self, x, y, training):
+        if training == True:
+            out = []
+            for i in range(4):
+                _, last_states = self.convLSTMDec(x)
+                x = last_states[0][0].unsqueeze(dim = 1)
 
-        x = self.convLSTM3(lastOutput, (lastHidden, lastCell))
-        lastOutput = x[0]
-        lastHidden = x[1][0]
-        lastCell = x[1][1]
+                out.append(x)
 
-        x = self.convLSTM4(lastOutput, (lastHidden, lastCell))
+                # update x
+                #x = y[:, i, :, :, :].unsqueeze(dim = 1)
 
-        return x
+        if training == False:
+            out = []
+            for i in range(4):
+                _, last_states = self.convLSTMDec(x)
+                x = last_states[0][0].unsqueeze(dim = 1)
+                out.append(x)
 
-    def decoder(self, x):
+        out = torch.cat(out, dim = 1).squeeze()
+
+        return out
+
+    def convOut(self, x):
+
+        # convolution across timesteps
         out = []
-
-        for i in range(x.size(0)):
-            s = self.conv1(x[i, :, :, :])
+        for i in range(4):
+            s = x[:, i, :, :, :]
+            s = self.conv(s)
             out.append(s)
-        out = torch.stack(out)
-        out = torch.permute(out, (1,0,2,3,4)).squeeze()
+
+        out = torch.stack(out, dim = 1)
+
         return out
 
     def forward(self, x, y, training):
-        if training == True:
-            x = torch.permute(x, (1, 0, 2, 3)).unsqueeze(dim=2)
-            y = torch.permute(y, (1, 0, 2, 3)).unsqueeze(dim=2)
-            x = self.encoder(x)
-            lastOutput = x[0][-1].unsqueeze(dim=0)
-            lastHidden = x[1][0]
-            lastCell = x[1][1]
+        x = x.unsqueeze(2)
+        y = y.unsqueeze(2)
 
-            # start predicting
-            predictions = []
-            targets = []
-            for i in range(self.future_horizon):
-                s = self.convLSTM4(lastOutput, (lastHidden, lastCell))
+        x = self.encoder(x)
 
-                # save predictions
-                predictions.append(s[0][-1])
+        out = self.decoder(x, y, training)
+        out = self.convOut(out).squeeze()
 
-                # update states
-                lastOutput = torch.stack(predictions, dim=0)
-                lastHidden = s[1][0]
-                lastCell = s[1][1]
-
-            lastOutput = self.decoder(lastOutput)
+        return out
 
 
-        if training == False:
-            x = torch.permute(x, (1,0,2,3)).unsqueeze(dim = 2)
-            x = self.encoder(x)
-            lastOutput = x[0][-1].unsqueeze(dim = 0)
-            lastHidden = x[1][0]
-            lastCell = x[1][1]
-
-            # start predicting
-            predictions = []
-            for i in range(self.future_horizon):
-                s = self.convLSTM4(lastOutput, (lastHidden, lastCell))
-
-                # save predictions
-                predictions.append(s[0][-1])
-
-                # update states
-                lastOutput = torch.stack(predictions, dim = 0)
-                lastHidden = s[1][0]
-                lastCell = s[1][1]
-
-            lastOutput = self.decoder(lastOutput)
-
-        return lastOutput
 
 
+
+
+
+
+
+
+"""   
+Parameters:
+        input_dim: Number of channels in input
+        hidden_dim: Number of hidden channels
+        kernel_size: Size of kernel in convolutions
+        num_layers: Number of LSTM layers stacked on each other
+        batch_first: Whether or not dimension 0 is the batch or not
+        bias: Bias or no bias in Convolution
+        return_all_layers: Return the list of computations for all layers
+        Note: Will do same padding.
+
+
+
+x = torch.rand((5, 4, 50, 50))
+model = ConvLSTMPredictor([4,4,4,4,4,4])
+print(model(x,x,training = True).size())
+
+
+convlstm = ConvLSTM(input_dim=1,
+                                 hidden_dim=[1,24],
+                                 kernel_size= (3,3),
+                                 num_layers=2,
+                                 batch_first=True,
+                                 bias=True,
+                                 return_all_layers=False)
+h, cell = convlstm(x)
+  # 0 for layer index, 0 for h index
+print(h[0].size())
 
 """
-model = ConvLSTMFuturePredictor(1, 20, (20, 50, 50), 3).to(device)
-#model = ConvLSTM(1, 60, (20, 50, 50), 3).to(device)
-
-test = torch.rand(20,4, 50, 50).to(device)
-print(model(test).size())
-
-"""
-

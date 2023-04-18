@@ -144,16 +144,7 @@ class LSTM(nn.Module):
         # decoder
         self.flattenDec = nn.Flatten(start_dim=1, end_dim=2)
         self.attention = nn.MultiheadAttention(self.lstmInputSize, attentionHeads, self.dropout, batch_first=True)
-        self.linear = nn.Sequential(nn.Linear(10000, 5000),
-                                    nn.LayerNorm(5000),
-                                    nn.BatchNorm1d(5000),
-                                    nn.GELU(),
-                                    nn.Linear(5000, 2500),
-                                    nn.LayerNorm(2500),
-                                    nn.BatchNorm1d(2500),
-                                    nn.GELU(),
-                                    nn.Linear(2500, 2500)
-                                    )
+        self.linear = nn.Sequential(nn.Linear(10000, 2500))
 
 
     def encoder(self, x):
