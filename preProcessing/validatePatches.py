@@ -4,11 +4,28 @@ import functions
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-"""
-img = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/0")
-img1 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/1")
-img2 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/3")
-img3 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/4")
+
+# data
+#img = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/0")
+#img1 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/1")
+#img2 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/3")
+#img3 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/4")
+
+# predictions
+threshold = 0.3
+# LSTMattentionsmall
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/results/LSTMAttentionSmall/modelPredictions/parvati/1/predictions"
+# Load the two PDF files as images
+images1 = functions.openData(path + "/0")[0,:,:]
+images2 = functions.openData(path + "/1")[0,:,:]
+images3 = functions.openData(path + "/2")[0,:,:]
+images4 = functions.openData(path + "/3")[0,:,:]
+
+# threshold again
+images1 = np.ma.masked_where(images1 < threshold, images1).filled(0)
+images2 = np.ma.masked_where(images2 < threshold, images2).filled(0)
+images3 = np.ma.masked_where(images3 < threshold, images3).filled(0)
+images4 = np.ma.masked_where(images4 < threshold, images4).filled(0)
 
 
 # global
@@ -22,12 +39,12 @@ for ax in axs.flat:
     ax.axis('off')
 
 # Plot the first image on the first column
-axs[0].imshow(img, cmap='gray')
+axs[0].imshow(images1, cmap='gray')
 #axs[0].set_title('Image 1')
 
 # Plot the second image on the second column
-frame1 = img.astype(np.float32)
-frame2 = img1.astype(np.float32)
+frame1 = images1.astype(np.float32)
+frame2 = images2.astype(np.float32)
 frame1= cv2.merge([frame1,frame1, frame1])
 frame2 = cv2.merge([frame2, frame2, frame2])
 
@@ -43,16 +60,16 @@ x, y = np.meshgrid(np.arange(0, w, gridsize), np.arange(0, h, gridsize))
 x_flow = flow[..., 0][::gridsize, ::gridsize]
 y_flow = flow[..., 1][::gridsize, ::gridsize]
 axs[1].quiver(x, y, x_flow, y_flow, color = color, width = 0.0016)
-axs[1].imshow(img1, cmap='gray')
+axs[1].imshow(images2, cmap='gray')
 #axs[1].set_title('Image 2')
 
 plt.tight_layout()
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/plots"
 os.chdir(path)
-plt.savefig("parbatiFlow.pdf", dpi = 1000)
+plt.savefig("parbatiFlowPredictions.pdf", dpi = 1000)
 plt.show()
 
-
+"""
 # Plot the third image on the third column
 frame1 = img1.astype(np.float32)
 frame2 = img2.astype(np.float32)
@@ -101,7 +118,7 @@ axs[1, 1].imshow(img3, cmap='gray')
 plt.tight_layout()
 plt.show()
 """
-
+"""
 ################################# plot scenes ###################################
 image = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/0")
 image1 = functions.openData("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images/1")
@@ -146,3 +163,4 @@ axs[2, 3].imshow(image11, cmap="gray")
 plt.savefig("scenesYear.pdf", dpi = 1000)
 plt.tight_layout()
 plt.show()
+"""

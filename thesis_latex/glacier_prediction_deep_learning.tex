@@ -30,6 +30,7 @@
 \captionsetup[figure]{labelsep=period,labelfont=it,justification=justified,
 	singlelinecheck=false,font=doublespacing} 
 
+\usepackage{wrapfig}
 % equations 
 \usepackage{bm}
 \usepackage{bbm}
@@ -203,9 +204,9 @@ In the search process of finding a suitable arhcitecture for the task at hand, m
 
 The SA-LSTM-H, inspired by \citet{mu2023icetft}, processes the flattened input patches in the LSTM layer (3 LSTM cells) in order to generate hidden state representations (last LSTM cell). These are then fed into a MHSA layer which produces a matrix of size (ignoring batch dimension) 4x2500 (timesteps $t_{-3}$ to $t$). This matrix is then flattened to a 1x10000 vector which is then fed through a linear layer and projected to a size of 1x2500, producing the output for timestep $t_{+1}$. This vector is then concatenated to the output of the hidden states of the LSTM layer. The LSTM layer then recursively predicts the next hidden state outputs using timesteps $t_{-2}$ until $t_{+1}$. This process is repeated until all future timesteps are predicted.
 
-\section{Experiment 1: Parvati Glacier}
+\section{Experiment 1: Model Selection based on Parvati Glacier Data}
 \subsection{Experimental Design}
-The Parvati glacier is well suited for the prediction of glacier movements, because first the landsat-8 image catalog provides a high temporal density of scenes that are almost evenly distributed over the months in a year, and second because of the high glacier density in the region and the surroundings. Therefore a dataset was created in which scenes are averaged over a $\Delta_t$ of three months of each year from January 01, 2013 until January 01, 2021. If for a given month no scenes were available the missing months were interpolated linearly in order to prevent temporal bias in the data (one month in sequence). The patches were extraced from the provided coordinates (\ref{fig:figure1}) in regions of interest of 800x800 pixels with a stride of 10, resulting in 161 728 sequences of 4 scenes and 4 corresponding targets. the data was then splitted into 80\% training and 20\% test data, while 10\% of the training data was used for validation. The dataset was firstly used in order to test the different model architectures and get an understanding of the best performing architectures with the validation set performance. Afterwards generalization performance was tested on the test set. As data augmentation techniques teacher forcing, dropout and weight decay were used (see table \ref{modelPars1} for hyperparameter settings). All models except the convolutional LSTM [convLSTM] network model were trained on nvidia RTX 2080ti graphics processing units, while the convLSTM was trained on a nvidia v100 gpu bcaue of higher model capacity.
+The Parvati glacier is well suited for the prediction of glacier movements, because first the landsat-8 image catalog provides a high temporal density of scenes that are almost evenly distributed over the months in a year, and second because of the high glacier density in the region and the surroundings. Therefore a dataset was created in which scenes are averaged over a $\Delta_t$ of three months of each year from January 01, 2013 until January 01, 2022. If for a given month no scenes were available the missing months were interpolated linearly in order to prevent temporal bias in the data (one month in sequence). The patches were extraced from the provided coordinates (\ref{fig:figure1}) in regions of interest of 800x800 pixels with a stride of 10, resulting in 161 728 sequences of 4 scenes and 4 corresponding targets. the data was then splitted into 80\% training and 20\% test data, while 10\% of the training data was used for validation. The dataset was firstly used in order to test the different model architectures and get an understanding of the best performing architectures with the validation set performance. Afterwards generalization performance was tested on the test set. As data augmentation techniques teacher forcing, dropout, early stopping and weight decay were used (see table \ref{modelPars1} for hyperparameter settings). All models except the convolutional LSTM [convLSTM] network model were trained on nvidia RTX 2080ti graphics processing units, while the convLSTM was trained on a nvidia v100 gpu bcaue of higher model capacity.
 
 \begin{table}[h]
 	\caption{Model Parameters}
@@ -217,15 +218,25 @@ The Parvati glacier is well suited for the prediction of glacier movements, beca
 		LSTM & .0001 & .001 & 40 & 100 & adamW \\
 		U- net & .001 & .01 & 20 & 100 & adamW \\
 		SA-LSTM-H & .0001 & .001 & 40 & 100 & adamW \\
-		ConvLSTM & .0001 & .001 & 40 & 100 & adamW \\
+		ConvLSTM & .0001 & .001 & 35 & 100 & adamW \\
 		\bottomrule
 	\end{tabular}
 \end{table}
 
-\subsection{Results}
-Except for the U-net architecture, all other models seem to capture the underlying data distribution. 
+\subsection{Results and Discussion}
+All models were trained until the validation error converged or increased because of overfitting. Figure \ref{fig:figure5} shows the train and validation losses.
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[scale = 1]{trainCurves.pdf}\hfill
+	
+	\caption{Train and validation loss curves while training. Validation Losses were calculated by taking batches of the same size as used in training from the validation set every 100 parameter update steps}
+	\label{fig:figure5}
+	
+\end{figure} 
 
-\begin{table}[htbp]
+\begin{wraptable}{r}{8cm}
+%\begin{table}[htbp]
 	%\centering
 	\caption{Testset Performance}
 	\begin{tabular}{lcc}
@@ -235,28 +246,53 @@ Except for the U-net architecture, all other models seem to capture the underlyi
 		U-net & 0.083 & 0.192 \\
 		MA-LSTM-H & 0.047 & 0.136 \\
 		LSTM Encoder-Decoder & 0.054 & 0.139 \\
-		ConvLSTM & 0.084 & 0.209 \\
+		ConvLSTM & 0.055 & 0.150 \\
 		\bottomrule
 	\end{tabular}%
 	\label{tab:performance_estimations}%
-\end{table}%
+%\end{table}%
+\end{wraptable}
 
+The SA-LSTM-H model seems to be able to capture the spatial and temporal dynamics of the patches well. The model outperforms the standard LSTM and ConvLSTM models on the testset scores (table \ref{tab:performance_estimations}). This result is in line with theoretical attributes of the architecture as the ability to attend to sequence elements in parallel increases performance over an accumulation of recurrent information flow in latent and cell state representations of standard LSTM cells \citep{ali2021sea}. 
 
-\subsection{Discussion}
+Figure \ref{fig:figure4} shows the predictions on a randomly generated patch sequence of the testset. 
+
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[scale = 0.9]{7.pdf}\hfill
+	
+	\caption{Predictions of the best performing MA-LSTM-H model on the test set. Model predictions are always plotted above the target patches}
+	\label{fig:figure4}
+	
+\end{figure} 
+
+Because the models tend to also predict values below the NDSI threshold of 0.3, the model outputs were again thresholded after prediction to reduce noise, resulting in better outputs (figure \ref{fig:figure6}). It is observable that all models, except the Unet capture the underlying data distribution in the scenes well. After closer inspection it is observable that the ConvLSTM shows some artefacts in the predictions based on the fact that images are predicted in patches, as for example the boarders of different patches are slightly visbile.
+
+In summary these results indicate that the scene NDSI masks can be predicted over time with the used approach. Figure \ref{fig:figure7} in addition shows the estimated optical flow from consecutive predicted scene masks. The LSTM encoder-decoder, the ConvLSTM and the MA-LSTM-H models are able to capture seasonal and annual changes in the dynamics of the snow and ice changes of the glacier. In a next step the generalization performance of the best performing model is tested on a different glacier dataset with different $\Delta_t$.    
+
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[scale = 0.09]{scenePredictions.pdf}\hfill
+	
+	\caption{Model predictions on the testset scenes. Predictions were thresholded with a NDSI threshold of 0.3 after prediction to reduce noise.}
+	\label{fig:figure6}
+	
+\end{figure} 
+
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[scale = 0.25]{parbatiFlowPredictions.pdf}\hfill
+	
+	\caption{Optical flow estimations based on predictions of the SA-LSTM-H model for averaged masks of April, May and June 2021 (first mask) and Juli, August and September 2021 (second mask).}
+	\label{fig:figure7}
+	
+\end{figure} 
+
 
 \section{Experiment 2: Jungfrau-Aletsch-Bietschhorn Glacier}
-
-\section{Experiment 3: Generalisation to Full Scenes}
-\subsection{Full Scene Learning}
- In a next step the models are retrained and fine-tuned in order to predict full scenes across time. In order to achieve this the models should learn smooth borders between patches of each scene in order to create a full consistent image. Thus a new dataset is used containing only non overlapping patches from consecutive scenes. 
- 
- Two approchaes are tested to achieve this. In the first approach the model now takes a sequence of scenes, e.g. $\{A, B, C, D, E\}$ and predicts the next $n$ patches for the next scenes, e.g. $\{F, G, H, I, J, ...\}$ in the future. Therefore the model input is now $\{a_k \in A, b_k \in B, c_k \in C, d_k \in D, e_k \in E\} \ \forall k \in K$, where $K$ is the number of respective patches in each scene, while the model output is now $\{f_k \in F, g_k \in G, h_k \in H, i_k \in I, j_k \in J\} \ \forall k \in K$ (all patches with the same indices stem from the same coordinates in the scene). After the model predicted all patches for the next secenes they are put together again from the patches and a final MSE loss is calculated on the full scenes and propagated through the model. With this procedure the model then learns to smooth the edges of the patches in the full scene image.
-\subsection{U-net Denoising Autoencoder}
- 
- 
-
-\subsection{Results}
-\subsection{Generalisation Test}
 
 \section{Discussion}
 

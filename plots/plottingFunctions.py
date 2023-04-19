@@ -352,11 +352,12 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         modelInpt = inputPatches.squeeze().unsqueeze(dim = 0)
 
         prediction = model.forward(modelInpt, targetPatches, training=False).squeeze()
-        print(prediction.size())
+
 
         # switch input with predictions; z = scene index, i = patch index
         for z in range(prediction.size(0)):
             inputList[z][i] = prediction[z, :, :]
+            #inputList[z][i] = modelInpt[z, :, :]
 
     # set patches back to images
     scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)
@@ -548,9 +549,11 @@ def plotPatches(model, modelName, data, tokenizer, device, plot):
 
     fig, axs = plt.subplots(ncols=int(len(plotData)/2), nrows=2)#, figsize=(20,30))
     axs = axs.flat
+    fig.subplots_adjust(hspace=0.001, wspace=0.001)
     for i in range(len(plotData)):
         # model predictions
         axs[i].imshow(minmaxScaler(plotData[i]), cmap='gray')
+        axs[i].axis("off")
         #axs[i].axis('off')
 
     # save on harddrive

@@ -9,6 +9,7 @@ import torch
 import numpy as np
 import visionTransformer
 import transformerBase
+import ConvLSTM
 
 
 # path
@@ -21,9 +22,10 @@ device = "cpu"
 # create model
 #model = visionTransformer.visionFuturePrediction(4,50,5, 2, 2, 800, 800, 0.1, 0.1, num_classes = 2500).to(device)
 #model = unet_model.UNet(1,1).to(device)
-model = transformerBase.Transformer(2500, 1, 1, device, predictionInterval=4).to(device)
+#model = transformerBase.Transformer(2500, 1, 1, device, predictionInterval=4).to(device)
 # load weights
 #model = plottingFunctions.loadCheckpoint(model, None, os.path.join(pathOrigin, "models", "Unet"))
+model = ConvLSTM.ConvLSTMPredictor([2, 2, 2, 2, 2, 2]).to(device)
 print("loading model finished")
 
 
@@ -43,14 +45,14 @@ for i in range(nSequences):
 
 """
 #load scenes
-scenePath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati/monthlyAveragedScenes/images"
+scenePath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/data/scenes/images"
 #scenePath = os.path.join(pathOrigin, "datasets", "parbati", "scenes")
 sequences = []
-n = 2
+n = 1
 
 # get testset scenes
 # get iterator
-iterator = np.arange(103 - n*8, 104)
+iterator = np.arange(35 - n*8, 36)
 ## iterate from back
 for i in iterator[0::8][0:-1]:
     inpt = []
@@ -73,8 +75,8 @@ for i in iterator[0::8][0:-1]:
 ## plot whole scenes
 with torch.no_grad():
     for i in range(len(sequences)):
-        plottingFunctions.inferenceScenes(model, sequences[i], 50, 50, (1, 700, 700),
-                                      "parvati", str(i), "Unet2", device,
+        plottingFunctions.inferenceScenes(model, sequences[i], 50, 50, (1, 800, 800),
+                                      "parvati", str(i), "ConvLSTM", device,
                                       plot = True, safe = True, pathOrigin = pathOrigin)
 
 
