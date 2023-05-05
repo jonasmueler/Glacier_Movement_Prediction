@@ -24,5 +24,15 @@ In order to train the models three folders were created /LSTM, /unet, /convLSTM.
 ### Testset performance
 With the testsetPerformance.py script in the /testing directory the models can be tested on the testset. The glaciers class from the datasetClasses.py script has a bootstrap argument, which enables bootstrap sampling of the testset if set to True, otherwise MSE and MAE scores are calculated on the testset and stored in a file in the /models folder. 
 
+In order to create predictions on the full scenes the inferencePlot.py script in the /plots folder can be used. The model tested has to be uncommented in order for the model and the weights to be loaded. The function takes a scene sequence of 8 scenes from the testset, splits the scenes into patch sequences, always uses the first 4 pacthes as model input and predicts the last 4 patches. The predictions are then put together again in order to get the full scene and saved together with the target scene images in the /results folder. 
+
+
+
+
+
+
+
+
+
 
 
