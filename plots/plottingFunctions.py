@@ -350,6 +350,8 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         # predict with model
 
         modelInpt = inputPatches.squeeze().unsqueeze(dim = 0)
+        
+
 
         prediction = model.forward(modelInpt, targetPatches, training=False).squeeze()
 
@@ -357,7 +359,7 @@ def inferenceScenes(model, data, patchSize, stride, outputDimensions, glacierNam
         # switch input with predictions; z = scene index, i = patch index
         for z in range(prediction.size(0)):
             inputList[z][i] = prediction[z, :, :]
-            #inputList[z][i] = modelInpt[z, :, :]
+            #inputList[z][i] = targetPatches[z, :, :]
 
     # set patches back to images
     scenePredictions = list(combinePatches(x, outputDimensions, patchSize, stride) for x in inputList)

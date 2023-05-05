@@ -45,14 +45,14 @@ for i in range(nSequences):
 
 """
 #load scenes
-scenePath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/data/scenes/images"
+scenePath = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/Jungfrau_Aletsch_Bietschhorn/monthlyAveragedScenes/images"
 #scenePath = os.path.join(pathOrigin, "datasets", "parbati", "scenes")
 sequences = []
 n = 1
 
 # get testset scenes
 # get iterator
-iterator = np.arange(35 - n*8, 36)
+iterator = np.arange(26 - n*8, 27)
 ## iterate from back
 for i in iterator[0::8][0:-1]:
     inpt = []
@@ -75,7 +75,7 @@ for i in iterator[0::8][0:-1]:
 ## plot whole scenes
 with torch.no_grad():
     for i in range(len(sequences)):
-        plottingFunctions.inferenceScenes(model, sequences[i], 50, 50, (1, 800, 800),
+        plottingFunctions.inferenceScenes(model, sequences[i], 50, 50, (1, 600, 600),
                                       "parvati", str(i), "ConvLSTM", device,
                                       plot = True, safe = True, pathOrigin = pathOrigin)
 

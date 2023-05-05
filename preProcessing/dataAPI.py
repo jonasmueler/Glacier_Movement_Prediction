@@ -78,17 +78,18 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
     os.makedirs(pathOrigin, exist_ok = True)
     os.chdir(pathOrigin)
 
+    """
     # change folder
     os.makedirs(pathOrigin + "/" + "examples", exist_ok = True)
     os.chdir(pathOrigin + "/" + "examples")
-
+    
     #plot as check in RGB
     if plot: # sanity check
         for i in range(4):
-            rgb = functions.createImage(d[i][1][1:4, :, :], 0.40)
+            rgb = functions.createImage(d[i][1][1:4, 0:800, 0:800], 0.40)
             plt.imshow(rgb)
             plt.axis("off")
-            """
+
             # clear date string
             name = str(d[i][0])
             name = name.replace(":", "-")
@@ -96,7 +97,7 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
 
             # save
             plt.savefig(name + ".pdf", dpi = 1000)
-            """
+
 
             plt.show()
         for i in range(len(d)): #rgb
@@ -104,7 +105,7 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
             plt.subplot(round(len(d)/2)+1, 2, i + 1)
             plt.imshow(rgb)
         plt.show()
-
+    """
     # change back to origin folder
     os.chdir(pathOrigin)
 

@@ -21,7 +21,7 @@ df = df[df['Validation Loss'] != 1]
 # define the size of the window
 window_size = 1163
 
-# compute the average over every 1600 values of the data
+# compute the averages 
 averagesTrain = []
 averagesVal = []
 for i in range(0, len(df), window_size):
@@ -129,5 +129,7 @@ print(len(averagesVal))
 plt.plot(averagesTrain, color = color[3], label = "Train Loss ConvLSTM")
 plt.plot(averagesVal, linestyle = "dashed", color = color[3], label = "Validation Loss ConvLSTM")
 plt.legend(fontsize = 8)
+plt.xlabel('epochs')
+plt.ylabel('MSE')
 plt.savefig("trainCurves.pdf", dpi = 1000)
 plt.show()

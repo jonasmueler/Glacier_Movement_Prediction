@@ -1,29 +1,29 @@
 # packages
-#import coiled
-#import distributed
-#import dask
+import coiled
+import distributed
+import dask
 import pandas as pd
 import pystac_client
-#import planetary_computer as pc
-#import ipyleaflet
-#import IPython.display as dsp
-#import geogif
-#from dateutil.parser import ParserError
-#import stackstac
-#import bottleneck
-#import dask
+import planetary_computer as pc
+import ipyleaflet
+import IPython.display as dsp
+import geogif
+from dateutil.parser import ParserError
+import stackstac
+import bottleneck
+import dask
 import matplotlib.pyplot as plt
 import numpy as np
-#import matplotlib.image as mpimg
+import matplotlib.image as mpimg
 from numpy import array
 import cv2
-#import imutils
+import imutils
 from torch import nn
-#from numpy import linalg as LA
-#from numpy import ma
+from numpy import linalg as LA
+from numpy import ma
 import os
 import pickle
-#from sklearn.feature_extraction import image
+from sklearn.feature_extraction import image
 import torch.optim as optim
 import torch
 # memory overflow bug fix
@@ -1422,6 +1422,10 @@ def enhancedCorAlign(imgStack):
     # Define ECC algorithm parameters
     criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10000, 1e-4)
 
+    #### debug ####
+    #criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10000, 0.1)
+    ###############
+
     warpMatrix = np.eye(3, 3, dtype=np.float32)
 
     # Define ECC mask
@@ -1492,15 +1496,16 @@ def monthlyAverageScenesEnCC(d, ROI, applyKernel):
     l = []
     counterImg = 0
     usedMonths = []
-    months =  [[i, i+1, i+2] for i in range(1, 12, 3) if i+2 <= 12]
+    #months =  [[i, i+1, i+2] for i in range(1, 12, 3) if i+2 <= 12] # parvati
+    months = [[i, i+1, i+2, i+3] for i in range(1, 13, 4) if i+3 <= 12]
 
     for y in np.arange(2013, 2022, 1): # year
         #for m in np.arange(1,13,1): # month
-        for [m, t, h] in months:
+        for [m, n, t, h] in months:
             imgAcc = np.zeros((2, ROI[1] - ROI[0], ROI[3] - ROI[2]))
             month = 0
             for i in range(len(d)):
-                if (((convertDatetoVector(d[i][0])[1].item() == m) or (convertDatetoVector(d[i][0])[1].item() == t) or (convertDatetoVector(d[i][0])[1].item() == h))  and (convertDatetoVector(d[i][0])[2].item() == y)):
+                if (((convertDatetoVector(d[i][0])[1].item() == m) or (convertDatetoVector(d[i][0])[1].item() == n)  or (convertDatetoVector(d[i][0])[1].item() == t) or (convertDatetoVector(d[i][0])[1].item() == h))  and (convertDatetoVector(d[i][0])[2].item() == y)):
                     # count months
                     month += 1
 
@@ -1528,7 +1533,8 @@ def monthlyAverageScenesEnCC(d, ROI, applyKernel):
 
 
     # sanity check
-    assert len(usedMonths) == len(l) == 9*4 # 9 years, 12 months, average 3 months
+    #assert len(usedMonths) == len(l) == 9*3 # 9 years, 12 months, average 3 months
+
 
     # interpolate between images
     ## first images can not be interpolated take first not missing image as template and impute
@@ -1549,8 +1555,9 @@ def monthlyAverageScenesEnCC(d, ROI, applyKernel):
                 l[idx + t + 1] = np.ma.masked_where(l[idx] + (t + 1) * delta < threshold, NDSI).filled(0)
 
     print("interpolation done")
-    result = l[1:]
-    usedMonths = usedMonths[1:]
+    result = l
+    #usedMonths = usedMonths[1:]
+
 
     ## save on harddrive
     print("start saving scenes")
@@ -1817,7 +1824,7 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
                         pickle.dump(yHelper, fp)
 
     elif stationary == False:
-        counter = 0
+        counter = 37633 # 0; for mixed dataset
         for i in range((len(patches) - 2*window) // 1 + 1): # formula from pytorch cnn classes
             # create patches from random consecutive timepoints in the future
             ## take next n scenes

@@ -6,6 +6,7 @@ import numpy as np
 import functions
 
 
+
 # targets
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/results/LSTMAttentionSmall/modelPredictions/parvati/1/targets"
 
@@ -25,10 +26,10 @@ images7 = functions.openData(path + "/2")[0,:,:]
 images8 = functions.openData(path + "/3")[0,:,:]
 
 # threshold again
-images5 = np.ma.masked_where(images5 < threshold, images5).filled(0)
-images6 = np.ma.masked_where(images6 < threshold, images6).filled(0)
-images7 = np.ma.masked_where(images7 < threshold, images7).filled(0)
-images8 = np.ma.masked_where(images8 < threshold, images8).filled(0)
+images5 = np.abs(np.ma.masked_where(images5 < threshold, images5).filled(0) - images1)
+images6 = np.abs(np.ma.masked_where(images6 < threshold, images6).filled(0) - images2)
+images7 = np.abs(np.ma.masked_where(images7 < threshold, images7).filled(0) - images3)
+images8 = np.abs(np.ma.masked_where(images8 < threshold, images8).filled(0) - images4)
 
 # Conv LSTM
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/results/ConvLSTM/modelPredictions/parvati/1/predictions"
@@ -39,10 +40,10 @@ images11 = functions.openData(path + "/2")[0,:,:]
 images12 = functions.openData(path + "/3")[0,:,:]
 
 # threshold again
-images9 = np.ma.masked_where(images9 < threshold, images9).filled(0)
-images10 = np.ma.masked_where(images10 < threshold, images10).filled(0)
-images11 = np.ma.masked_where(images11 < threshold, images11).filled(0)
-images12 = np.ma.masked_where(images12 < threshold, images12).filled(0)
+images9 = np.abs(np.ma.masked_where(images9 < threshold, images9).filled(0) - images1)
+images10 = np.abs(np.ma.masked_where(images10 < threshold, images10).filled(0) - images2)
+images11 = np.abs(np.ma.masked_where(images11 < threshold, images11).filled(0) - images3)
+images12 = np.abs(np.ma.masked_where(images12 < threshold, images12).filled(0) - images4)
 
 
 # LSTM
@@ -54,10 +55,10 @@ images15 = functions.openData(path + "/2")[0,:,:]
 images16 = functions.openData(path + "/3")[0,:,:]
 
 # threshold again
-images13 = np.ma.masked_where(images13 < threshold, images13).filled(0)
-images14 = np.ma.masked_where(images14 < threshold, images14).filled(0)
-images15 = np.ma.masked_where(images15 < threshold, images15).filled(0)
-images16 = np.ma.masked_where(images16 < threshold, images16).filled(0)
+images13 = np.abs(np.ma.masked_where(images13 < threshold, images13).filled(0) - images1)
+images14 = np.abs(np.ma.masked_where(images14 < threshold, images14).filled(0) - images2)
+images15 = np.abs(np.ma.masked_where(images15 < threshold, images15).filled(0) - images3)
+images16 = np.abs(np.ma.masked_where(images16 < threshold, images16).filled(0) - images4)
 
 # Unet
 path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/experiment1/results/Unet/modelPredictions/parvati/1/predictions"
@@ -68,21 +69,22 @@ images19 = functions.openData(path + "/2")[0,:,:]
 images20 = functions.openData(path + "/3")[0,:,:]
 
 # threshold again
-images17 = np.ma.masked_where(images17 < threshold, images17).filled(0)
-images18 = np.ma.masked_where(images18 < threshold, images18).filled(0)
-images19 = np.ma.masked_where(images19 < threshold, images19).filled(0)
-images20 = np.ma.masked_where(images20 < threshold, images20).filled(0)
+images17 = np.abs(np.ma.masked_where(images17 < threshold, images17).filled(0) - images1)
+images18 = np.abs(np.ma.masked_where(images18 < threshold, images18).filled(0) - images2)
+images19 = np.abs(np.ma.masked_where(images19 < threshold, images19).filled(0) - images3)
+images20 = np.abs(np.ma.masked_where(images20 < threshold, images20).filled(0) - images4)
 
 # Create a figure with two subplots
 fig, axs = plt.subplots(5, 4, figsize=(60, 100))
 # Adjust the space between subplots
-fig.subplots_adjust(hspace=0.001, wspace = 0.001)
+fig.subplots_adjust(hspace=0.01, wspace = 0.01)
 
 fontsize = 120
 
 axs[0,0].imshow(images1, cmap = "gray")
 axs[0,0].set_title('Targets', fontsize = fontsize)
 axs[0,0].set_axis_off()
+
 
 axs[0,1].imshow(images2, cmap = "gray")
 #axs[0].set_title('First PDF')
@@ -160,9 +162,40 @@ axs[4,3].imshow(images20, cmap = "gray")
 #axs[0].set_title('First PDF')
 axs[4,3].set_axis_off()
 
+"""
+# Loop over the rows and columns of the axes
+for row in range(0, 5):
+    for col in range(4):
+        if col == 3:
+            # Add a colorbar to the fourth plot in each row
+            im = axs[row, col].imshow(eval(f"images{4 * row + col + 1}"), cmap = "gray")
+            axs[row, col].set_axis_off()
+            cax = fig.add_axes([0.9, axs[row, col].get_position().y0, 0.01, axs[row, col].get_position().height])
+            fig.colorbar(im, cax=cax)
+
+
+        else:
+            axs[row, col].imshow(eval(f"images{4 * row + col + 1}"), cmap = "gray")
+            axs[row, col].set_axis_off()
+"""
+for row in range(0, 5):
+    for col in range(4):
+        if col == 3:
+            # Add a colorbar to the fourth plot in each row
+            im = axs[row, col].imshow(eval(f"images{4 * row + col + 1}"), cmap = "gray")
+            axs[row, col].set_axis_off()
+            cax = fig.add_axes([0.9, axs[row, col].get_position().y0, 0.01, axs[row, col].get_position().height])
+            cbar = fig.colorbar(im, cax=cax)
+            cbar.ax.tick_params(labelsize=60) # adjust the value of labelsize as per your requirement
+        else:
+            axs[row, col].imshow(eval(f"images{4 * row + col + 1}"), cmap = "gray")
+            axs[row, col].set_axis_off()
+
 # Show the plot
 
 os.chdir("/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/plots")
-plt.tight_layout()
-plt.savefig("ScenePredictions.pdf", dpi = 1000)
+
+
+#plt.tight_layout()
+plt.savefig("ScenePredictionsDifferences.pdf", dpi = 200)
 plt.show()
