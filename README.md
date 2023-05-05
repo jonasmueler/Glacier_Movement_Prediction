@@ -18,4 +18,9 @@ This container can then be used in order to run scripts, for example without ent
 ```
 singularity exec --nv --bind <path to repo that should be bounded to container>,`pwd` deeplearning.sif python3 <path to script> --timer_repetitions 10000 --gpu
 ```
+In order to train the models three folders were created /LSTM, /unet, /convLSTM. With the LSTMTrain.py and lstmAttentionTrain.py files in the LSTM folder hyperaparemeters can be specified and the model training can be started (on GPU with Cuda). Note that the scripts use the weights and biases tool, which is a free tool to monitor training progress in real time in a browser application. If weights and biases should be used, then a account has to be created and registered in the used environemnt, if not the wandb argument can be set to false in the trainLoop function. The same procedure can be applied to convLSTMTrain.py in the convLSTM, and train.py in the unet directory. The models are saved in a created subdirectory /models, where also a csv file is stored with the train and validation losses.
+
+### Testset performance
+
+
 
