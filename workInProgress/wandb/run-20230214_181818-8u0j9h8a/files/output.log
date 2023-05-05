@@ -1,0 +1,64 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py:590: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+epoch:  0 , example:  1  current loss =  1.3062539100646973
+epoch:  0 , example:  2  current loss =  1.298229992389679
+epoch:  0 , example:  3  current loss =  1.2908953030904133
+epoch:  1 , example:  4  current loss =  1.2843833565711975
+epoch:  1 , example:  5  current loss =  1.2783923149108887
+epoch:  1 , example:  6  current loss =  1.273020327091217
+model checkpoint saved
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 108, in <module>
+    functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 1013, in fullSceneTrain
+    loss = fullSceneLoss(helper[0][0], helper[0][1],
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 928, in fullSceneLoss
+    prediction = model.forward(finalInpt, training = training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 936, in forward
+    reconstruction = self.decoder(res[0], skipConnections, res[2])
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 875, in decoder
+    s = self.relu(s)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 102, in forward
+    return F.relu(input, inplace=self.inplace)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 1457, in relu
+    result = torch.relu(input)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/fx/traceback.py", line 57, in format_stack
+    return traceback.format_stack()
+  File "/usr/lib/python3.10/traceback.py", line 213, in format_stack
+    return format_list(extract_stack(f, limit=limit))
+  File "/usr/lib/python3.10/traceback.py", line 227, in extract_stack
+    stack = StackSummary.extract(walk_stack(f), limit=limit)
+  File "/usr/lib/python3.10/traceback.py", line 379, in extract
+    linecache.checkcache(filename)
+  File "/usr/lib/python3.10/linecache.py", line 72, in checkcache
+    stat = os.stat(fullname)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 108, in <module>
+    functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 1013, in fullSceneTrain
+    loss = fullSceneLoss(helper[0][0], helper[0][1],
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 928, in fullSceneLoss
+    prediction = model.forward(finalInpt, training = training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 936, in forward
+    reconstruction = self.decoder(res[0], skipConnections, res[2])
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py", line 875, in decoder
+    s = self.relu(s)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 102, in forward
+    return F.relu(input, inplace=self.inplace)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/nn/functional.py", line 1457, in relu
+    result = torch.relu(input)
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/fx/traceback.py", line 57, in format_stack
+    return traceback.format_stack()
+  File "/usr/lib/python3.10/traceback.py", line 213, in format_stack
+    return format_list(extract_stack(f, limit=limit))
+  File "/usr/lib/python3.10/traceback.py", line 227, in extract_stack
+    stack = StackSummary.extract(walk_stack(f), limit=limit)
+  File "/usr/lib/python3.10/traceback.py", line 379, in extract
+    linecache.checkcache(filename)
+  File "/usr/lib/python3.10/linecache.py", line 72, in checkcache
+    stat = os.stat(fullname)

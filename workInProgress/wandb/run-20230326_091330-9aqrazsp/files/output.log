@@ -1,0 +1,59 @@
+/home/jonas/.local/lib/python3.10/site-packages/torch/nn/modules/loss.py:536: UserWarning: Using a target size (torch.Size([100, 50, 50])) that is different to the input size (torch.Size([100, 1, 1, 50, 50])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  return F.mse_loss(input, target, reduction=self.reduction)
+current loss:  12.471494674682617
+current loss:  19.11609649658203
+current loss:  9.545283317565918
+current loss:  9.777368545532227
+current loss:  8.627678871154785
+current loss:  9.50820541381836
+current loss:  8.024435043334961
+current loss:  6.877606391906738
+current loss:  9.047690391540527
+current loss:  6.50577449798584
+current loss:  5.020946025848389
+current loss:  4.473164081573486
+current loss:  4.080379009246826
+current loss:  3.573138475418091
+current loss:  3.6306095123291016
+current loss:  4.429437637329102
+current loss:  4.14572286605835
+current loss:  4.180769443511963
+current loss:  4.297929763793945
+current loss:  5.109475612640381
+current loss:  3.3064448833465576
+current loss:  3.052976608276367
+current loss:  2.837325096130371
+current loss:  3.1340882778167725
+current loss:  2.890798807144165
+current loss:  3.1805381774902344
+current loss:  3.7177951335906982
+current loss:  3.5063462257385254
+current loss:  3.1071014404296875
+current loss:  4.977236270904541
+current loss:  3.1721763610839844
+current loss:  3.27009916305542
+current loss:  3.463980197906494
+current loss:  3.9224600791931152
+current loss:  2.8994693756103516
+current loss:  3.2748239040374756
+current loss:  2.888650894165039
+current loss:  3.664874792098999
+current loss:  2.924473285675049
+current loss:  3.3502299785614014
+current loss:  2.4507126808166504
+current loss:  2.416527271270752
+current loss:  3.3048248291015625
+current loss:  3.48188853263855
+current loss:  3.368023633956909
+current loss:  2.2954390048980713
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 179, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 157, in trainTokenizer
+    losses[counter] = loss.detach().cpu().item()
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 179, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 157, in trainTokenizer
+    losses[counter] = loss.detach().cpu().item()

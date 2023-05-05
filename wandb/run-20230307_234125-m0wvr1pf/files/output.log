@@ -1,4 +1,0 @@
-/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py:95: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
-  return torch.tensor(s).to(self.device)
-torch.Size([4, 1, 50, 50])
-epoch:  0 , example:  1  current loss =  1.255824089050293

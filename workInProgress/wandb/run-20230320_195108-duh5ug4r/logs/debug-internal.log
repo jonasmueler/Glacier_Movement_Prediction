@@ -1,0 +1,156 @@
+2023-03-20 19:51:08,900 INFO    StreamThr :27965 [internal.py:wandb_internal():87] W&B internal server running at pid: 27965, started at: 2023-03-20 19:51:08.900057
+2023-03-20 19:51:08,904 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status
+2023-03-20 19:51:08,904 INFO    WriterThread:27965 [datastore.py:open_for_write():85] open: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/run-duh5ug4r.wandb
+2023-03-20 19:51:08,908 DEBUG   SenderThread:27965 [sender.py:send():336] send: header
+2023-03-20 19:51:08,920 DEBUG   SenderThread:27965 [sender.py:send():336] send: run
+2023-03-20 19:51:09,575 INFO    SenderThread:27965 [dir_watcher.py:__init__():216] watching files in: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files
+2023-03-20 19:51:09,576 INFO    SenderThread:27965 [sender.py:_start_run_threads():1067] run started: duh5ug4r with start time 1679338268.901664
+2023-03-20 19:51:09,576 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:09,577 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:09,595 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: check_version
+2023-03-20 19:51:09,595 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: check_version
+2023-03-20 19:51:09,843 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: run_start
+2023-03-20 19:51:09,864 DEBUG   HandlerThread:27965 [system_info.py:__init__():31] System info init
+2023-03-20 19:51:09,864 DEBUG   HandlerThread:27965 [system_info.py:__init__():46] System info init done
+2023-03-20 19:51:09,864 INFO    HandlerThread:27965 [system_monitor.py:start():151] Starting system monitor
+2023-03-20 19:51:09,865 INFO    SystemMonitor:27965 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-03-20 19:51:09,865 INFO    HandlerThread:27965 [system_monitor.py:probe():172] Collecting system info
+2023-03-20 19:51:09,867 INFO    SystemMonitor:27965 [interfaces.py:start():168] Started cpu
+2023-03-20 19:51:09,869 INFO    SystemMonitor:27965 [interfaces.py:start():168] Started disk
+2023-03-20 19:51:09,870 INFO    SystemMonitor:27965 [interfaces.py:start():168] Started gpu
+2023-03-20 19:51:09,871 INFO    SystemMonitor:27965 [interfaces.py:start():168] Started memory
+2023-03-20 19:51:09,872 INFO    SystemMonitor:27965 [interfaces.py:start():168] Started network
+2023-03-20 19:51:09,880 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:09,881 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:09,881 DEBUG   HandlerThread:27965 [system_info.py:probe():195] Probing system
+2023-03-20 19:51:09,886 DEBUG   HandlerThread:27965 [system_info.py:_probe_git():180] Probing git
+2023-03-20 19:51:09,904 DEBUG   HandlerThread:27965 [system_info.py:_probe_git():188] Probing git done
+2023-03-20 19:51:09,904 DEBUG   HandlerThread:27965 [system_info.py:probe():241] Probing system done
+2023-03-20 19:51:09,904 DEBUG   HandlerThread:27965 [system_monitor.py:probe():181] {'os': 'Linux-5.19.0-35-generic-x86_64-with-glibc2.35', 'python': '3.10.6', 'heartbeatAt': '2023-03-20T18:51:09.881663', 'startedAt': '2023-03-20T18:51:08.527996', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTMTrain.py', 'codePath': 'LSTMTrain.py', 'git': {'remote': 'https://github.com/jonasmueler/Glacier_Movement_Prediction.git', 'commit': '92f45b2be544f7b7c63c565035d3a9e04a8674d3'}, 'email': 'jonasmu@edu.aau.at', 'root': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code', 'host': 'jonas-X555UB', 'username': 'jonas', 'executable': '/usr/bin/python3.10', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2066.4747500000003, 'min': 400.0, 'max': 2800.0}, 'cpu_freq_per_core': [{'current': 2673.772, 'min': 400.0, 'max': 2800.0}, {'current': 2660.404, 'min': 400.0, 'max': 2800.0}, {'current': 2661.986, 'min': 400.0, 'max': 2800.0}, {'current': 2675.517, 'min': 400.0, 'max': 2800.0}], 'disk': {'total': 233.17998886108398, 'used': 172.19647216796875}, 'gpu': 'NVIDIA GeForce 940M', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce 940M', 'memory_total': 2147483648}], 'memory': {'total': 7.664207458496094}}
+2023-03-20 19:51:09,904 INFO    HandlerThread:27965 [system_monitor.py:probe():182] Finished collecting system info
+2023-03-20 19:51:09,904 INFO    HandlerThread:27965 [system_monitor.py:probe():185] Publishing system info
+2023-03-20 19:51:09,905 DEBUG   HandlerThread:27965 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-03-20 19:51:09,905 DEBUG   HandlerThread:27965 [system_info.py:_save_pip():67] Saving pip packages done
+2023-03-20 19:51:09,906 INFO    HandlerThread:27965 [system_monitor.py:probe():187] Finished publishing system info
+2023-03-20 19:51:09,911 DEBUG   SenderThread:27965 [sender.py:send():336] send: files
+2023-03-20 19:51:09,911 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-metadata.json with policy now
+2023-03-20 19:51:09,921 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: stop_status
+2023-03-20 19:51:09,922 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: stop_status
+2023-03-20 19:51:10,255 DEBUG   SenderThread:27965 [sender.py:send():336] send: telemetry
+2023-03-20 19:51:10,581 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:10,582 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-metadata.json
+2023-03-20 19:51:10,583 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/requirements.txt
+2023-03-20 19:51:10,784 INFO    wandb-upload_0:27965 [upload_job.py:push():138] Uploaded file /tmp/tmpkec2gy33wandb/utig0o2p-wandb-metadata.json
+2023-03-20 19:51:11,882 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:11,882 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:12,753 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:12,766 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:12,766 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:12,769 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:13,581 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:13,582 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:13,883 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:13,884 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:14,082 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:14,083 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:14,083 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:14,084 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:14,085 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:14,584 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:15,387 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:15,388 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:15,388 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:15,389 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:15,585 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:15,586 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:15,884 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:15,885 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:16,412 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:16,413 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:16,413 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:16,414 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:16,589 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:17,403 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:17,404 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:17,404 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:17,405 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:17,595 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:17,596 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:17,886 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:17,886 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:18,356 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:18,357 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:18,357 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:18,358 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:18,596 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:19,350 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:19,351 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:19,351 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:19,352 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:19,352 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:19,598 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:19,599 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:19,887 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:19,887 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:20,350 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:20,351 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:20,351 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:20,352 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:20,600 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:21,405 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:21,406 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:21,407 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:21,408 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:21,601 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:21,602 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:21,889 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:21,889 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:22,492 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:22,493 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:22,493 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:22,494 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:22,605 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:23,507 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:23,509 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:23,509 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:23,510 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:23,606 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:23,607 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:23,891 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:23,891 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:24,511 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:24,548 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:24,550 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:24,550 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:24,551 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:24,608 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:24,921 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-20 19:51:25,575 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-20 19:51:25,576 DEBUG   SenderThread:27965 [sender.py:send():336] send: history
+2023-03-20 19:51:25,577 DEBUG   SenderThread:27965 [sender.py:send_request():363] send_request: summary_record
+2023-03-20 19:51:25,578 INFO    SenderThread:27965 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-20 19:51:25,609 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:25,610 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/wandb-summary.json
+2023-03-20 19:51:25,893 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:25,894 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:27,618 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:27,896 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:27,897 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:29,622 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/output.log
+2023-03-20 19:51:29,899 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:29,899 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:30,058 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:31,900 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:31,900 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:33,902 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:33,902 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:35,059 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:35,903 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:35,903 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:37,905 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:37,905 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:39,980 ERROR   gpu       :27965 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-20 19:51:39,981 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:39,981 ERROR   gpu       :27965 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-20 19:51:40,065 DEBUG   HandlerThread:27965 [handler.py:handle_request():144] handle_request: status_report
+2023-03-20 19:51:40,666 INFO    Thread-13 :27965 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230320_195108-duh5ug4r/files/config.yaml

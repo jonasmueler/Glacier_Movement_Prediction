@@ -1,0 +1,28 @@
+current loss:  10.991262435913086
+current loss:  7.1185994148254395
+current loss:  4.200509071350098
+current loss:  2.599820137023926
+current loss:  1.9109162092208862
+current loss:  1.6669453382492065
+current loss:  2.196889638900757
+current loss:  2.7101552486419678
+current loss:  2.6766297817230225
+current loss:  2.1984031200408936
+current loss:  1.8436635732650757
+current loss:  1.4283579587936401
+current loss:  1.2556308507919312
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTMTrain.py", line 6, in <module>
+    import tokenizer
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 103, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 82, in trainTokenizer
+    losses[counter] = loss.detach().cpu().item()
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/LSTMTrain.py", line 6, in <module>
+    import tokenizer
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 103, in <module>
+    trainTokenizer(model, trainLoader, optimizer, criterion, device, 5, pathOrigin, True)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py", line 82, in trainTokenizer
+    losses[counter] = loss.detach().cpu().item()

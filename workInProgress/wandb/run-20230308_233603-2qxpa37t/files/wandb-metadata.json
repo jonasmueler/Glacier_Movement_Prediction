@@ -1,0 +1,65 @@
+{
+    "os": "Linux-5.19.0-35-generic-x86_64-with-glibc2.35",
+    "python": "3.10.6",
+    "heartbeatAt": "2023-03-08T22:36:05.272725",
+    "startedAt": "2023-03-08T22:36:03.695575",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py",
+    "codePath": "completeTrainScriptDebug.py",
+    "git": {
+        "remote": "https://github.com/jonasmueler/Glacier_Movement_Prediction.git",
+        "commit": "4ee6e7e9c4564408729983bb412552b0578ef84d"
+    },
+    "email": "jonasmu@edu.aau.at",
+    "root": "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code",
+    "host": "jonas-X555UB",
+    "username": "jonas",
+    "executable": "/usr/bin/python3.10",
+    "cpu_count": 2,
+    "cpu_count_logical": 4,
+    "cpu_freq": {
+        "current": 2701.2707499999997,
+        "min": 400.0,
+        "max": 2800.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2700.08,
+            "min": 400.0,
+            "max": 2800.0
+        },
+        {
+            "current": 2704.293,
+            "min": 400.0,
+            "max": 2800.0
+        },
+        {
+            "current": 2699.926,
+            "min": 400.0,
+            "max": 2800.0
+        },
+        {
+            "current": 2700.784,
+            "min": 400.0,
+            "max": 2800.0
+        }
+    ],
+    "disk": {
+        "total": 233.17998886108398,
+        "used": 83.06147003173828
+    },
+    "gpu": "NVIDIA GeForce 940M",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce 940M",
+            "memory_total": 2147483648
+        }
+    ],
+    "memory": {
+        "total": 7.6641998291015625
+    }
+}

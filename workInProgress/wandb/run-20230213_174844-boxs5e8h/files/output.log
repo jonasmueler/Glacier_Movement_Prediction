@@ -1,0 +1,13 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/models.py:590: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+epoch:  0 , example:  1  current loss =  1.484079360961914
+epoch:  0 , example:  2  current loss =  1.4804953932762146
+epoch:  0 , example:  3  current loss =  1.4769532680511475
+epoch:  1 , example:  4  current loss =  1.4733920395374298
+epoch:  1 , example:  5  current loss =  1.4698277235031127
+epoch:  1 , example:  6  current loss =  1.4662625193595886
+model checkpoint saved
+epoch:  0 , example:  1  current loss =  36.87879180908203
+model checkpoint saved
+start saving prediction scenes
+prediction scenes saved

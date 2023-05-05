@@ -1,0 +1,26 @@
+
+torch.Size([5, 1, 3])
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 82, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 506, in forward
+    l = self.latentSpace(res[0], target, datesDecoder, training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 370, in latentSpace
+    yInput = (yInput + positionalEmbedding[flattenedInput.size(0):]) + self.dateEncoder(targetsT[q +1]) #take next timestep temporal information
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 88, in dateEncoder
+    month = dateVec[1]
+IndexError: index 1 is out of bounds for dimension 0 with size 1
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScriptDebug.py", line 82, in <module>
+    functions.trainLoop(dTrain, model, False,"transformerPatches", 0.0001, 0.01, 0, 2, None, 1, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 585, in trainLoop
+    forward = model.forward(helper, training = False)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 506, in forward
+    l = self.latentSpace(res[0], target, datesDecoder, training)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 370, in latentSpace
+    yInput = (yInput + positionalEmbedding[flattenedInput.size(0):]) + self.dateEncoder(targetsT[q +1]) #take next timestep temporal information
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/TransformerTemporal.py", line 88, in dateEncoder
+    month = dateVec[1]
+IndexError: index 1 is out of bounds for dimension 0 with size 1

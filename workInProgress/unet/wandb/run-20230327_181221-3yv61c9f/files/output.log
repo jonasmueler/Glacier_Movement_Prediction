@@ -1,0 +1,11 @@
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])
+epoch:  0 , example:  1  current loss =  11.129107475280762
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])
+epoch:  0 , example:  2  current loss =  16.062824249267578
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])
+torch.Size([10, 1, 50, 50])

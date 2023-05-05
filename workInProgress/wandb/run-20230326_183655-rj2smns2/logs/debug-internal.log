@@ -1,0 +1,798 @@
+2023-03-26 18:36:55,610 INFO    StreamThr :9017 [internal.py:wandb_internal():87] W&B internal server running at pid: 9017, started at: 2023-03-26 18:36:55.609615
+2023-03-26 18:36:55,614 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status
+2023-03-26 18:36:55,616 INFO    WriterThread:9017 [datastore.py:open_for_write():85] open: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/run-rj2smns2.wandb
+2023-03-26 18:36:55,619 DEBUG   SenderThread:9017 [sender.py:send():336] send: header
+2023-03-26 18:36:55,631 DEBUG   SenderThread:9017 [sender.py:send():336] send: run
+2023-03-26 18:36:56,294 INFO    SenderThread:9017 [dir_watcher.py:__init__():216] watching files in: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files
+2023-03-26 18:36:56,295 INFO    SenderThread:9017 [sender.py:_start_run_threads():1067] run started: rj2smns2 with start time 1679848615.613874
+2023-03-26 18:36:56,296 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:56,297 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:56,307 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: check_version
+2023-03-26 18:36:56,308 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: check_version
+2023-03-26 18:36:56,473 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: run_start
+2023-03-26 18:36:56,485 DEBUG   HandlerThread:9017 [system_info.py:__init__():31] System info init
+2023-03-26 18:36:56,485 DEBUG   HandlerThread:9017 [system_info.py:__init__():46] System info init done
+2023-03-26 18:36:56,485 INFO    HandlerThread:9017 [system_monitor.py:start():151] Starting system monitor
+2023-03-26 18:36:56,486 INFO    SystemMonitor:9017 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-03-26 18:36:56,486 INFO    HandlerThread:9017 [system_monitor.py:probe():172] Collecting system info
+2023-03-26 18:36:56,486 INFO    SystemMonitor:9017 [interfaces.py:start():168] Started cpu
+2023-03-26 18:36:56,487 INFO    SystemMonitor:9017 [interfaces.py:start():168] Started disk
+2023-03-26 18:36:56,488 INFO    SystemMonitor:9017 [interfaces.py:start():168] Started gpu
+2023-03-26 18:36:56,488 INFO    SystemMonitor:9017 [interfaces.py:start():168] Started memory
+2023-03-26 18:36:56,489 INFO    SystemMonitor:9017 [interfaces.py:start():168] Started network
+2023-03-26 18:36:56,494 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:36:56,494 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:36:56,498 DEBUG   HandlerThread:9017 [system_info.py:probe():195] Probing system
+2023-03-26 18:36:56,503 DEBUG   HandlerThread:9017 [system_info.py:_probe_git():180] Probing git
+2023-03-26 18:36:56,521 DEBUG   HandlerThread:9017 [system_info.py:_probe_git():188] Probing git done
+2023-03-26 18:36:56,521 DEBUG   HandlerThread:9017 [system_info.py:probe():241] Probing system done
+2023-03-26 18:36:56,521 DEBUG   HandlerThread:9017 [system_monitor.py:probe():181] {'os': 'Linux-5.19.0-35-generic-x86_64-with-glibc2.35', 'python': '3.10.6', 'heartbeatAt': '2023-03-26T16:36:56.499042', 'startedAt': '2023-03-26T16:36:55.588195', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/tokenizer.py', 'codePath': 'tokenizer.py', 'git': {'remote': 'https://github.com/jonasmueler/Glacier_Movement_Prediction.git', 'commit': 'c998364ad2cc5a74979cbdb3a4137767489ed916'}, 'email': 'jonasmu@edu.aau.at', 'root': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code', 'host': 'jonas-X555UB', 'username': 'jonas', 'executable': '/usr/bin/python3.10', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2700.0457499999998, 'min': 400.0, 'max': 2800.0}, 'cpu_freq_per_core': [{'current': 2700.025, 'min': 400.0, 'max': 2800.0}, {'current': 2699.991, 'min': 400.0, 'max': 2800.0}, {'current': 2699.983, 'min': 400.0, 'max': 2800.0}, {'current': 2699.958, 'min': 400.0, 'max': 2800.0}], 'disk': {'total': 233.17998886108398, 'used': 172.2534942626953}, 'gpu': 'NVIDIA GeForce 940M', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce 940M', 'memory_total': 2147483648}], 'memory': {'total': 7.664207458496094}}
+2023-03-26 18:36:56,521 INFO    HandlerThread:9017 [system_monitor.py:probe():182] Finished collecting system info
+2023-03-26 18:36:56,521 INFO    HandlerThread:9017 [system_monitor.py:probe():185] Publishing system info
+2023-03-26 18:36:56,521 DEBUG   HandlerThread:9017 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-03-26 18:36:56,523 DEBUG   HandlerThread:9017 [system_info.py:_save_pip():67] Saving pip packages done
+2023-03-26 18:36:56,523 INFO    HandlerThread:9017 [system_monitor.py:probe():187] Finished publishing system info
+2023-03-26 18:36:56,526 DEBUG   SenderThread:9017 [sender.py:send():336] send: files
+2023-03-26 18:36:56,526 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-metadata.json with policy now
+2023-03-26 18:36:56,538 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: stop_status
+2023-03-26 18:36:56,539 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: stop_status
+2023-03-26 18:36:56,863 DEBUG   SenderThread:9017 [sender.py:send():336] send: telemetry
+2023-03-26 18:36:57,277 INFO    wandb-upload_0:9017 [upload_job.py:push():138] Uploaded file /tmp/tmph_r5ujnkwandb/2wak0xug-wandb-metadata.json
+2023-03-26 18:36:57,299 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:36:57,300 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-metadata.json
+2023-03-26 18:36:57,300 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/requirements.txt
+2023-03-26 18:36:58,469 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:58,472 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:58,473 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:58,479 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:58,495 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:36:58,495 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:36:58,648 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:58,649 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:58,650 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:58,651 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:58,819 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:58,820 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:58,821 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:58,822 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:58,986 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:58,987 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:58,987 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:58,988 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,153 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,155 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,155 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,156 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,302 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:36:59,303 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:36:59,325 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,326 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,327 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,327 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,493 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,493 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,494 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,494 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,658 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,659 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,660 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,660 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,825 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,826 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,826 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,827 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:36:59,994 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:36:59,995 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:36:59,995 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:36:59,996 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:00,174 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:00,175 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:00,175 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:00,176 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:00,303 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:00,342 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:00,343 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:00,343 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:00,344 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:00,496 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:00,496 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:00,512 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:00,513 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:00,514 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:00,515 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:00,685 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:00,685 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:00,687 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:00,687 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:00,689 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:00,861 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:00,862 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:00,862 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:00,863 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,033 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,034 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,035 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,035 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,201 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,202 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,202 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,203 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,305 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:01,307 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:01,370 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,371 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,371 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,372 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,541 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,542 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,542 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,543 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,711 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,713 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,713 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,714 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:01,882 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:01,883 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:01,883 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:01,884 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,051 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,052 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,052 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,053 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,219 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,219 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,220 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,221 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,307 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:02,393 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,394 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,395 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,396 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,497 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:02,498 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:02,580 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,582 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,583 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,584 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,765 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,766 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,767 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,767 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:02,935 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:02,936 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:02,937 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:02,938 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,112 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,113 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,114 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,115 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,296 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,297 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,297 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,298 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,308 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:03,309 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:03,467 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,468 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,469 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,470 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,640 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,641 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,641 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,642 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,810 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,811 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,812 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,814 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:03,983 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:03,984 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:03,984 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:03,985 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:04,153 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:04,153 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:04,154 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:04,155 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:04,310 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:04,336 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:04,336 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:04,337 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:04,337 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:04,499 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:04,499 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:04,508 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:04,509 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:04,510 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:04,511 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:04,681 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:04,682 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:04,683 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:04,684 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:04,855 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:04,855 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:04,856 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:04,857 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,026 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,028 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,029 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,030 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,202 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,203 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,203 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,204 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,313 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:05,314 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:05,374 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,375 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,376 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,377 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,546 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,547 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,547 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,548 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,718 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,719 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:05,719 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,720 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,720 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:05,891 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:05,892 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:05,892 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:05,893 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,060 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,061 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,061 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,062 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,229 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,230 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,231 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,231 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,314 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:06,398 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,399 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,399 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,400 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,500 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:06,500 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:06,574 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,575 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,575 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,576 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,746 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,747 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,747 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,748 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:06,915 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:06,916 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:06,916 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:06,917 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,089 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,091 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,091 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,092 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,261 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,262 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,262 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,263 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,316 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:07,316 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:07,431 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,432 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,432 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,433 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,601 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,601 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,602 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,603 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,769 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,770 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,771 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,771 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:07,938 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:07,939 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:07,939 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:07,940 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,106 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,107 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,107 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,108 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,280 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,281 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,281 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,282 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,319 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:08,451 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,452 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,452 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,453 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,501 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:08,501 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:08,618 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,619 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,619 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,620 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,786 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,787 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,787 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,788 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:08,956 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:08,957 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:08,957 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:08,958 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,126 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,127 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,127 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,128 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,297 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,298 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,299 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,300 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,322 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:09,323 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:09,481 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,482 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,482 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,483 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,649 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,649 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,650 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,651 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,819 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,903 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,904 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,904 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:09,987 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:09,988 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:09,988 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:09,989 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:10,155 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:10,156 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:10,156 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:10,157 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:10,323 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:10,327 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:10,328 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:10,329 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:10,329 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:10,505 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:10,505 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:10,523 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:10,524 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:10,524 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:10,525 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:10,693 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:10,694 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:10,695 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:10,695 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:10,866 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:10,866 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:10,867 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:10,867 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:10,868 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,038 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,039 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,040 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,040 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,213 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,214 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,215 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,216 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,325 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:11,325 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:11,383 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,384 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,385 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,385 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,536 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-26 18:37:11,555 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,556 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,557 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,557 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,727 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,728 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,728 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,729 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:11,900 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:11,901 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:11,902 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:11,903 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,076 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,077 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,077 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,078 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,249 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,250 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,250 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,251 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,326 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:12,424 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,425 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,425 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,426 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,506 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:12,506 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:12,596 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,597 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,597 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,598 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,770 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,771 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,771 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,772 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:12,939 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:12,940 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:12,941 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:12,942 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,107 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,108 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,108 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,109 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,279 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,280 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,280 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,281 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,328 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:13,328 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:13,448 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,449 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,449 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,450 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,616 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,617 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,617 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,618 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,791 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,793 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,793 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,794 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:13,973 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:13,974 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:13,974 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:13,975 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:14,142 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:14,143 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:14,143 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:14,144 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:14,310 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:14,312 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:14,312 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:14,313 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:14,330 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:14,491 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:14,491 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:14,492 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:14,493 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:14,511 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:14,511 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:14,665 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:14,666 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:14,666 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:14,667 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:14,834 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:14,835 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:14,835 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:14,836 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,001 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,002 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,002 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,003 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,169 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,170 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,170 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,171 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,331 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:15,332 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:15,347 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,348 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,349 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,349 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,522 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,523 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,524 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,525 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,692 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,693 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,693 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,694 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,863 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:15,864 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:15,864 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:15,865 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:15,866 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:16,032 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,033 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,033 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,034 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:16,202 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,203 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,204 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,204 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:16,332 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:16,371 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,372 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,372 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,373 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:16,515 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:16,516 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:16,537 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-26 18:37:16,543 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,544 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,544 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,545 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:16,713 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,714 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,714 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,715 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:16,884 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:16,885 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:16,885 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:16,886 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,050 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,052 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,052 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,053 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,224 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,225 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,226 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,226 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,334 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:17,334 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:17,392 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,393 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,394 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,394 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,568 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,570 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,570 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,571 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,740 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,740 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,741 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,742 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:17,910 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:17,910 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:17,911 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:17,912 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,078 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,079 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,079 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,080 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,248 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,249 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,249 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,250 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,336 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:18,417 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,418 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,418 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,419 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,521 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:18,521 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:18,591 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,592 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,592 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,593 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,760 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,761 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,761 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,762 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:18,931 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:18,932 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:18,932 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:18,933 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,100 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,101 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,102 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,102 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,270 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,271 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,271 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,272 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,337 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:19,338 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:19,441 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,442 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,442 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,443 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,619 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,620 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,620 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,621 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,787 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,788 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,788 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,789 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:19,956 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:19,957 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:19,957 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:19,958 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,124 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,125 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,125 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,126 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,299 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,300 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,300 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,301 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,339 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:20,471 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,472 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,473 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,474 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,525 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:20,526 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:20,641 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,642 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,642 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,643 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,811 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,812 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,812 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,813 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:20,980 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:20,980 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:20,981 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:20,982 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:20,982 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,147 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:21,148 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:21,148 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:21,149 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,325 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:21,327 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:21,327 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:21,328 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,341 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:21,342 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:21,496 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:21,578 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-26 18:37:21,579 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:21,579 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:21,579 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,663 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:21,664 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:21,665 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:21,665 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,830 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:21,831 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:21,831 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:21,832 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:21,999 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,000 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,000 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,001 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:22,169 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,170 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,170 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,171 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:22,339 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,340 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,340 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,341 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:22,343 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:22,505 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,506 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,507 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,508 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:22,534 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:22,534 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:22,686 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,687 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,687 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,688 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:22,857 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:22,858 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:22,858 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:22,859 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,028 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,029 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,029 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,030 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,197 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,198 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,198 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,199 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,345 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:23,345 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:23,366 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,367 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,367 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,368 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,535 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,536 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,537 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,537 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,702 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,703 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,703 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,704 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:23,871 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:23,872 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:23,872 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:23,873 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,040 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,042 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,042 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,043 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,212 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,213 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,214 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,214 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,346 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:24,382 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,383 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,383 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,384 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,539 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:24,540 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:24,552 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,553 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,553 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,554 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,726 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,727 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,727 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,728 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:24,894 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:24,895 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:24,895 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:24,896 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,061 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,062 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,063 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,063 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,229 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,230 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,230 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,231 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,348 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:25,349 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:25,398 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,398 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,399 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,400 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,565 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,566 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,567 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,568 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,740 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,742 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,742 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,743 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:25,914 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:25,915 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:25,916 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:25,917 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:26,097 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:26,102 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:26,273 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:26,350 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:26,444 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-26 18:37:26,452 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:26,452 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:26,453 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:26,453 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:26,454 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:26,454 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:26,455 DEBUG   SenderThread:9017 [sender.py:send():336] send: history
+2023-03-26 18:37:26,455 DEBUG   SenderThread:9017 [sender.py:send_request():363] send_request: summary_record
+2023-03-26 18:37:26,456 INFO    SenderThread:9017 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-26 18:37:26,538 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-26 18:37:26,601 ERROR   gpu       :9017 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-26 18:37:26,602 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:26,602 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:27,355 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/wandb-summary.json
+2023-03-26 18:37:27,356 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:27,357 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/config.yaml
+2023-03-26 18:37:28,603 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:28,604 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:29,361 INFO    Thread-13 :9017 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230326_183655-rj2smns2/files/output.log
+2023-03-26 18:37:30,605 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:30,605 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:31,626 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report
+2023-03-26 18:37:32,606 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:32,606 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:34,608 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:34,609 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:36,611 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:36,612 ERROR   gpu       :9017 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-26 18:37:36,627 DEBUG   HandlerThread:9017 [handler.py:handle_request():144] handle_request: status_report

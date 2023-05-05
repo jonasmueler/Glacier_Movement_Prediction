@@ -1,0 +1,176 @@
+2023-03-02 10:52:39,151 INFO    StreamThr :45036 [internal.py:wandb_internal():87] W&B internal server running at pid: 45036, started at: 2023-03-02 10:52:39.150217
+2023-03-02 10:52:39,158 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status
+2023-03-02 10:52:39,159 INFO    WriterThread:45036 [datastore.py:open_for_write():85] open: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/run-81qrp0if.wandb
+2023-03-02 10:52:39,165 DEBUG   SenderThread:45036 [sender.py:send():336] send: header
+2023-03-02 10:52:39,178 DEBUG   SenderThread:45036 [sender.py:send():336] send: run
+2023-03-02 10:52:39,774 INFO    SenderThread:45036 [dir_watcher.py:__init__():216] watching files in: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files
+2023-03-02 10:52:39,774 INFO    SenderThread:45036 [sender.py:_start_run_threads():1067] run started: 81qrp0if with start time 1677750759.154582
+2023-03-02 10:52:39,775 DEBUG   SenderThread:45036 [sender.py:send_request():363] send_request: summary_record
+2023-03-02 10:52:39,776 INFO    SenderThread:45036 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-02 10:52:39,781 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: check_version
+2023-03-02 10:52:39,782 DEBUG   SenderThread:45036 [sender.py:send_request():363] send_request: check_version
+2023-03-02 10:52:39,926 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: run_start
+2023-03-02 10:52:39,945 DEBUG   HandlerThread:45036 [system_info.py:__init__():31] System info init
+2023-03-02 10:52:39,946 DEBUG   HandlerThread:45036 [system_info.py:__init__():46] System info init done
+2023-03-02 10:52:39,946 INFO    HandlerThread:45036 [system_monitor.py:start():151] Starting system monitor
+2023-03-02 10:52:39,947 INFO    SystemMonitor:45036 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-03-02 10:52:39,947 INFO    HandlerThread:45036 [system_monitor.py:probe():172] Collecting system info
+2023-03-02 10:52:39,947 INFO    SystemMonitor:45036 [interfaces.py:start():168] Started cpu
+2023-03-02 10:52:39,948 INFO    SystemMonitor:45036 [interfaces.py:start():168] Started disk
+2023-03-02 10:52:39,948 INFO    SystemMonitor:45036 [interfaces.py:start():168] Started gpu
+2023-03-02 10:52:39,949 INFO    SystemMonitor:45036 [interfaces.py:start():168] Started memory
+2023-03-02 10:52:39,950 INFO    SystemMonitor:45036 [interfaces.py:start():168] Started network
+2023-03-02 10:52:39,959 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:39,960 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:39,960 DEBUG   HandlerThread:45036 [system_info.py:probe():195] Probing system
+2023-03-02 10:52:39,965 DEBUG   HandlerThread:45036 [system_info.py:_probe_git():180] Probing git
+2023-03-02 10:52:39,982 DEBUG   HandlerThread:45036 [system_info.py:_probe_git():188] Probing git done
+2023-03-02 10:52:39,983 DEBUG   HandlerThread:45036 [system_info.py:probe():241] Probing system done
+2023-03-02 10:52:39,983 DEBUG   HandlerThread:45036 [system_monitor.py:probe():181] {'os': 'Linux-5.19.0-32-generic-x86_64-with-glibc2.35', 'python': '3.10.6', 'heartbeatAt': '2023-03-02T09:52:39.960815', 'startedAt': '2023-03-02T09:52:39.064117', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py', 'codePath': 'completeTrainScript.py', 'git': {'remote': 'https://github.com/jonasmueler/Glacier_Movement_Prediction.git', 'commit': 'ebc3ba78d37743e98e7cd95ca856e3c85d5ab023'}, 'email': 'jonasmu@edu.aau.at', 'root': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code', 'host': 'jonas-X555UB', 'username': 'jonas', 'executable': '/usr/bin/python3.10', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2699.986, 'min': 400.0, 'max': 2800.0}, 'cpu_freq_per_core': [{'current': 2700.005, 'min': 400.0, 'max': 2800.0}, {'current': 2700.019, 'min': 400.0, 'max': 2800.0}, {'current': 2700.004, 'min': 400.0, 'max': 2800.0}, {'current': 2699.994, 'min': 400.0, 'max': 2800.0}], 'disk': {'total': 233.17998886108398, 'used': 82.81288528442383}, 'gpu': 'NVIDIA GeForce 940M', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce 940M', 'memory_total': 2147483648}], 'memory': {'total': 7.664211273193359}}
+2023-03-02 10:52:39,983 INFO    HandlerThread:45036 [system_monitor.py:probe():182] Finished collecting system info
+2023-03-02 10:52:39,983 INFO    HandlerThread:45036 [system_monitor.py:probe():185] Publishing system info
+2023-03-02 10:52:39,983 DEBUG   HandlerThread:45036 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-03-02 10:52:39,984 DEBUG   HandlerThread:45036 [system_info.py:_save_pip():67] Saving pip packages done
+2023-03-02 10:52:39,985 INFO    HandlerThread:45036 [system_monitor.py:probe():187] Finished publishing system info
+2023-03-02 10:52:39,989 DEBUG   SenderThread:45036 [sender.py:send():336] send: files
+2023-03-02 10:52:39,990 INFO    SenderThread:45036 [sender.py:_save_file():1321] saving file wandb-metadata.json with policy now
+2023-03-02 10:52:40,002 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: stop_status
+2023-03-02 10:52:40,002 DEBUG   SenderThread:45036 [sender.py:send_request():363] send_request: stop_status
+2023-03-02 10:52:40,363 DEBUG   SenderThread:45036 [sender.py:send():336] send: telemetry
+2023-03-02 10:52:40,778 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/wandb-metadata.json
+2023-03-02 10:52:40,779 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/requirements.txt
+2023-03-02 10:52:40,779 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/wandb-summary.json
+2023-03-02 10:52:40,779 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/output.log
+2023-03-02 10:52:40,840 INFO    wandb-upload_0:45036 [upload_job.py:push():138] Uploaded file /tmp/tmpt7riwrv8wandb/nojz00op-wandb-metadata.json
+2023-03-02 10:52:41,961 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:41,961 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:42,779 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/output.log
+2023-03-02 10:52:43,962 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:43,963 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:44,365 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:52:45,965 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:45,966 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:47,968 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:47,968 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:49,366 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:52:49,970 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:49,970 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:51,971 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:51,972 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:53,973 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:53,974 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:54,367 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:52:54,999 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:52:55,994 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:55,995 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:57,996 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:58,010 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:52:59,378 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:00,012 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:00,013 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:00,020 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:02,015 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:02,028 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:04,029 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:04,030 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:04,380 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:05,070 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:06,032 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:06,032 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:08,034 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:08,035 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:09,451 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:10,075 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:10,486 ERROR   gpu       :45036 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-02 10:53:10,489 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:10,490 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:11,007 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/config.yaml
+2023-03-02 10:53:12,492 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:12,493 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:14,495 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:14,495 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:15,131 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:15,912 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:16,497 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:16,497 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:18,499 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:18,500 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:20,073 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:20,502 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:20,502 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:20,912 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:22,503 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:22,503 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:24,505 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:24,544 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:25,092 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:25,914 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:26,546 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:26,547 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:28,548 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:28,549 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:30,094 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:30,551 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:30,552 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:30,914 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:32,554 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:32,555 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:34,557 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:34,558 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:35,092 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:35,916 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:36,561 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:36,562 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:38,564 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:38,564 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:39,960 DEBUG   SystemMonitor:45036 [system_monitor.py:_start():130] Starting system metrics aggregation loop
+2023-03-02 10:53:40,044 DEBUG   SenderThread:45036 [sender.py:send():336] send: stats
+2023-03-02 10:53:40,090 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:40,627 ERROR   gpu       :45036 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-03-02 10:53:40,628 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:40,629 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:41,050 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:42,630 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:42,631 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:44,121 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: partial_history
+2023-03-02 10:53:44,146 DEBUG   SenderThread:45036 [sender.py:send():336] send: history
+2023-03-02 10:53:44,158 DEBUG   SenderThread:45036 [sender.py:send_request():363] send_request: summary_record
+2023-03-02 10:53:44,185 INFO    SenderThread:45036 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-03-02 10:53:44,216 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/wandb-summary.json
+2023-03-02 10:53:44,633 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:44,634 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:45,097 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:46,214 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:46,238 INFO    Thread-13 :45036 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230302_105239-81qrp0if/files/output.log
+2023-03-02 10:53:46,636 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:46,636 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:48,638 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:48,638 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:50,100 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:50,640 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:50,640 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:51,216 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:52,642 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:52,643 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:54,644 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:54,645 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:55,101 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:53:56,218 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:53:56,647 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:56,648 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:58,649 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:53:58,650 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:00,101 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:54:00,651 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:00,651 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:01,218 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:54:02,653 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:02,654 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:04,655 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:04,656 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:05,103 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: keepalive
+2023-03-02 10:54:06,220 DEBUG   HandlerThread:45036 [handler.py:handle_request():144] handle_request: status_report
+2023-03-02 10:54:06,658 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:06,669 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:08,706 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-03-02 10:54:08,708 ERROR   gpu       :45036 [interfaces.py:monitor():129] Failed to sample metric: Not Supported

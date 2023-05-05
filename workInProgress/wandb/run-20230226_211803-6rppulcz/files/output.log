@@ -1,0 +1,27 @@
+/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/Transformer.py:78: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  s = layer(s)
+epoch:  0 , example:  1  current loss =  2.3286397457122803
+epoch:  0 , example:  2  current loss =  2.324461579322815
+epoch:  0 , example:  3  current loss =  2.322616179784139
+epoch:  1 , example:  4  current loss =  2.320270359516144
+epoch:  1 , example:  5  current loss =  2.3173112869262695
+epoch:  1 , example:  6  current loss =  2.315283258756002
+model checkpoint saved
+results saved!
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 115, in <module>
+    functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 1081, in fullSceneTrain
+    saveCheckpoint(checkpoint, modelName)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 458, in saveCheckpoint
+    torch.save(state.state_dict(), filename)
+AttributeError: 'dict' object has no attribute 'state_dict'
+Traceback (most recent call last):
+epoch:  0 , example:  1  current loss =  41.82563400268555
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py", line 115, in <module>
+    functions.fullSceneTrain(model, "transformerScenes", optim.Adam(model.parameters(), lr=0.0001, weight_decay= 0.01),
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 1081, in fullSceneTrain
+    saveCheckpoint(checkpoint, modelName)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 458, in saveCheckpoint
+    torch.save(state.state_dict(), filename)
+AttributeError: 'dict' object has no attribute 'state_dict'

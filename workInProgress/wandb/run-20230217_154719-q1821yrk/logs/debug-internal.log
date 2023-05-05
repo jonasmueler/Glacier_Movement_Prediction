@@ -1,0 +1,175 @@
+2023-02-17 15:47:19,207 INFO    StreamThr :21306 [internal.py:wandb_internal():87] W&B internal server running at pid: 21306, started at: 2023-02-17 15:47:19.206335
+2023-02-17 15:47:19,208 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: status
+2023-02-17 15:47:19,209 INFO    WriterThread:21306 [datastore.py:open_for_write():85] open: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/run-q1821yrk.wandb
+2023-02-17 15:47:19,213 DEBUG   SenderThread:21306 [sender.py:send():336] send: header
+2023-02-17 15:47:19,226 DEBUG   SenderThread:21306 [sender.py:send():336] send: run
+2023-02-17 15:47:19,841 INFO    SenderThread:21306 [dir_watcher.py:__init__():216] watching files in: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files
+2023-02-17 15:47:19,841 INFO    SenderThread:21306 [sender.py:_start_run_threads():1067] run started: q1821yrk with start time 1676645239.207546
+2023-02-17 15:47:19,842 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: summary_record
+2023-02-17 15:47:19,843 INFO    SenderThread:21306 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-02-17 15:47:19,846 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: check_version
+2023-02-17 15:47:19,847 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: check_version
+2023-02-17 15:47:20,003 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: run_start
+2023-02-17 15:47:20,016 DEBUG   HandlerThread:21306 [system_info.py:__init__():31] System info init
+2023-02-17 15:47:20,017 DEBUG   HandlerThread:21306 [system_info.py:__init__():46] System info init done
+2023-02-17 15:47:20,017 INFO    HandlerThread:21306 [system_monitor.py:start():151] Starting system monitor
+2023-02-17 15:47:20,017 INFO    SystemMonitor:21306 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-02-17 15:47:20,017 INFO    HandlerThread:21306 [system_monitor.py:probe():172] Collecting system info
+2023-02-17 15:47:20,018 INFO    SystemMonitor:21306 [interfaces.py:start():168] Started cpu
+2023-02-17 15:47:20,018 INFO    SystemMonitor:21306 [interfaces.py:start():168] Started disk
+2023-02-17 15:47:20,019 INFO    SystemMonitor:21306 [interfaces.py:start():168] Started gpu
+2023-02-17 15:47:20,020 INFO    SystemMonitor:21306 [interfaces.py:start():168] Started memory
+2023-02-17 15:47:20,020 INFO    SystemMonitor:21306 [interfaces.py:start():168] Started network
+2023-02-17 15:47:20,026 ERROR   gpu       :21306 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-02-17 15:47:20,027 ERROR   gpu       :21306 [interfaces.py:monitor():129] Failed to sample metric: Not Supported
+2023-02-17 15:47:20,030 DEBUG   HandlerThread:21306 [system_info.py:probe():195] Probing system
+2023-02-17 15:47:20,035 DEBUG   HandlerThread:21306 [system_info.py:_probe_git():180] Probing git
+2023-02-17 15:47:20,051 DEBUG   HandlerThread:21306 [system_info.py:_probe_git():188] Probing git done
+2023-02-17 15:47:20,051 DEBUG   HandlerThread:21306 [system_info.py:probe():241] Probing system done
+2023-02-17 15:47:20,051 DEBUG   HandlerThread:21306 [system_monitor.py:probe():181] {'os': 'Linux-5.19.0-32-generic-x86_64-with-glibc2.35', 'python': '3.10.6', 'heartbeatAt': '2023-02-17T14:47:20.031045', 'startedAt': '2023-02-17T14:47:19.159719', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/completeTrainScript.py', 'codePath': 'completeTrainScript.py', 'git': {'remote': 'https://github.com/jonasmueler/Glacier_Movement_Prediction.git', 'commit': '023eb32a8980cf006b3da4b360d33fc5ae2c0c9d'}, 'email': 'jonasmu@edu.aau.at', 'root': '/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code', 'host': 'jonas-X555UB', 'username': 'jonas', 'executable': '/usr/bin/python3.10', 'cpu_count': 2, 'cpu_count_logical': 4, 'cpu_freq': {'current': 2587.7085, 'min': 400.0, 'max': 2800.0}, 'cpu_freq_per_core': [{'current': 2600.92, 'min': 400.0, 'max': 2800.0}, {'current': 2597.598, 'min': 400.0, 'max': 2800.0}, {'current': 2606.145, 'min': 400.0, 'max': 2800.0}, {'current': 2546.171, 'min': 400.0, 'max': 2800.0}], 'disk': {'total': 233.17998886108398, 'used': 80.31553649902344}, 'gpu': 'NVIDIA GeForce 940M', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce 940M', 'memory_total': 2147483648}], 'memory': {'total': 7.664211273193359}}
+2023-02-17 15:47:20,051 INFO    HandlerThread:21306 [system_monitor.py:probe():182] Finished collecting system info
+2023-02-17 15:47:20,051 INFO    HandlerThread:21306 [system_monitor.py:probe():185] Publishing system info
+2023-02-17 15:47:20,052 DEBUG   HandlerThread:21306 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-02-17 15:47:20,053 DEBUG   HandlerThread:21306 [system_info.py:_save_pip():67] Saving pip packages done
+2023-02-17 15:47:20,054 INFO    HandlerThread:21306 [system_monitor.py:probe():187] Finished publishing system info
+2023-02-17 15:47:20,057 DEBUG   SenderThread:21306 [sender.py:send():336] send: files
+2023-02-17 15:47:20,057 INFO    SenderThread:21306 [sender.py:_save_file():1321] saving file wandb-metadata.json with policy now
+2023-02-17 15:47:20,069 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: stop_status
+2023-02-17 15:47:20,070 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: stop_status
+2023-02-17 15:47:20,419 DEBUG   SenderThread:21306 [sender.py:send():336] send: telemetry
+2023-02-17 15:47:20,487 DEBUG   SenderThread:21306 [sender.py:send():336] send: exit
+2023-02-17 15:47:20,487 INFO    SenderThread:21306 [sender.py:send_exit():559] handling exit code: 1
+2023-02-17 15:47:20,488 INFO    SenderThread:21306 [sender.py:send_exit():561] handling runtime: 0
+2023-02-17 15:47:20,488 INFO    SenderThread:21306 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-02-17 15:47:20,489 INFO    SenderThread:21306 [sender.py:send_exit():567] send defer
+2023-02-17 15:47:20,489 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,489 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 0
+2023-02-17 15:47:20,489 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,489 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 0
+2023-02-17 15:47:20,490 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 1
+2023-02-17 15:47:20,490 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,490 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 1
+2023-02-17 15:47:20,490 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,490 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 1
+2023-02-17 15:47:20,490 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 2
+2023-02-17 15:47:20,491 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,491 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 2
+2023-02-17 15:47:20,491 INFO    HandlerThread:21306 [system_monitor.py:finish():161] Stopping system monitor
+2023-02-17 15:47:20,491 DEBUG   SystemMonitor:21306 [system_monitor.py:_start():130] Starting system metrics aggregation loop
+2023-02-17 15:47:20,492 DEBUG   SystemMonitor:21306 [system_monitor.py:_start():137] Finished system metrics aggregation loop
+2023-02-17 15:47:20,492 DEBUG   SystemMonitor:21306 [system_monitor.py:_start():141] Publishing last batch of metrics
+2023-02-17 15:47:20,492 INFO    HandlerThread:21306 [interfaces.py:finish():175] Joined cpu
+2023-02-17 15:47:20,493 INFO    HandlerThread:21306 [interfaces.py:finish():175] Joined disk
+2023-02-17 15:47:20,534 ERROR   gpu       :21306 [interfaces.py:aggregate():146] Failed to serialize metric: division by zero
+2023-02-17 15:47:20,534 INFO    HandlerThread:21306 [interfaces.py:finish():175] Joined gpu
+2023-02-17 15:47:20,535 INFO    HandlerThread:21306 [interfaces.py:finish():175] Joined memory
+2023-02-17 15:47:20,535 INFO    HandlerThread:21306 [interfaces.py:finish():175] Joined network
+2023-02-17 15:47:20,535 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,536 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 2
+2023-02-17 15:47:20,536 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 3
+2023-02-17 15:47:20,536 DEBUG   SenderThread:21306 [sender.py:send():336] send: stats
+2023-02-17 15:47:20,536 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,536 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 3
+2023-02-17 15:47:20,536 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,537 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 3
+2023-02-17 15:47:20,537 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 4
+2023-02-17 15:47:20,537 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,537 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 4
+2023-02-17 15:47:20,537 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,537 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 4
+2023-02-17 15:47:20,537 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 5
+2023-02-17 15:47:20,538 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,538 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 5
+2023-02-17 15:47:20,538 DEBUG   SenderThread:21306 [sender.py:send():336] send: summary
+2023-02-17 15:47:20,539 INFO    SenderThread:21306 [sender.py:_save_file():1321] saving file wandb-summary.json with policy end
+2023-02-17 15:47:20,539 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,539 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 5
+2023-02-17 15:47:20,539 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 6
+2023-02-17 15:47:20,540 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,540 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 6
+2023-02-17 15:47:20,540 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,540 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 6
+2023-02-17 15:47:20,545 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: status_report
+2023-02-17 15:47:20,840 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 7
+2023-02-17 15:47:20,840 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:20,841 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 7
+2023-02-17 15:47:20,842 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:20,842 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 7
+2023-02-17 15:47:20,857 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/config.yaml
+2023-02-17 15:47:20,859 INFO    wandb-upload_0:21306 [upload_job.py:push():138] Uploaded file /tmp/tmp32xa16jlwandb/ofbxzcfs-wandb-metadata.json
+2023-02-17 15:47:20,860 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/output.log
+2023-02-17 15:47:20,861 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/requirements.txt
+2023-02-17 15:47:20,863 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/wandb-summary.json
+2023-02-17 15:47:20,864 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_created():275] file/dir created: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/wandb-metadata.json
+2023-02-17 15:47:21,488 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: poll_exit
+2023-02-17 15:47:22,445 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 8
+2023-02-17 15:47:22,446 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: poll_exit
+2023-02-17 15:47:22,446 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:22,448 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 8
+2023-02-17 15:47:22,449 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:22,450 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 8
+2023-02-17 15:47:22,474 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 9
+2023-02-17 15:47:22,475 DEBUG   SenderThread:21306 [sender.py:send():336] send: artifact
+2023-02-17 15:47:22,475 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:22,483 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 9
+2023-02-17 15:47:22,489 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: poll_exit
+2023-02-17 15:47:22,859 INFO    Thread-13 :21306 [dir_watcher.py:_on_file_modified():292] file/dir modified: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/output.log
+2023-02-17 15:47:24,462 INFO    SenderThread:21306 [sender.py:send_artifact():1417] sent artifact job-https___github.com_jonasmueler_Glacier_Movement_Prediction.git_completeTrainScript.py - {'id': 'QXJ0aWZhY3Q6MzY1MjE4MzY4', 'digest': '907e3afb0a8d7ebbdd56da64a34cf4ef', 'state': 'COMMITTED', 'aliases': [{'artifactCollectionName': 'job-https___github.com_jonasmueler_Glacier_Movement_Prediction.git_completeTrainScript.py', 'alias': 'latest'}, {'artifactCollectionName': 'job-https___github.com_jonasmueler_Glacier_Movement_Prediction.git_completeTrainScript.py', 'alias': 'v1'}], 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjUyNzQ0MjM5', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MzY2NjQyODk5', 'versionIndex': 3}}, 'version': 'v1'}
+2023-02-17 15:47:24,463 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:24,463 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 9
+2023-02-17 15:47:24,464 INFO    SenderThread:21306 [dir_watcher.py:finish():362] shutting down directory watcher
+2023-02-17 15:47:24,864 INFO    SenderThread:21306 [dir_watcher.py:finish():392] scan: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files
+2023-02-17 15:47:24,865 INFO    SenderThread:21306 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/config.yaml config.yaml
+2023-02-17 15:47:24,867 INFO    SenderThread:21306 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/output.log output.log
+2023-02-17 15:47:24,877 INFO    SenderThread:21306 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/requirements.txt requirements.txt
+2023-02-17 15:47:24,888 INFO    SenderThread:21306 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/wandb-metadata.json wandb-metadata.json
+2023-02-17 15:47:24,889 INFO    SenderThread:21306 [dir_watcher.py:finish():406] scan save: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/wandb-summary.json wandb-summary.json
+2023-02-17 15:47:24,900 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 10
+2023-02-17 15:47:24,902 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: poll_exit
+2023-02-17 15:47:24,903 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:24,904 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 10
+2023-02-17 15:47:24,911 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:24,917 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 10
+2023-02-17 15:47:24,918 INFO    SenderThread:21306 [file_pusher.py:finish():162] shutting down file pusher
+2023-02-17 15:47:25,860 INFO    wandb-upload_2:21306 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/requirements.txt
+2023-02-17 15:47:26,167 INFO    wandb-upload_0:21306 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/config.yaml
+2023-02-17 15:47:26,179 INFO    wandb-upload_3:21306 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/wandb-summary.json
+2023-02-17 15:47:26,181 INFO    wandb-upload_1:21306 [upload_job.py:push():138] Uploaded file /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/files/output.log
+2023-02-17 15:47:26,382 INFO    Thread-12 (_thread_body):21306 [sender.py:transition_state():587] send defer: 11
+2023-02-17 15:47:26,383 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:26,384 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 11
+2023-02-17 15:47:26,385 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:26,385 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 11
+2023-02-17 15:47:26,386 INFO    SenderThread:21306 [file_pusher.py:join():167] waiting for file pusher
+2023-02-17 15:47:26,386 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 12
+2023-02-17 15:47:26,387 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:26,387 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 12
+2023-02-17 15:47:26,388 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:26,389 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 12
+2023-02-17 15:47:26,569 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 13
+2023-02-17 15:47:26,570 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:26,570 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 13
+2023-02-17 15:47:26,572 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:26,572 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 13
+2023-02-17 15:47:26,573 INFO    SenderThread:21306 [sender.py:transition_state():587] send defer: 14
+2023-02-17 15:47:26,574 DEBUG   SenderThread:21306 [sender.py:send():336] send: final
+2023-02-17 15:47:26,574 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: defer
+2023-02-17 15:47:26,574 DEBUG   SenderThread:21306 [sender.py:send():336] send: footer
+2023-02-17 15:47:26,575 INFO    HandlerThread:21306 [handler.py:handle_request_defer():170] handle defer: 14
+2023-02-17 15:47:26,577 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: defer
+2023-02-17 15:47:26,577 INFO    SenderThread:21306 [sender.py:send_request_defer():583] handle sender defer: 14
+2023-02-17 15:47:26,579 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: poll_exit
+2023-02-17 15:47:26,581 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: server_info
+2023-02-17 15:47:26,581 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: poll_exit
+2023-02-17 15:47:26,583 DEBUG   SenderThread:21306 [sender.py:send_request():363] send_request: server_info
+2023-02-17 15:47:26,592 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: get_summary
+2023-02-17 15:47:26,593 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: sampled_history
+2023-02-17 15:47:26,954 INFO    MainThread:21306 [wandb_run.py:_footer_history_summary_info():3442] rendering history
+2023-02-17 15:47:26,955 INFO    MainThread:21306 [wandb_run.py:_footer_history_summary_info():3474] rendering summary
+2023-02-17 15:47:26,956 INFO    MainThread:21306 [wandb_run.py:_footer_sync_info():3398] logging synced files
+2023-02-17 15:47:26,957 DEBUG   HandlerThread:21306 [handler.py:handle_request():144] handle_request: shutdown
+2023-02-17 15:47:26,957 INFO    HandlerThread:21306 [handler.py:finish():841] shutting down handler
+2023-02-17 15:47:27,583 INFO    WriterThread:21306 [datastore.py:close():299] close: /media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/wandb/run-20230217_154719-q1821yrk/run-q1821yrk.wandb
+2023-02-17 15:47:27,954 INFO    SenderThread:21306 [sender.py:finish():1493] shutting down sender
+2023-02-17 15:47:27,954 INFO    SenderThread:21306 [file_pusher.py:finish():162] shutting down file pusher
+2023-02-17 15:47:27,955 INFO    SenderThread:21306 [file_pusher.py:join():167] waiting for file pusher

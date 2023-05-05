@@ -1,0 +1,39 @@
+
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  1  current loss =  10.433418273925781
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  2  current loss =  9.861725807189941
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  3  current loss =  12.143402099609375
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  4  current loss =  13.579022407531738
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  5  current loss =  9.280394554138184
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  6  current loss =  7.85015869140625
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  7  current loss =  9.799802780151367
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  8  current loss =  9.945297241210938
+torch.Size([4, 20, 1, 50, 50])
+epoch:  0 , example:  9  current loss =  8.765162467956543
+torch.Size([4, 20, 1, 50, 50])
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "ConvLSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 724, in trainLoopConvLSTM
+    loss.backward()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/_tensor.py", line 488, in backward
+    torch.autograd.backward(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 197, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/ConvLSTMTrain.py", line 27, in <module>
+    functions.trainLoopConvLSTM(dataTrain, dataVal, None,  model, loss, False, "ConvLSTM", params, True, device)
+  File "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/code/functions.py", line 724, in trainLoopConvLSTM
+    loss.backward()
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/_tensor.py", line 488, in backward
+    torch.autograd.backward(
+  File "/home/jonas/.local/lib/python3.10/site-packages/torch/autograd/__init__.py", line 197, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
