@@ -1760,7 +1760,7 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
 
     """
     #Path = os.getcwd()
-    Path = "/home/jonas/datasets" ## change here
+    Path = "/home/jonas/datasets" ## change here to where train data is saved
     if stationary: # yearly data; too sparse
         years = ["2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
 
@@ -1824,7 +1824,7 @@ def getTrainTest(patches, window, inputBands, outputBands, stationary):
                         pickle.dump(yHelper, fp)
 
     elif stationary == False:
-        counter = 37633 # 0; for mixed dataset
+        counter =  0 # 37633 for mixed dataset
         for i in range((len(patches) - 2*window) // 1 + 1): # formula from pytorch cnn classes
             # create patches from random consecutive timepoints in the future
             ## take next n scenes

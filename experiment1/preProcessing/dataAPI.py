@@ -25,8 +25,10 @@ import os
 import pickle
 import rasterio
 
-# wrapper for acquiring data
+# global; change path here
+pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets"
 
+# wrapper for acquiring data
 def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = False):
     """
     acquire and preprocess the data
@@ -54,7 +56,6 @@ def API(box, time, cloudCoverage, allowedMissings, year, glacierName, plot = Fal
     # save on hard drive with pickling
     # create folder
 
-    pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets"
     pathOrigin = pathOrigin + "/" + glacierName
     os.makedirs(pathOrigin, exist_ok = True)
     os.chdir(pathOrigin)

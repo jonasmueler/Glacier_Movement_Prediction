@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import pickle
 from collections import Counter
 
-path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati" # change here
+## # change here to folder with yearly scene data
+path = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code/datasets/parbati"
 
 ########### first check images with plot, then save patched pickle files #######################
 glacier = "parvati"
