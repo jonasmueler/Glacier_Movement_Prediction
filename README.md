@@ -1,6 +1,7 @@
 # Glacier Movement Prediction with Deep Learning Models and Satellite Data
 
 ## Experiment 1 
+/experiment1
 
 ### Data Acquisition and Preprocessing
 
@@ -21,6 +22,7 @@ singularity exec --nv --bind <path to repo that should be bounded to container>,
 In order to train the models three folders were created /LSTM, /unet, /convLSTM. With the LSTMTrain.py and lstmAttentionTrain.py files in the LSTM folder hyperaparemeters can be specified and the model training can be started (on GPU with Cuda). Note that the scripts use the weights and biases tool, which is a free tool to monitor training progress in real time in a browser application. If weights and biases should be used, then a account has to be created and registered in the used environemnt, if not the wandb argument can be set to false in the trainLoop function. The same procedure can be applied to convLSTMTrain.py in the convLSTM, and train.py in the unet directory. The models are saved in a created subdirectory /models, where also a csv file is stored with the train and validation losses.
 
 ### Testset performance
+With the testsetPerformance.py script in the /testing directory the models can be tested on the testset. The glaciers class from the datasetClasses.py script has a bootstrap argument, which enables bootstrap sampling of the testset if set to True, otherwise MSE and MAE scores are calculated on the testset and stored in a file in the /models folder. 
 
 
 
