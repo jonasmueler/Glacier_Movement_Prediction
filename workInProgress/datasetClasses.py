@@ -87,6 +87,57 @@ class glaciers(Dataset):
 
         return inpt, target
 
+class glaciersTest(Dataset):
+    def __init__(self, path, mode):
+        """
+        dataset class for train loop
+        path: str
+            path to image and target folder
+        mode: str
+            train, val, test
+        """
+        self.mode = mode
+        self.path = path
+
+        # take 80% of data as train and val, take 20% of data for testing
+        # get list of all image paths in directory
+        images = os.listdir(os.path.join(self.path, "images"))
+        paths = [os.path.join(os.path.join(self.path, "images"), item) for item in images]
+        self.images = paths
+
+        targets = os.listdir(os.path.join(self.path, "targets"))
+        paths = [os.path.join(os.path.join(self.path, "targets"), item) for item in targets]
+        self.targets = paths
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, idx):
+        """
+        returns datum for training
+
+        idx: int
+            index to datum
+        returns: torch.tensor
+                image and targets
+        """
+        if is_tensor(idx):
+            idx = idx.tolist()
+
+        try:
+            # get data in tensor format
+            inpt = functions.openData(self.images[idx])
+            #inpt = inpt[:, 2, :, :]
+            target = functions.openData(self.targets[idx])
+        except:
+            # get data in tensor format
+            index = np.random.randint(self.__len__())
+            inpt = functions.openData(self.images[index])
+            #inpt = inpt[:, 2, :, :]
+            target = functions.openData(self.targets[index])
+
+        return inpt, target
+
 class tokenizerData(Dataset):
     def __init__(self, path):
         """

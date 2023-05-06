@@ -49,7 +49,7 @@ dataTest = DataLoader(datasetTest, 100, shuffle = True)
 with torch.no_grad():
     # do 2000 bootstrap iterations
     losses = []
-    nIterations = 100
+    nIterations = 1
     MSELoss = torch.nn.MSELoss()
     MAELoss = torch.nn.L1Loss()
     modelName = "LSTMAttentionSmall"
