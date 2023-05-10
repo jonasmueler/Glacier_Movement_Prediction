@@ -45,6 +45,6 @@ plt.plot(averagesVal, label = "Validation Loss SA-LSTM-H", linestyle = "dashed",
 plt.legend(fontsize = 8)
 plt.xlabel('epochs')
 plt.ylabel('MSE')
-plt.savefig("trainCurvesSecond.pdf", dpi = 1000)
+plt.savefig("trainCurvesThird.pdf", dpi = 1000)
 plt.show()
 
