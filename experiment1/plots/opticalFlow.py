@@ -26,7 +26,7 @@ images2Prediction= np.ma.masked_where(images2Prediction< threshold, images2Predi
 gridsize = 10
 params = {"scale": 0.5, "levels": 6, "window": 60, "iterations": 10, "poly": 5, "sigma": 1.1}
 color = "olive"
-# Create a figure with a single row and five columns
+# Create a figure with a single row and 2 columns
 fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(40, 20))
 
 # Turn off axis for all subplots
