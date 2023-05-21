@@ -134,13 +134,13 @@ class Transformer(nn.Module):
 
         return l
 
-"""
+
 # test
 # args: hiddenLenc, attLayers, attentionHeads, device, Training=True, predictionInterval=None)
 
-model = Transformer(2500, 1,1,"cuda", predictionInterval=4).to("cuda")
+#model = Transformer(2500, 1,1,"cuda", predictionInterval=4).to("cuda")
 
-print(model.forward(torch.rand(5, 4, 50,50).to("cuda"), torch.rand(3, 4, 50,50).to("cuda"), training = False).size())
-"""
+#print(model.forward(torch.rand(5, 4, 50,50).to("cuda"), torch.rand(3, 4, 50,50).to("cuda"), training = False).size())
+
 
 

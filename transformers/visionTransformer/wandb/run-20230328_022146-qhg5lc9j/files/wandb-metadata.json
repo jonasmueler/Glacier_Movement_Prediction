@@ -1,8 +1,8 @@
 {
     "os": "Linux-5.19.0-35-generic-x86_64-with-glibc2.35",
     "python": "3.10.6",
-    "heartbeatAt": "2023-03-28T00:21:46.950188",
-    "startedAt": "2023-03-28T00:21:46.052299",
+    "heartbeatAt": "2023-03-27T19:13:06.091768",
+    "startedAt": "2023-03-27T19:13:05.205422",
     "docker": null,
     "cuda": null,
     "args": [],
@@ -21,35 +21,35 @@
     "cpu_count": 2,
     "cpu_count_logical": 4,
     "cpu_freq": {
-        "current": 2699.9985,
+        "current": 1956.9297500000002,
         "min": 400.0,
         "max": 2800.0
     },
     "cpu_freq_per_core": [
         {
-            "current": 2700.002,
+            "current": 2313.096,
             "min": 400.0,
             "max": 2800.0
         },
         {
-            "current": 2700.0,
+            "current": 2317.85,
             "min": 400.0,
             "max": 2800.0
         },
         {
-            "current": 2699.998,
+            "current": 2183.61,
             "min": 400.0,
             "max": 2800.0
         },
         {
-            "current": 2699.999,
+            "current": 2147.93,
             "min": 400.0,
             "max": 2800.0
         }
     ],
     "disk": {
         "total": 233.17998886108398,
-        "used": 176.23789596557617
+        "used": 172.67282104492188
     },
     "gpu": "NVIDIA GeForce 940M",
     "gpu_count": 1,

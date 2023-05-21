@@ -3,20 +3,20 @@
 #import distributed
 #import dask
 import pandas as pd
-import pystac_client
+#import pystac_client
 import planetary_computer as pc
 #import ipyleaflet
 #import IPython.display as dsp
 #import geogif
 #from dateutil.parser import ParserError
-import stackstac
+#import stackstac
 #import bottleneck
 #import dask
 import matplotlib.pyplot as plt
 import numpy as np
 #import matplotlib.image as mpimg
 from numpy import array
-import cv2
+#import cv2
 #import imutils
 from torch import nn
 #from numpy import linalg as LA
@@ -41,8 +41,8 @@ from collections import Counter
 
 ## global variables for project
 ### change here to run on cluster ####
-#pathOrigin = "/mnt/qb/work/ludwig/lqb875"
-pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
+pathOrigin = "/mnt/qb/work/ludwig/lqb875"
+#pathOrigin = "/media/jonas/B41ED7D91ED792AA/Arbeit_und_Studium/Kognitionswissenschaft/Semester_5/masterarbeit#/data_Code"
 
 
 
@@ -1106,7 +1106,7 @@ def trainLoopUnet(trainLoader, valLoader, model, criterion, loadModel, modelName
                 validationLosses[trainCounter] = valLoss.detach().cpu().item()
 
             # save model and optimizer checkpoint in case of memory overlow
-            if trainCounter % 5000 == 0:
+            if trainCounter % 500 == 0:
                 saveCheckpoint(model, optimizer, pathOrigin + "/" + "models/" + modelName)
 
                 # save gradient descent
@@ -1121,7 +1121,7 @@ def trainLoopUnet(trainLoader, valLoader, model, criterion, loadModel, modelName
 
 
     # save results of gradient descent
-    path = os.path.join(pathOrigin, "/models")
+    path = os.path.join(pathOrigin, "models")
     os.chdir(path)
     df = pd.DataFrame({"Train Loss": trainLosses, "Validation Loss": validationLosses})
     df.to_csv(modelName + ".csv", index=False)
