@@ -1,7 +1,7 @@
 # Glacier Movement Prediction with Deep Learning Models and Satellite Data
 
 ## Data Availability
-The data used for all three experiments can be accessed in the /mnt/qb/work/ludwig/nludwig/Data/glacier_movement_deep_learning directory of the slurm cluster for compute jobs of the university of tuebingen (https://gitlab.mlcloud.uni-tuebingen.de/doku/public/-/wikis/SLURM). For access please contact jonas3.mueller@student.uni-tuebingen.de or nicole.ludwig@uni-tuebingen.de
+The data used for all three experiments can be accessed in the /mnt/qb/work/ludwig/nludwig/Data/glacier_movements_deep_learning directory of the slurm cluster for compute jobs of the university of tuebingen (https://gitlab.mlcloud.uni-tuebingen.de/doku/public/-/wikis/SLURM). For access please contact jonas3.mueller@student.uni-tuebingen.de or nicole.ludwig@uni-tuebingen.de
 
 The /experiment1 folder contains the /images and /targets folders which contain all data input sequences (images) and target sequences. The dataloader of the first experiment lists all elements in these folders and divides into train/validate and test (80/20 split) for training. The scene folder contains all unpatched scene files, while the dates folder contains the corresponding dates. As the dataloader takes the last 20 % of the data in /images and /targets as test data, the sequence of the last 8 scenes in the /scenes folder just contain testset data and are therefore used in the work for testing of full scene predictions. 
 
