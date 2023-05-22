@@ -311,7 +311,7 @@ def gaussianBlurring(Input, kSize, band):
     return Input
 
 
-### image alignment with ORB features and RANSAC algorithm (see paper), same parameters used
+### image alignment with ORB features and RANSAC algorithm 
 def alignImages(image, template, RGB, maxFeatures, keepPercent):
     """
     image: 2d or 3d nd array
@@ -343,8 +343,7 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
         templateGray = template
         templateGray = templateGray.astype('uint8')
 
-    # use ORB to detect keypoints and extract (binary) local
-    # invariant features
+    # use ORB to detect keypoints and extract features
     orb = cv2.ORB_create(maxFeatures)
     (kpsA, descsA) = orb.detectAndCompute(imageGray, None)
     (kpsB, descsB) = orb.detectAndCompute(templateGray, None)
@@ -356,11 +355,10 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = matcher.match(descsA, descsB) #, None)
 
-    # sort the matches by their distance (the smaller the distance,
-    # the "more similar" the features are)
+    # sort 
     matches = sorted(matches, key=lambda x:x.distance)
 
-    # keep only the top matches
+    # keep only the top 
     keep = int(len(matches) * keepPercent)
     matches = matches[:keep]
 
@@ -390,7 +388,7 @@ def alignImages(image, template, RGB, maxFeatures, keepPercent):
     aligned = cv2.warpPerspective(image, H, (w, h))
 
     return aligned
-
+    
 def openData(name):
     """
     opens pickled data object

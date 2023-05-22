@@ -313,17 +313,21 @@ def gaussianBlurring(Input, kSize, band):
     return Input
 
 
-### image alignment with ORB features and RANSAC algorithm (see paper), same parameters used
-def alignImages(image, template, maxFeatures, keepPercent):
+### image alignment with ORB features and RANSAC algorithm 
+def alignImages(image, template, RGB, maxFeatures, keepPercent):
     """
     image: 2d or 3d nd array
         input image to be aligned
     template: 2d or 3d nd array
         template for alignment
+    RGB: boolean
+        is image in RGB format 3d ndarray?
     maxFeatures: int
         max. amount of features used for alignment
     keepPercent: float
         amount of features kept for aligning
+
+
 
     returns: ndarray
         alignend image
@@ -331,13 +335,17 @@ def alignImages(image, template, maxFeatures, keepPercent):
     """
 
     # convert both the input image and template to grayscale
-    imageGray = image.astype(np.float32)
-    templateGray = template.astype(np.float32)
-    imageGray = cv2.merge([imageGray, imageGray, imageGray])
-    templateGray = cv2.merge([templateGray, templateGray, templateGray])
+    if RGB:
+        imageGray = cv2.cvtColor(image.astype('uint8'), cv2.COLOR_BGR2GRAY)
+        templateGray =  cv2.cvtColor(template.astype('uint8'), cv2.COLOR_BGR2GRAY)
+    if RGB == False:
+        imageGray = image
+        imageGray = imageGray.astype('uint8')
 
-    # use ORB to detect keypoints and extract (binary) local
-    # invariant features
+        templateGray = template
+        templateGray = templateGray.astype('uint8')
+
+    # use ORB to detect keypoints and extract features
     orb = cv2.ORB_create(maxFeatures)
     (kpsA, descsA) = orb.detectAndCompute(imageGray, None)
     (kpsB, descsB) = orb.detectAndCompute(templateGray, None)
@@ -349,11 +357,10 @@ def alignImages(image, template, maxFeatures, keepPercent):
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = matcher.match(descsA, descsB) #, None)
 
-    # sort the matches by their distance (the smaller the distance,
-    # the "more similar" the features are)
+    # sort 
     matches = sorted(matches, key=lambda x:x.distance)
 
-    # keep only the top matches
+    # keep only the top 
     keep = int(len(matches) * keepPercent)
     matches = matches[:keep]
 
@@ -375,17 +382,14 @@ def alignImages(image, template, maxFeatures, keepPercent):
     # points
     #print(ptsA)
     #print(ptsB)
-
     (H, mask) = cv2.findHomography(ptsA, ptsB, method=cv2.RANSAC)
 
     # use the homography matrix to align the images
     (h, w) = template.shape[:2]
 
-
     aligned = cv2.warpPerspective(image, H, (w, h))
 
     return aligned
-
 
 def aligneOverTime(data):
     """
